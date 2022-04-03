@@ -6,6 +6,7 @@ const Meals = require('./meals');
 const Recipes = require('./recipes');
 const Users = require('./users');
 
+
 module.exports = function initModels(sequelize) {
     const categories = Categories(sequelize, DataTypes);
     const images = Images(sequelize, DataTypes);
@@ -13,6 +14,7 @@ module.exports = function initModels(sequelize) {
     const meals = Meals(sequelize, DataTypes);
     const recipes = Recipes(sequelize, DataTypes);
     const users = Users(sequelize, DataTypes);
+
 
     recipes.belongsTo(meals, { as: 'id_meal', foreignKey: 'id' });
     meals.hasOne(recipes, { as: 'recipe', foreignKey: 'id' });

@@ -34,6 +34,10 @@ module.exports = function DefineRecipes(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        title: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
     }, {
         sequelize,
         tableName: 'recipes',

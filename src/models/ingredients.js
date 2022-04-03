@@ -11,6 +11,10 @@ module.exports = function DefineIngredients(sequelize, DataTypes) {
             allowNull: false,
             unique: 'Name constraint',
         },
+        measurement: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
     }, {
         sequelize,
         tableName: 'ingredients',

@@ -20,11 +20,19 @@ module.exports = function DefineUsers(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        activationLink: {
+            type: DataTypes.TEXT,
+        },
         isGranted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
         },
+        isActivated: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        }
     }, {
         sequelize,
         tableName: 'users',
