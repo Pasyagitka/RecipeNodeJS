@@ -1,10 +1,11 @@
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const winston = require('winston');
-const expressWinston = require('express-winston');
+const morgan = require('morgan');
 const mongoose = require('mongoose');
+const { ValidationError} = require('express-validator');
 require('dotenv').config();
 
 
@@ -22,19 +23,6 @@ const start = async() => {
 }
 
 
-// app.use(expressWinston.logger({
-//     transports: [
-//         new winston.transports.Console({
-//             json: true,
-//             colorize: true,
-//         }),
-//     ],
-//     msg: 'HTTP {{req.method}} {{req.url}}',
-//     expressFormat: true,
-//     colorize: true,
-// }));
-
-
 app.use(passport.initialize());
 
 app.use(express.json());
@@ -42,6 +30,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(morgan('dev', {
+    skip: function (req, res) { return res.statusCode < 400 }
+}))
+  
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms', {
+    stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+}))
 
 const authRouter = require('./src/routes/auth');
 const ingredientsRouter = require('./src/routes/ingredients');
@@ -56,11 +51,11 @@ app.use('/categories', categoriesRouter);
 app.use('/textFromFile', textFromFileRouter);
 
 
-function errorResponder(error, req, res, next) { 
+app.use((error, req, res, next) => { 
     console.log(error);
-    res.status(error.status).send(error.message);
-}
-app.use(errorResponder);
+    res.status(error.statusCode).send(error.error);
+});
+
 
 
 start();
