@@ -1,8 +1,17 @@
 const bcrypt = require('bcrypt');
-const { password } = require('pg/lib/defaults');
 const uuid = require('uuid');
+const generator = require('generate-password');
 const Users = require('../models').users;
 const mailService = require('./mailService');
+const {
+    AlreadyExistsError,
+    NotExistsError,
+    UnauthorizedError,
+    BadActivationLinkError,
+    WrongPasswordError,
+    BadResetPasswordLinkError,
+} = require('../errors/customError');
+
 const {
     generateTokens,
     saveToken,
@@ -14,7 +23,7 @@ const {
 async function registration(login, email, password) {
     const candidate = await Users.findOne({ where: { email } });
     if (candidate) {
-        throw new Error(`Пользователь с почтовым адресом ${email} уже существует`);
+        throw new AlreadyExistsError();
     }
     const hashPassword = await bcrypt.hash(password, 3);
     const activationLink = uuid.v4();
@@ -38,20 +47,20 @@ async function registration(login, email, password) {
 async function activate(activationLink) {
     const user = await Users.findOne({ where: { activationLink } });
     if (!user) {
-        throw new Error('Некорректная ссылка активации');
+        throw new BadActivationLinkError();
     }
-    user.isActivated = true;
+    await Users.update({isActivated: true, activationLink: null}, { where: { email: user.email } });
     await user.save();
 }
 
 async function login(email, password) {
     const findUser = await Users.findOne({ where: { email } });
     if (!findUser) {
-        throw new Error('Пользователь с таким email не найден');
+        throw new NotExistsError();
     }
     const isPassEquals = await bcrypt.compare(password, findUser.password);
     if (!isPassEquals) {
-        throw new Error('Неверный пароль');
+        throw new WrongPasswordError();
     }
     const user = {
         id: findUser.id,
@@ -70,12 +79,12 @@ async function logout(refreshToken) {
 
 async function refresh(refreshToken) {
     if (!refreshToken) {
-        throw new Error('Unauthorized');
+        throw new UnauthorizedError();
     }
     const userData = validateRefreshToken(refreshToken);
     const tokenFromDb = await findToken(refreshToken);
     if (!userData || !tokenFromDb) {
-        throw new Error('Unauthorized');
+        throw new UnauthorizedError();
     }
     const user = await Users.findByPk(userData.id);
     const userDto = {
@@ -93,39 +102,30 @@ async function refresh(refreshToken) {
 async function sendResetPassword(email) {
     const findUser = await Users.findOne({ where: { email } });
     if (!findUser) {
-        throw new Error('Пользователь с таким email не найден');
+        throw new NotExistsError();
     }
     const link = uuid.v4();
-    await Users.update({resetPasswordLink: link}, { where: { email } });
-
-    await mailService.sendResetPasswordEmail(email, `${process.env.API_URL}/auth/reset-password-email/${findUser.id}/${link}`, password);
+    let password = generator.generate({
+        length: 10,
+        numbers: true
+    });
+    let temporaryPassword = await bcrypt.hash(password, 3);
+    await Users.update({resetPasswordLink: link, temporaryPassword}, { where: { email } });
+    await mailService.sendResetPasswordEmail(email, `${process.env.API_URL}/auth/reset-password/${findUser.login}/${link}`, password);
 }
 
 
-async function reset(email, resetPasswordLink) {
-    const user = await Users.findOne({ where: { email } });
-    console.log(user);
+async function resetConfirm(login, resetPasswordLink) {
+    const user = await Users.findOne({ where: { login } });
     if (!user) {
-        throw new Error('Пользователь не найден');
+        throw new NotExistsError();
     }
     if (resetPasswordLink !== user.resetPasswordLink) {
-        throw new Error('Неккоректная ссылка смены пароля');
+        throw new BadResetPasswordLinkError();
     }
+    await Users.update({password: user.temporaryPassword, temporaryPassword: null, resetPasswordLink: null}, { where: { login } });
+    await mailService.sendConfirmResetPasswordEmail(user.email);
     return true;
-}
-
-async function resetPost(email, resetPasswordLink, password) {
-    const user = await Users.findOne({ where: { email } });
-    console.log(user);
-    if (!user) {
-        throw new Error('Пользователь не найден');
-    }
-    if (resetPasswordLink !== user.resetPasswordLink) {
-        throw new Error('Неккоректная ссылка смены пароля');
-    }
-    const hashPassword = await bcrypt.hash(password, 3);
-    await Users.update({password: hashPassword}, { where: { email } });
-    return;
 }
 
 module.exports = {
@@ -135,6 +135,5 @@ module.exports = {
     logout,
     refresh,
     sendResetPassword,
-    reset,
-    resetPost,
+    resetConfirm,
 };
