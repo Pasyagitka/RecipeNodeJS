@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const tokenModel = require('../models').token;
 
 function generateTokens(payload) {
-    const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: '30m' });
+    const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: '1d' });
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' });
     return {
         accessToken,
@@ -12,8 +12,7 @@ function generateTokens(payload) {
 
 function validateAccessToken(token) {
     try {
-        const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-        return userData;
+        return jwt.verify(token, process.env.JWT_ACCESS_SECRET);
     } catch (e) {
         return null;
     }
@@ -21,8 +20,7 @@ function validateAccessToken(token) {
 
 function validateRefreshToken(token) {
     try {
-        const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-        return userData;
+        return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
     } catch (e) {
         return null;
     }
@@ -34,18 +32,15 @@ async function saveToken(userId, refreshToken) {
         tokenData.refreshToken = refreshToken;
         return tokenData.save();
     }
-    const token = await tokenModel.create({ userId, refreshToken });
-    return token;
+    return await tokenModel.create({ userId, refreshToken });
 }
 
 async function removeToken(refreshToken) {
-    const tokenData = await tokenModel.deleteOne({ refreshToken });
-    return tokenData;
+    return await tokenModel.deleteOne({ refreshToken });
 }
 
 async function findToken(refreshToken) {
-    const tokenData = await tokenModel.findOne({ refreshToken });
-    return tokenData;
+    return await tokenModel.findOne({ refreshToken });
 }
 
 module.exports = {
