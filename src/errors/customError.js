@@ -1,5 +1,5 @@
-function CustomError(message, status = 500){
-    return {message, status};
+function CustomError(error, statusCode = 500){
+    return {error, statusCode};
 }
 
 function AlreadyExistsError() {
@@ -11,11 +11,27 @@ function NotExistsError() {
 }
 
 function UnauthorizedError() {
-    return new CustomError('Unauthorized', '401');
+    return new CustomError('Unauthorized', 401);
 }
+
+function BadActivationLinkError() {
+    return new CustomError('Bad activation link');
+}
+
+function BadResetPasswordLinkError() {
+    return new CustomError('Bad reset password link');
+}
+
+function WrongPasswordError() {
+    return new CustomError('Wrong password');
+}
+
 
 module.exports = {
     AlreadyExistsError,
     NotExistsError,
     UnauthorizedError,
+    BadActivationLinkError,
+    WrongPasswordError,
+    BadResetPasswordLinkError,
 }

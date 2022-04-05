@@ -20,7 +20,13 @@ module.exports = function DefineUsers(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        temporaryPassword: {
+            type: DataTypes.TEXT,
+        },
         activationLink: {
+            type: DataTypes.TEXT,
+        },
+        resetPasswordLink: {
             type: DataTypes.TEXT,
         },
         isGranted: {
