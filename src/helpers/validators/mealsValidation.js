@@ -2,7 +2,7 @@ const { Joi } = require('express-validation');
 
 const create = {
     body: Joi.object({
-        meal: Joi.string().required()
+        meal: Joi.string().required(),
     }),
 };
 
