@@ -1,18 +1,10 @@
-module.exports = function DefineImages(sequelize, DataTypes) {
-    return sequelize.define('images', {
+module.exports = function DefineRecipeIngredients(sequelize, DataTypes) {
+    return sequelize.define('recipe_ingredients', {
         id: {
             autoIncrement: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
-        },
-        uri: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-        },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: true,
         },
         recipeId: {
             type: DataTypes.INTEGER,
@@ -22,14 +14,27 @@ module.exports = function DefineImages(sequelize, DataTypes) {
                 key: 'id',
             },
         },
+        ingredientId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'ingredients',
+                key: 'id',
+            },
+        },
+        quantity: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 1,
+        },
     }, {
         sequelize,
-        tableName: 'images',
+        tableName: 'recipe_ingredients',
         schema: 'public',
         timestamps: false,
         indexes: [
             {
-                name: 'images_pkey',
+                name: 'recipe_ingredients_pkey',
                 unique: true,
                 fields: [
                     { name: 'id' },
