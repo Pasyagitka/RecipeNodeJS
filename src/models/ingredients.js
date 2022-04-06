@@ -29,7 +29,7 @@ module.exports = function DefineIngredients(sequelize, DataTypes) {
                 ],
             },
             {
-                name: 'ingredients_pkey',
+                name: 'ingridients_pkey',
                 unique: true,
                 fields: [
                     { name: 'id' },
