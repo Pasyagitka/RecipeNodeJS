@@ -32,15 +32,18 @@ async function saveToken(userId, refreshToken) {
         tokenData.refreshToken = refreshToken;
         return tokenData.save();
     }
-    return await tokenModel.create({ userId, refreshToken });
+    const token = await tokenModel.create({ userId, refreshToken });
+    return token;
 }
 
 async function removeToken(refreshToken) {
-    return await tokenModel.deleteOne({ refreshToken });
+    const token = await tokenModel.deleteOne({ refreshToken });
+    return token;
 }
 
 async function findToken(refreshToken) {
-    return await tokenModel.findOne({ refreshToken });
+    const token = await tokenModel.findOne({ refreshToken });
+    return token;
 }
 
 module.exports = {

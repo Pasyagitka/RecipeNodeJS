@@ -21,15 +21,22 @@ const {
 } = require('./tokenService');
 
 async function registration(login, email, password) {
-    const candidate = await Users.findOne({ where: { email } });
-    if (candidate) {
-        throw new AlreadyExistsError();
+    const findByEmail = await Users.findOne({ where: { email } });
+    if (findByEmail) {
+        throw new AlreadyExistsError('email');
+    }
+    const findByLogin = await Users.findOne({ where: { login } });
+    if (findByLogin) {
+        throw new AlreadyExistsError('login');
     }
     const hashPassword = await bcrypt.hash(password, 3);
     const activationLink = uuid.v4();
 
     const newUser = await Users.create({
-        email, login, password: hashPassword, activationLink,
+        email,
+        login,
+        password: hashPassword,
+        activationLink,
     });
     await mailService.sendActivationMail(email, `${process.env.API_URL}/auth/activate/${activationLink}`);
 
@@ -38,25 +45,28 @@ async function registration(login, email, password) {
         email: newUser.email,
         isActivated: newUser.isActivated,
     };
-    const tokens = generateTokens({ ...user });
+    const tokens = generateTokens(user);
     await saveToken(user.id, tokens.refreshToken);
 
     return { ...tokens, user };
 }
 
 async function activate(activationLink) {
-    const user = await Users.findOne({ where: { activationLink } });
-    if (!user) {
+    const findUser = await Users.findOne({ where: { activationLink } });
+    if (!findUser) {
         throw new BadActivationLinkError();
     }
-    await Users.update({isActivated: true, activationLink: null}, { where: { email: user.email } });
-    await user.save();
+    await Users.update({
+        isActivated: true,
+        activationLink: null,
+    }, { where: { email: findUser.email } });
+    await findUser.save();
 }
 
 async function login(email, password) {
     const findUser = await Users.findOne({ where: { email } });
     if (!findUser) {
-        throw new NotExistsError();
+        throw new NotExistsError('user (by email)');
     }
     const isPassEquals = await bcrypt.compare(password, findUser.password);
     if (!isPassEquals) {
@@ -67,7 +77,7 @@ async function login(email, password) {
         email: findUser.email,
         isActivated: findUser.isActivated,
     };
-    const tokens = generateTokens({ ...user });
+    const tokens = generateTokens(user);
     await saveToken(user.id, tokens.refreshToken);
     return { ...tokens, user };
 }
@@ -86,45 +96,50 @@ async function refresh(refreshToken) {
     if (!userData || !tokenFromDb) {
         throw new UnauthorizedError();
     }
-    const user = await Users.findByPk(userData.id);
-    const userDto = {
-        id: user.id,
-        email: user.email,
-        isActivated: user.isActivated,
+    const findUser = await Users.findByPk(userData.id);
+    const user = {
+        id: findUser.id,
+        email: findUser.email,
+        isActivated: findUser.isActivated,
     };
-    const tokens = generateTokens({ ...userDto });
+    const tokens = generateTokens(user);
 
-    await saveToken(userDto.id, tokens.refreshToken);
-    return { ...tokens, user: userDto };
+    await saveToken(user.id, tokens.refreshToken);
+    return { ...tokens, user };
 }
-
 
 async function sendResetPassword(email) {
     const findUser = await Users.findOne({ where: { email } });
     if (!findUser) {
-        throw new NotExistsError();
+        throw new NotExistsError('user (by email)');
     }
     const link = uuid.v4();
-    let password = generator.generate({
+    const password = generator.generate({
         length: 10,
-        numbers: true
+        numbers: true,
     });
-    let temporaryPassword = await bcrypt.hash(password, 3);
-    await Users.update({resetPasswordLink: link, temporaryPassword}, { where: { email } });
+    const temporaryPassword = await bcrypt.hash(password, 3);
+    await Users.update({
+        resetPasswordLink: link,
+        temporaryPassword,
+    }, { where: { email } });
     await mailService.sendResetPasswordEmail(email, `${process.env.API_URL}/auth/reset-password/${findUser.login}/${link}`, password);
 }
 
-
 async function resetConfirm(login, resetPasswordLink) {
-    const user = await Users.findOne({ where: { login } });
-    if (!user) {
-        throw new NotExistsError();
+    const findUser = await Users.findOne({ where: { login } });
+    if (!findUser) {
+        throw new NotExistsError('user (by login)');
     }
-    if (resetPasswordLink !== user.resetPasswordLink) {
+    if (resetPasswordLink !== findUser.resetPasswordLink) {
         throw new BadResetPasswordLinkError();
     }
-    await Users.update({password: user.temporaryPassword, temporaryPassword: null, resetPasswordLink: null}, { where: { login } });
-    await mailService.sendConfirmResetPasswordEmail(user.email);
+    await Users.update({
+        password: findUser.temporaryPassword,
+        temporaryPassword: null,
+        resetPasswordLink: null,
+    }, { where: { login } });
+    await mailService.sendConfirmResetPasswordEmail(findUser.email);
     return true;
 }
 

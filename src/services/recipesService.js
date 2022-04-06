@@ -23,7 +23,7 @@ exports.create = async (data) => {
     const meal = await Meals.findOne({ where: { meal: data.meal } });
     if (!meal) throw new NotExistsError('mealId');
 
-    return await Recipes.create({
+    const result = await Recipes.create({
         categoryId: category.id,
         authorId: author.id,
         mealId: meal.id,
@@ -32,32 +32,32 @@ exports.create = async (data) => {
         instruction: data.instruction,
         title: data.title,
     });
+    return result;
 };
 
 exports.update = async (data) => {
-    let category; let author; let
-        meal;
+    let category; let author; let meal;
     if (data.category) {
         category = await Categories.findOne({ where: { category: data.category } });
-        if (!category) throw new NotExistsError();
+        if (!category) throw new NotExistsError('category');
     }
 
     if (data.authorId) {
         author = await Users.findOne({ where: { id: data.authorId } });
-        if (!author) throw new NotExistsError();
+        if (!author) throw new NotExistsError('user (author)');
     }
 
     if (data.meal) {
         meal = await Meals.findOne({ where: { meal: data.meal } });
-        if (!meal) throw new NotExistsError();
+        if (!meal) throw new NotExistsError('meal');
     }
 
     const { id } = data;
 
     const exists = await Recipes.findOne({ where: { id } });
-    if (!exists) throw new NotExistsError();
+    if (!exists) throw new NotExistsError('recipe');
 
-    const num = await Recipes.update({
+    const upd = await Recipes.update({
         categoryId: category?.id ?? exists.categoryId,
         authorId: author?.id ?? exists.authorId,
         mealId: meal?.id ?? exists.mealId,
@@ -65,15 +65,13 @@ exports.update = async (data) => {
         instruction: data.instruction ?? exists.instruction,
         title: data.title ?? exists.title,
     }, { where: { id } });
-    if (num === 1) {
-        return (data);
-    }
-    return null;
+
+    return upd ? data : null;
 };
 
 exports.delete = async (id) => {
     const exists = await Recipes.findOne({ where: { id } });
-    if (!exists) throw new NotExistsError();
-    const num = await Recipes.destroy({ where: { id } });
-    return num ? exists : null;
+    if (!exists) throw new NotExistsError('recipe');
+    const result = await exists.destroy();
+    return result ? exists : null;
 };

@@ -41,7 +41,6 @@ async function sendResetPasswordEmail(to, link, password) {
     });
 }
 
-
 async function sendConfirmResetPasswordEmail(to) {
     await transporter.sendMail({
         from: process.env.EMAIL_USERNAME,
