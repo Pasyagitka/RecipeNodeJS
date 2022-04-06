@@ -1,9 +1,9 @@
 var express = require('express');
 const { validate } = require('express-validation');
 var router = express.Router();
-const controller = require('../controllers/ingredients');
+const controller = require('../controllers/recipes');
 const authMiddleware = require('../middlewares/auth');
-const validation = require('../helpers/validators/ingredientsValidation');
+const validation = require('../helpers/validators/recipesValidation');
 
 router.get("/", controller.findAll);
 router.post("/", authMiddleware, validate(validation.create), controller.create);

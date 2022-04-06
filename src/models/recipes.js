@@ -5,22 +5,30 @@ module.exports = function DefineRecipes(sequelize, DataTypes) {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
-            references: {
-                model: 'meals',
-                key: 'id',
-            },
         },
         categoryId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: 'categories',
+                key: 'id',
+            },
         },
         authorId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: 'users',
+                key: 'id',
+            },
         },
         mealId: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: 'meals',
+                key: 'id',
+            },
         },
         datePublished: {
             type: DataTypes.DATEONLY,

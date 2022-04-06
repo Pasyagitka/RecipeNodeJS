@@ -20,15 +20,6 @@ module.exports = function DefineUsers(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        temporaryPassword: {
-            type: DataTypes.TEXT,
-        },
-        activationLink: {
-            type: DataTypes.TEXT,
-        },
-        resetPasswordLink: {
-            type: DataTypes.TEXT,
-        },
         isGranted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
@@ -38,7 +29,19 @@ module.exports = function DefineUsers(sequelize, DataTypes) {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
-        }
+        },
+        activationLink: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+        resetPasswordLink: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
+        temporaryPassword: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
     }, {
         sequelize,
         tableName: 'users',

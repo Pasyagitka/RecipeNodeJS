@@ -24,10 +24,7 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
     try {
         let num = await categoriesService.update(req.body);
-        if (num == 1) {
-            return res.json(req.body);
-        } 
-        else return res.send('');
+        return res.json(num);
     } catch (e) {
         next(e);
     }
@@ -37,10 +34,7 @@ exports.delete = async (req, res, next) => {
     try {
         let id = req.params.id;
         let num = await categoriesService.delete(id);
-        if (num == 1) {
-           return res.json(exists);
-        }
-        else return res.send(''); //todo remove?
+        return res.json(num);
     } catch (e) {
         next(e);
     }

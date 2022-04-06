@@ -1,4 +1,4 @@
-const userService = require('../services/userService');
+const authService = require('../services/authService');
 
 const cookieConfig = {
     maxAge: 30 * 24 * 60 * 60 * 1000, 
@@ -8,7 +8,7 @@ const cookieConfig = {
 async function registration(req, res, next) {
     try {
         const {login, email, password} = req.body;
-        const userData = await userService.registration(login, email, password);
+        const userData = await authService.registration(login, email, password);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
         return res.json(userData);
     } catch (e) {
@@ -19,7 +19,7 @@ async function registration(req, res, next) {
 async function login(req, res, next) {
     try {
         const {email, password} = req.body;
-        const userData = await userService.login(email, password);
+        const userData = await authService.login(email, password);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
         return res.json(userData);
     } catch (e) {
@@ -30,7 +30,7 @@ async function login(req, res, next) {
 async function logout(req, res, next) {
     try {
         const {refreshToken} = req.cookies;
-        const token = await userService.logout(refreshToken);
+        const token = await authService.logout(refreshToken);
         res.clearCookie('refreshToken');
         return res.json(token);
     } catch (e) {
@@ -41,7 +41,7 @@ async function logout(req, res, next) {
 async function activate(req, res, next) {
     try {
         const activationLink = req.params.link;
-        await userService.activate(activationLink);
+        await authService.activate(activationLink);
         return res.send('Success');
     } catch (e) {
         next(e);
@@ -51,7 +51,7 @@ async function activate(req, res, next) {
 async function refresh(req, res, next) {
     try {
         const {refreshToken} = req.cookies;
-        const userData = await userService.refresh(refreshToken);
+        const userData = await authService.refresh(refreshToken);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
         return res.json(userData);
     } catch (e) {
@@ -61,7 +61,7 @@ async function refresh(req, res, next) {
 
 async function sendResetPassword(req, res, next) {
     try {
-        await userService.sendResetPassword(req.body.email);
+        await authService.sendResetPassword(req.body.email);
         return res.send('Password reset link sent to your email account');
     } catch (e) {
         next(e);
@@ -72,7 +72,7 @@ async function resetConfirm(req, res, next) {
     try {
         const login = req.params.login;
         const resetPasswordLink = req.params.link;
-        let isReset = await userService.resetConfirm(login, resetPasswordLink);
+        let isReset = await authService.resetConfirm(login, resetPasswordLink);
         if (isReset) {
             return res.send('Success');
         }

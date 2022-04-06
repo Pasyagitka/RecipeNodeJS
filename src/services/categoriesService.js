@@ -1,43 +1,40 @@
-const Categories = require("../models").categories;
-const {AlreadyExistsError, NotExistsError} = require('../errors/customError');
+const Categories = require('../models').categories;
+const { AlreadyExistsError, NotExistsError } = require('../errors/customError');
 
 exports.findAll = async () => {
-    let all = await Categories.findAll({
-        raw : true,  
-        nest : true
+    const all = await Categories.findAll({
+        raw: true,
+        nest: true,
     });
     return all;
 };
 
-
 exports.create = async (category) => {
-    const exists = await Categories.findOne( {where: { category }});
+    const exists = await Categories.findOne({ where: { category } });
     if (exists) throw new AlreadyExistsError();
-    let data = await Categories.create({category});
+    const data = await Categories.create({ category });
     return data;
 };
 
+exports.update = async (data) => {
+    const { id, category } = data;
+    const exists = await Categories.findOne({ where: { id } });
+    if (!exists) throw new NotExistsError('category');
 
-exports.update = async (body) => {
-    let {id, category} = body;
-    const exists = await Categories.findOne( {where: { id }});
-    const duplicateName = await Categories.findOne( {where: { category }});
-    if (!exists)  throw new NotExistsError();
-    if (duplicateName) throw new AlreadyExistsError();
-    let num = await Categories.update(body, { where: { id } }); 
-    if (num == 1) {
-        return (body);
-    } 
-    else return null;
-}
+    const duplicateName = await Categories.findOne({ where: { category } });
+    if (duplicateName && duplicateName.id !== id) {
+        throw new AlreadyExistsError('category');
+    }
+    const upd = await Categories.update({
+        category,
+    }, { where: { id } });
+    return upd ? data : null;
+};
 
 exports.delete = async (id) => {
-    const exists = await Categories.findOne( {where: { id }});
-    if (!exists)  throw new NotExistsError();
-    let num = await Categories.destroy({ where: { id} });
-    if (num == 1) {
-        return (exists);
-    }
-    else return null; //todo remove?
+    const exists = await Categories.findOne({ where: { id } });
+    if (!exists) throw new NotExistsError('category');
+    const result = await exists.destroy();
+    return result ? exists : null;
 };
 

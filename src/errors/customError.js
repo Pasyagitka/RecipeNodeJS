@@ -2,12 +2,12 @@ function CustomError(error, statusCode = 500){
     return {error, statusCode};
 }
 
-function AlreadyExistsError() {
-    return new CustomError('Already exists');
+function AlreadyExistsError(data = '') {
+    return new CustomError(`Already exists ${data}`);
 }
 
-function NotExistsError() {
-    return new CustomError('Not exists');
+function NotExistsError(data = '') {
+    return new CustomError(`Not exists ${data}`);
 }
 
 function UnauthorizedError() {

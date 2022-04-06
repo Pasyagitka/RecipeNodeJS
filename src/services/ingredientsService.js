@@ -1,43 +1,46 @@
-const Ingredients = require("../models").ingredients;
-const {AlreadyExistsError, NotExistsError} = require('../errors/customError');
+const Ingredients = require('../models').ingredients;
+const { AlreadyExistsError, NotExistsError } = require('../errors/customError');
 
 exports.findAll = async () => {
-    let all = await Ingredients.findAll({
-        raw : true,  
-        nest : true
+    const all = await Ingredients.findAll({
+        raw: true,
+        nest: true,
     });
     return all;
 };
 
-
 exports.create = async (name, measurement) => {
-    const exists = await Ingredients.findOne( {where: { name }});
-    if (exists) throw new AlreadyExistsError();
-    let data = await Ingredients.create({name, measurement});
+    const exists = await Ingredients.findOne({ where: { name } });
+    if (exists) throw new AlreadyExistsError('ingredient (name)');
+
+    const data = await Ingredients.create({
+        name,
+        measurement,
+    });
     return data;
 };
 
+exports.update = async (data) => {
+    const { id, name, measurement } = data;
+    const exists = await Ingredients.findOne({ where: { id } });
+    if (!exists) throw new NotExistsError('ingredient');
 
-exports.update = async (body) => {
-    let {id, name} = body;
-    const exists = await Ingredients.findOne( {where: { id }});
-    const duplicateName = await Ingredients.findOne( {where: { name }});
-    if (!exists) throw new NotExistsError();
-    if (duplicateName) throw new AlreadyExistsError();
+    const duplicateName = await Ingredients.findOne({ where: { name } });
+    if (duplicateName && duplicateName.id !== id) {
+        throw new AlreadyExistsError('ingredient (name)');
+    }
 
-    let num = await Ingredients.update(body, { where: { id } }); 
-    if (num == 1) {
-        return (body);
-    } 
-    else return null;
-}
+    const upd = await Ingredients.update({
+        name,
+        measurement: measurement ?? exists.measurement,
+    }, { where: { id } });
+
+    return upd ? data : null;
+};
 
 exports.delete = async (id) => {
-    const exists = await Ingredients.findOne( {where: { id }});
-    if (!exists)  throw new NotExistsError();
-    let num = await Ingredients.destroy({ where: { id} });
-    if (num == 1) {
-        return (exists);
-    }
-    else return null;
+    const exists = await Ingredients.findOne({ where: { id } });
+    if (!exists) throw new NotExistsError('ingredient');
+    const result = await exists.destroy();
+    return result ? exists : null;
 };
