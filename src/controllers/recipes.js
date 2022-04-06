@@ -30,8 +30,8 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const num = await recipesService.delete(id);
-        return res.json(num);
+        const result = await recipesService.delete(id);
+        return res.json(result);
     } catch (e) {
         next(e);
     }

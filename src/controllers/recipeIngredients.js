@@ -1,41 +1,38 @@
-const mealsService = require("../services/mealsService");
-
+const recipeIngredients = require('../services/recipeIngredientsService');
 
 exports.findAll = async (req, res, next) => {
     try {
-        let all = await mealsService.findAll();
+        let recipeId = req.params.recipeId;
+        const all = await recipeIngredients.findAllForRecipe(recipeId);
         return res.json(all);
     } catch (e) {
         next(e);
     }
 };
 
-
 exports.create = async (req, res, next) => {
     try {
-        let {meal} = req.body;
-        let data = await mealsService.create(meal);
+        const data = await recipeIngredients.create(req.body);
         return res.json(data);
     } catch (e) {
         next(e);
     }
 };
 
-
 exports.update = async (req, res, next) => {
     try {
-        let num = await mealsService.update(req.body);
+        const num = await recipeIngredients.update(req.body);
         return res.json(num);
     } catch (e) {
         next(e);
     }
-}
+};
 
 exports.delete = async (req, res, next) => {
     try {
-        let id = req.params.id;
-        let num = await mealsService.delete(id);
-        return res.json(num);
+        const { id } = req.params;
+        const result = await recipeIngredients.delete(id);
+        return res.json(result);
     } catch (e) {
         next(e);
     }
