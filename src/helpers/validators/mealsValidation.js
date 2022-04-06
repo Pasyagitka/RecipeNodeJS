@@ -9,7 +9,7 @@ const create = {
 const update = {
     body: Joi.object({
         id: Joi.number().required(),
-        meal: Joi.string().required(),
+        meal: Joi.string(),
     }),
 };
 

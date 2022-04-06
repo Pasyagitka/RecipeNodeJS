@@ -9,7 +9,7 @@ const create = {
 const update = {
     body: Joi.object({
         id: Joi.number().required(),
-        category: Joi.string().required(),
+        category: Joi.string(),
     }),
 };
 
