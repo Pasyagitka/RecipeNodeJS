@@ -16,7 +16,6 @@ module.exports = function DefineRecipeIngredients(sequelize, DataTypes) {
         },
         ingredientId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             references: {
                 model: 'ingredients',
                 key: 'id',
