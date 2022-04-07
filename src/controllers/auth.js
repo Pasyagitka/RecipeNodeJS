@@ -1,13 +1,13 @@
 const authService = require('../services/authService');
 
 const cookieConfig = {
-    maxAge: 30 * 24 * 60 * 60 * 1000, 
-    httpOnly: true
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
 };
 
 async function registration(req, res, next) {
     try {
-        const {login, email, password} = req.body;
+        const { login, email, password } = req.body;
         const userData = await authService.registration(login, email, password);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
         return res.json(userData);
@@ -18,7 +18,7 @@ async function registration(req, res, next) {
 
 async function login(req, res, next) {
     try {
-        const {email, password} = req.body;
+        const { email, password } = req.body;
         const userData = await authService.login(email, password);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
         return res.json(userData);
@@ -29,7 +29,7 @@ async function login(req, res, next) {
 
 async function logout(req, res, next) {
     try {
-        const {refreshToken} = req.cookies;
+        const { refreshToken } = req.cookies;
         const token = await authService.logout(refreshToken);
         res.clearCookie('refreshToken');
         return res.json(token);
@@ -50,7 +50,7 @@ async function activate(req, res, next) {
 
 async function refresh(req, res, next) {
     try {
-        const {refreshToken} = req.cookies;
+        const { refreshToken } = req.cookies;
         const userData = await authService.refresh(refreshToken);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
         return res.json(userData);
@@ -70,18 +70,17 @@ async function sendResetPassword(req, res, next) {
 
 async function resetConfirm(req, res, next) {
     try {
-        const login = req.params.login;
+        const { login } = req.params;
         const resetPasswordLink = req.params.link;
-        let isReset = await authService.resetConfirm(login, resetPasswordLink);
+        const isReset = await authService.resetConfirm(login, resetPasswordLink);
         if (isReset) {
             return res.send('Success');
         }
-        else return res.send('Failure');
+        return res.send('Failure');
     } catch (e) {
         next(e);
     }
 }
-
 
 module.exports = {
     registration,
@@ -91,4 +90,4 @@ module.exports = {
     refresh,
     sendResetPassword,
     resetConfirm,
-}
+};
