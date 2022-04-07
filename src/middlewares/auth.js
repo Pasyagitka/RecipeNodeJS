@@ -1,6 +1,5 @@
 const tokenService = require('../services/tokenService');
-const {UnauthorizedError} = require('../errors/customError');
-
+const { UnauthorizedError } = require('../errors/customError');
 
 module.exports = function (req, res, next) {
     try {
@@ -13,8 +12,8 @@ module.exports = function (req, res, next) {
         if (!accessToken) {
             return next(new UnauthorizedError());
         }
-        
-        const {refreshToken} = req.cookies;
+
+        const { refreshToken } = req.cookies;
         if (!refreshToken) {
             throw new UnauthorizedError();
         }
@@ -26,7 +25,6 @@ module.exports = function (req, res, next) {
 
         req.user = userData;
         next();
-        
     } catch (e) {
         return next(new UnauthorizedError());
     }

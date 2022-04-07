@@ -1,41 +1,46 @@
-const categoriesService = require("../services/categoriesService");
+const categoriesService = require('../services/categoriesService');
 
-exports.findAll = async (req, res, next) => {
+async function findAll(req, res, next) {
     try {
-        let all = await categoriesService.findAll();
+        const all = await categoriesService.findAll();
         return res.json(all);
     } catch (e) {
         next(e);
     }
-};
+}
 
-
-exports.create = async (req, res, next) => {
+async function create(req, res, next) {
     try {
-        let {category} = req.body;
-        let data = await categoriesService.create(category);
+        const { category } = req.body;
+        const data = await categoriesService.create(category);
         return res.json(data);
     } catch (e) {
         next(e);
     }
-};
+}
 
-
-exports.update = async (req, res, next) => {
+async function update(req, res, next) {
     try {
-        let num = await categoriesService.update(req.body);
+        const num = await categoriesService.update(req.body);
         return res.json(num);
     } catch (e) {
         next(e);
     }
 }
 
-exports.delete = async (req, res, next) => {
+async function remove(req, res, next) {
     try {
-        let id = req.params.id;
-        let num = await categoriesService.delete(id);
+        const { id } = req.params;
+        const num = await categoriesService.delete(id);
         return res.json(num);
     } catch (e) {
         next(e);
     }
+}
+
+module.exports = {
+    findAll,
+    create,
+    update,
+    delete: remove,
 };
