@@ -18,26 +18,29 @@ module.exports = function initModels(sequelize) {
     const recipeIngredients = RecipeIngredients(sequelize, DataTypes);
     const cookbooks = Cookbooks(sequelize, DataTypes);
 
-    recipes.belongsTo(categories, { as: 'category', foreignKey: 'categoryId' });
+    recipes.belongsTo(categories, { as: 'category', foreignKey: 'categoryId', onDelete: 'SET NULL' });
     categories.hasMany(recipes, { as: 'recipes', foreignKey: 'categoryId' });
 
-    recipeIngredients.belongsTo(ingredients, { as: 'ingredient', foreignKey: 'ingredientId' });
+    recipeIngredients.belongsTo(ingredients, { as: 'ingredient', foreignKey: 'ingredientId', onDelete: 'SET NULL' });
     ingredients.hasMany(recipeIngredients, { as: 'recipe_ingredients', foreignKey: 'ingredientId' });
 
-    recipes.belongsTo(meals, { as: 'meal', foreignKey: 'mealId' });
+    recipes.belongsTo(meals, { as: 'meal', foreignKey: 'mealId', onDelete: 'SET NULL' });
     meals.hasMany(recipes, { as: 'recipes', foreignKey: 'mealId' });
 
-    images.belongsTo(recipes, { as: 'recipe', foreignKey: 'recipeId' });
+    images.belongsTo(recipes, { as: 'recipe', foreignKey: 'recipeId', onDelete: 'cascade' });
     recipes.hasMany(images, { as: 'images', foreignKey: 'recipeId' });
 
-    recipeIngredients.belongsTo(recipes, { as: 'recipe', foreignKey: 'recipeId' });
+    recipeIngredients.belongsTo(recipes, { as: 'recipe', foreignKey: 'recipeId', onDelete: 'cascade' });
     recipes.hasMany(recipeIngredients, { as: 'recipe_ingredients', foreignKey: 'recipeId' });
 
-    recipes.belongsTo(users, { as: 'author', foreignKey: 'authorId' });
+    recipes.belongsTo(users, { as: 'author', foreignKey: 'authorId', onDelete: 'cascade' });
     users.hasMany(recipes, { as: 'recipes', foreignKey: 'authorId' });
 
-    cookbooks.belongsTo(users, { as: 'user', foreignKey: 'userId' });
+    cookbooks.belongsTo(users, { as: 'user', foreignKey: 'userId', onDelete: 'cascade' });
     users.hasMany(cookbooks, { as: 'cookbooks', foreignKey: 'userId' });
+
+    cookbooks.belongsTo(recipes, { as: "recipe", foreignKey: "recipeId", onDelete: 'cascade'});
+    recipes.hasMany(cookbooks, { as: "cookbooks", foreignKey: "recipeId"});
 
     return {
         categories,

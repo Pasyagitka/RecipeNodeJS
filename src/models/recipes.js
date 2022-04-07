@@ -8,7 +8,6 @@ module.exports = function DefineRecipes(sequelize, DataTypes) {
         },
         categoryId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             references: {
                 model: 'categories',
                 key: 'id',
@@ -24,7 +23,6 @@ module.exports = function DefineRecipes(sequelize, DataTypes) {
         },
         mealId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
             references: {
                 model: 'meals',
                 key: 'id',
