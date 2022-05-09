@@ -1,0 +1,25 @@
+<article class="create-recipe-container">
+    {{!-- <div>
+        {{recipe.mealId}}, {{recipe.categoryId}}
+    </div>
+    <h1>{{recipe.title}}</h1>
+    <div>Posted by {{recipe.authorId}} {{recipe.datePublished}}</div>
+    <div>Time to cook: {{recipe.timeToCook}}m</div>
+        <div>
+            <h4>Ingredients</h4>
+        </div>
+        <h4>Instructions</h4>
+        {{recipe.instruction}}
+    </div> --}}
+    <h1 style="margin: 0 auto; display:block">Creating a new recipe</h1>
+    <form class="add-recipe-form">
+        <input type='text' name='title' value='title'/><br/>
+        <input type='text' name='category' value='category'/> <br/>
+        <input type='number' name='time-to-cook' placeholder='time-to-cook (numeric)'/><br/>
+        <input type='text' name='instruction' value='instruction'/><br/>
+        <input type='text' name='images' value='instruction'/><br/>
+        <input type='text' name='ingredients' value='ingredients'/><br/>
+        <input type='submit' name='add' value='add'/><br/>
+    </form>
+    <a href="javascript:(history.back());">Back</a>
+</article>

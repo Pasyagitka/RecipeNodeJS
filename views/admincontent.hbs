@@ -1,0 +1,46 @@
+<main class="moderate-main-container"> 
+        <div class="moderate-container">
+            {{>searchinput}}
+            {{>table}}
+            <div class="projects-container-header">
+                <p>Meals</p>
+            </div>
+            <div >
+                 <table class="cookbook-table">
+                    {{#each recipeList}}
+                            <tr>
+                                <td>{{>recipe}}</td>
+                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
+                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
+                            </tr> 
+                    {{/each}}
+                </table>
+            </div>
+            <div class="projects-container-header">
+                <p>Ingredients</p>
+            </div>
+            <div>
+                 <table class="cookbook-table">
+                    {{#each recipeList}}
+                            <tr>
+                                <td>{{>recipe}}</td>
+                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
+                            </tr> 
+                    {{/each}}
+                </table>
+            </div>
+            <div class="projects-container-header">
+                <p>Categories</p>
+            </div>
+            <div>
+                 <table class="cookbook-table">
+                    {{#each recipeList}}
+                            <tr>
+                                <td>{{>recipe}}</td>
+                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
+                            </tr> 
+                    {{/each}}
+                </table>
+            </div>
+        </div>
+</main>

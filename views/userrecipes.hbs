@@ -1,0 +1,19 @@
+<main class="main-container">
+    <div class="projects-container">
+        <a class="add-recipe-big-button" href="/addrecipe">Create new recipe</a>
+        <div class="projects-container-header">
+            <p>My recipes</p>
+            <p>All recipes</p>
+        </div>
+        <div class="projects-items-container">
+                <table class="cookbook-table">
+                {{#each recipeList}}
+                        <tr>
+                            <td>{{>recipe}}</td>
+                            <td>{{>minibutton wrapperClasses='list-view-button-wrapper delete-button-wrapper' buttonClasses='list-view-button '}}</td>
+                        </tr> 
+                {{/each}}
+            </table>
+        </div>
+    </div>
+</main>

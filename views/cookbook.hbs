@@ -1,0 +1,20 @@
+<main class="main-container">
+        {{!-- {{>leftmenu}} --}}
+        <div class="projects-container">
+            {{>searchinput}}
+            <div class="projects-container-header">
+                <p>My cookbook</p>
+                <p>All recipes</p>
+            </div>
+            <div class="projects-items-container">
+                 <table class="cookbook-table">
+                    {{#each recipeList}}
+                            <tr>
+                                <td>{{>recipe}}</td>
+                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper delete-button-wrapper' buttonClasses='list-view-button '}}</td>
+                            </tr> 
+                    {{/each}}
+                </table>
+            </div>
+        </div>
+</main>

@@ -1,0 +1,30 @@
+.recipe-details-container {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    row-gap: 20px;
+    background-color: #ffffff;
+    border-radius: 25px;
+    margin: 15px;
+    padding: 25px 25px 0 25px;
+    overflow-y: auto;
+}
+
+.create-recipe-container {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    row-gap: 20px;
+    background: url('images/back.jpg');
+    border-radius: 25px;
+    margin: 15px;
+    padding: 25px 25px 0 25px;
+    overflow-y: auto;
+}
+
+@media print {
+    .print-link,
+    .header-container {
+        display: none;
+    }    
+}

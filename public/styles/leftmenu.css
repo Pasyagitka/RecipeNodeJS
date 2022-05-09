@@ -1,0 +1,19 @@
+.left-menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 50px 0;
+ }
+ 
+ .home-button {
+     background-image: url("/images/home.svg");
+ }
+ .chart-button {
+     background-image: url("/images/chart.svg");
+ }
+ .calendar-button {
+     background-image: url("/images/calendar.svg");
+ }
+ .settings-button {
+     background-image: url("/images/settings.svg");
+ }

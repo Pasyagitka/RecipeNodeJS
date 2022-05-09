@@ -1,0 +1,22 @@
+<article class="recipe-details-container">
+    <div style="display: flex; width: 100%; justify-content:space-between">
+        <div>
+            <p>{{recipe.mealId}}, {{recipe.categoryId}}</p>
+        </div>
+        <div style="display: flex; justify-content:space-between; gap: 15px">
+            <a class="print-link" href="javascript:(print());">Print</a>
+            <script src="https://yastatic.net/share2/share.js"></script>
+            <div class="ya-share2" data-curtain data-shape="round" data-color-scheme="whiteblack" data-limit="0" data-more-button-type="short" data-services="vkontakte,facebook,telegram"></div>
+        </div>
+    </div>
+    <h1>{{recipe.title}}</h1>
+    <div>Posted by {{recipe.authorId}} {{recipe.datePublished}}</div>
+    <div>Time to cook: {{recipe.timeToCook}}m</div>
+        <div>
+            <h4>Ingredients</h4>
+        </div>
+        <h4>Instructions</h4>
+        {{recipe.instruction}}
+    </div>
+    <a href="javascript:(history.back());">Back</a>
+</article>
