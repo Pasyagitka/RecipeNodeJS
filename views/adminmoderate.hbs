@@ -1,11 +1,11 @@
 <main class="moderate-main-container">
         <div class="moderate-container">
             {{>searchinput}}
-            <div class="projects-container-header">
+            <div class="recipes-container-header">
                 <p>New recipes</p>
             </div>
             <div >
-                 <table class="cookbook-table">
+                 <table>
                     {{#each recipeList}}
                             <tr>
                                 <td>{{>recipe}}</td>
@@ -15,11 +15,11 @@
                     {{/each}}
                 </table>
             </div>
-            <div class="projects-container-header">
+            <div class="recipes-container-header">
                 <p>All recipes</p>
             </div>
             <div>
-                 <table class="cookbook-table">
+                 <table>
                     {{#each recipeList}}
                             <tr>
                                 <td>{{>recipe}}</td>

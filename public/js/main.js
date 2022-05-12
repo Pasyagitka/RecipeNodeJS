@@ -14,9 +14,9 @@ function messageContainerClose() {
 }
 
 function switchToRowView() {
-    document.querySelectorAll('.project-item-wrapper').forEach((item) => {
-        item.classList.add('project-item-wrapper-row');
-        item.classList.remove('project-item-wrapper-default');
+    document.querySelectorAll('.recipe-item-wrapper').forEach((item) => {
+        item.classList.add('recipe-item-wrapper-row');
+        item.classList.remove('recipe-item-wrapper-default');
     })
     document.querySelector('.list-view-button-wrapper').style.backgroundColor = '#1f1c2e';
     document.querySelector('.list-view-button-wrapper > button').classList.add('inverted-colors');
@@ -24,9 +24,9 @@ function switchToRowView() {
     document.querySelector('.grid-view-button-wrapper > button').classList.remove('inverted-colors');
 }
 function switchToDefaultView() {
-    document.querySelectorAll('.project-item-wrapper').forEach((item) => {
-        item.classList.add('project-item-wrapper-default');
-        item.classList.remove('project-item-wrapper-row');
+    document.querySelectorAll('.recipe-item-wrapper').forEach((item) => {
+        item.classList.add('recipe-item-wrapper-default');
+        item.classList.remove('recipe-item-wrapper-row');
     })
     document.querySelector('.list-view-button-wrapper').style.backgroundColor = 'transparent';
     document.querySelector('.list-view-button-wrapper > button').classList.remove('inverted-colors');

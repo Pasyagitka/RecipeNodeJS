@@ -1,6 +1,5 @@
 const cookbooksService = require('../services/cookbooksService');
-
-
+const recipesService = require('../services/recipesService');
 
 async function getCookbook(req, res, next) {
     try {
@@ -34,10 +33,13 @@ async function create(req, res, next) {
 
 async function remove(req, res, next) {
     try {
+        console.log(req.params);
         const { recipeId } = req.params;
         const { userId } = req.body;
         const result = await cookbooksService.delete(recipeId, userId);
-        return res.json(result);
+        //return res.renderPjax(result);
+        return res.renderPjax('cookbook', { title: 'Cookbook', recipeList  });
+
     } catch (e) {
         next(e);
     }

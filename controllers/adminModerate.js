@@ -1,7 +1,6 @@
 async function getAdminModerate(req, res, next) {
     try {
-        let recipeList = await recipesService.findAll();
-        res.render('adminmoderate', { title: 'Admin moderate', recipeList  });
+        res.render('adminmoderate', { title: 'Admin moderate'});
     } catch (e) {
         next(e);
     }

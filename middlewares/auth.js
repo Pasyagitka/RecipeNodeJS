@@ -9,6 +9,8 @@ module.exports = function (req, res, next) {
         }
 
         const accessToken = authorizationHeader.split(' ')[1];
+        console.log('auth token', accessToken);
+
         if (!accessToken) {
             return next(new UnauthorizedError());
         }

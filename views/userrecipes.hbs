@@ -1,19 +1,34 @@
+{{!-- fetch recipes GET by userid(body) --}}
+{{!-- PUT recipe -by Id --}}
+{{!-- confirm DELETE --}}
+{{!-- filter, search --}}
+
 <main class="main-container">
-    <div class="projects-container">
-        <a class="add-recipe-big-button" href="/addrecipe">Create new recipe</a>
-        <div class="projects-container-header">
+    <div class="recipes-container">
+        <a class="big-green-button" href="/userrecipes/add">Create new recipe</a>
+        <div class="recipes-container-header">
             <p>My recipes</p>
             <p>All recipes</p>
         </div>
-        <div class="projects-items-container">
-                <table class="cookbook-table">
-                {{#each recipeList}}
-                        <tr>
-                            <td>{{>recipe}}</td>
-                            <td>{{>minibutton wrapperClasses='list-view-button-wrapper delete-button-wrapper' buttonClasses='list-view-button '}}</td>
-                        </tr> 
-                {{/each}}
+        <div class="recipes-items-container user-recipes-items-container">
+                <div>
+                    {{#each recipeList}}
+                        <div style="">
+                            {{>recipe}}
+                            <a href="/userrecipes/update" style="flex: 2;">Update</a>
+                            <button data-pjax='user-recipes-items-container'
+                            
+                               onclick="deleteUserRecipe({{id}})"
+                               >Delete</button>
+                        </div>
+                    {{/each}}
+                </div>
             </table>
         </div>
     </div>
 </main>
+
+{{!-- <script type = "text/javascript">
+    var url = "/js/APICall.js";
+    $.getScript(url);
+</script> --}}

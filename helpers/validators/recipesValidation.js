@@ -1,10 +1,16 @@
 const { Joi } = require('express-validation');
 
+const get = {
+    params: Joi.object({
+        id: Joi.number().required(),
+    }),
+};
+
 const create = {
     body: Joi.object({
-        category: Joi.string().required(),
+        categoryId: Joi.number().required(),
         authorId: Joi.number().required(),
-        meal: Joi.string().required(),
+        mealId: Joi.number().required(),
         timeToCook: Joi.number().required(),
         instruction: Joi.string().required(),
         title: Joi.string().required(),
@@ -30,6 +36,7 @@ const remove = {
 };
 
 module.exports = {
+    get,
     create,   
     update,
     remove,

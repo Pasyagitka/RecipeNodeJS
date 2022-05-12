@@ -6,7 +6,6 @@ const cookieConfig = {
     httpOnly: true,
 };
 
-
 async function getLogin(req, res, next) {
     try {
         res.render('login', { title: 'Login', isNoHeaderPage: true  });
@@ -28,7 +27,7 @@ async function registration(req, res, next) {
         const { login, email, password } = req.body;
         const userData = await authService.registration(login, email, password);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
-        res.render('login', {userData});
+        res.redirect('/login');
         //return res.json(userData);
     } catch (e) {
         next(e);
@@ -39,10 +38,14 @@ async function login(req, res, next) {
     try {
         const { email, password } = req.body;
         const userData = await authService.login(email, password);
-        //let recipeList = await recipeService.getAll();
+        let recipeList = await recipeService.findAll();
+        //console.log(userData);
+        //req.headers.authorization = 'Bearer ' + userData.accessToken;
+        //console.log(req.headers);
+        //console.log(r.split(' ')[1])
+        //console.log('contoler', req.headers);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
-        // res.render('main', {userData, recipeList});
-        return res.json(userData);
+        res.redirect('/');
     } catch (e) {
         next(e);
     }
@@ -53,8 +56,7 @@ async function logout(req, res, next) {
         const { refreshToken } = req.cookies;
         const token = await authService.logout(refreshToken);
         res.clearCookie('refreshToken');
-        res.render('login', {token})
-        //return res.json(token);
+        res.redirect('/login');
     } catch (e) {
         next(e);
     }

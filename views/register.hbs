@@ -1,24 +1,22 @@
-<div class="container align-items-center d-flex" style="padding: 10px; height:600px;">
-<div class="container col-4 bg-light rounded" style="padding: 10px; width: 500px">
-  <h1 style="text-align: center">Register</h1>
-  <div class="form-group" style="margin: 10px;">
-    <div>
-      <div class="form-group">
-        <label for="login">Login</label>
-        <input type="text" name="login" id="login" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="email">E-mail</label>
-        <input type="email" name="email" id="email" class="form-control">
-      </div>
-      <a th:href="@{/login}"><small class="text-muted">Already have an account? Sign in.</small></a></br>
-      <input type="submit" class="btn btn-primary" value="Sign Up" onclick="register()"/></br>
-      <div style="color:red" id="errorOutput"></div>
-    </div>
-  </div>
-  </div>
+<div class="auth-form-wrapper">
+    <form class="auth-form" method="post" action="/register">
+        <h3>Register</h3>
+        <img src="/images/logo.png">
+
+        <label for="login" class="login-label">Login</label>
+        <input type="text" placeholder="Login" id="login" name="login" class="login-input">
+
+        <label for="email" class="login-label">Email</label>
+        <input type="text" placeholder="Email" id="email" name="email" class="login-input">
+
+        <label for="password" class="login-label">Password</label>
+        <input type="password" placeholder="Password" id="password" name="password" class="login-input">
+
+        <input type="submit" class="big-green-button" style="width:100%;" value="Register"></input>
+        <a class="auth-link" href='/login'>Already have an account? Log in</a>
+        <div class="social">
+          <div class="go"><i class="fab fa-google"></i>  Google</div>
+          <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
+        </div>
+    </form>
 </div>

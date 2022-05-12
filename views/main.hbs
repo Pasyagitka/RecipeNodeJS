@@ -1,36 +1,39 @@
 <main class="main-container">
         {{>leftmenu}}
-        <div class="projects-container">
-            <div class="projects-container-header">
-                <p>Projects</p>
+        <div class="recipes-container">
+            <div class="recipes-container-header">
+                <p>Recipes...</p>
                 <p>December, 12</p>
             </div>
-            <div class="projects-statistics-container">
-                <div class="projects-statistics-data-container">
-                    <div class="projects-statistics-item">
+             {{>filter}}
+            <div class="recipes-statistics-container">
+                <div class="recipes-statistics-data-container">
+                    <div class="recipes-statistics-item">
                         <div>45</div>
                         <div>In Progress</div>    
                     </div>
-                    <div class="projects-statistics-item">
+                    <div class="recipes-statistics-item">
                         <div>24</div>
                         <div>Upcoming</div>    
                     </div>
-                    <div class="projects-statistics-item">
+                    <div class="recipes-statistics-item">
                         <div>62</div>
-                        <div>Total Projects</div>    
+                        <div>Total Recipes</div>    
                     </div>
                 </div>
                <div class="view-buttons-container">
                    <div class="list-view-button-wrapper">
-                        <button class="list-view-button">
+                        <button class="list-view-button inverted-colors">
                    </div>
                    <div class="grid-view-button-wrapper">
-                        <button class="grid-view-button inverted-colors">
+                        <button class="grid-view-button">
                     </div>
                </div>
             </div>
-            <div class="projects-items-container">
+            <div class="recipes-items-container">
                 {{#each recipeList}}
+                    {{>recipe}}
+                    {{>recipe}}
                     {{>recipe}}
                 {{/each}}
             </div>
@@ -39,7 +42,7 @@
             <div class="client-messages-container-header">
                 <p>Client Messages</p>
                 <button class="client-messages-close-button">
-                    <img src="images/close.svg"/>
+                    <img src="/images/close.svg"/>
                 </button>
             </div>
             <div class="client-messages-items-container">

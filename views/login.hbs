@@ -1,17 +1,17 @@
-<div class="login-body">
-    <form class="login-form" method="post" action="/auth/login">
+<div class="auth-form-wrapper">
+    <form class="auth-form" method="post" action="/login">
         <h3>Login</h3>
-        <img src="/images/logo.png" width="50px" style="margin: 10px auto; display: block;">
+        <img src="/images/logo.png">
 
-        <label for="email" class="login-label">Username</label>
+        <label for="email" class="login-label">Email</label>
         <input type="text" placeholder="Email" id="email" name="email" class="login-input">
 
         <label for="password" class="login-label">Password</label>
         <input type="password" placeholder="Password" id="password" name="password" class="login-input">
 
-        <input type="submit" class="login-button" value="Log In"></input>
-        <a class="register-link" href='/auth/register'>Do not have an account? Register</a>
-        <div class="social">
+        <input type="submit" class="big-green-button" style="width: 100%;" value="Log In"></input>
+        <a class="auth-link" href='/register'>Do not have an account? Register</a>
+        <div class="social" hidden>
           <div class="go"><i class="fab fa-google"></i>  Google</div>
           <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
         </div>

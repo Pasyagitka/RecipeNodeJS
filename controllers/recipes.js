@@ -1,8 +1,15 @@
 const recipesService = require('../services/recipesService');
+const categoriesService = require('../services/categoriesService');
+const mealsService = require('../services/mealsService');
+
+const { NotExistsError } = require('../helpers/errors/customError');
+
 
 async function getAddRecipes(req, res, next) {
     try {
-        res.render('addrecipe', { title: 'Add new recipe'  });
+        let categories = await categoriesService.findAll();
+        let meals = await mealsService.findAll();
+        res.render('addrecipe', { title: 'Add new recipe', categories, meals  });
     } catch (e) {
         next(e);
     }
@@ -10,8 +17,10 @@ async function getAddRecipes(req, res, next) {
 
 async function getRecipe(req, res, next) {
     try {
-        let recipeList = await recipesService.findAll();
-        res.render('recipe', { title: 'Recipe details', recipe: recipeList[0] });
+        const { id } = req.params;
+        let recipe = await recipesService.findOne(id);
+        if(!recipe) throw new NotExistsError('recipe');
+        res.render('recipe', { title: 'Recipe details', recipe: recipe });
     } catch (e) {
         next(e);
     }
@@ -19,6 +28,7 @@ async function getRecipe(req, res, next) {
 
 async function getUserRecipes(req, res, next) {
     try {
+        // console.log('user', req.user);
         let recipeList = await recipesService.findAll();
         res.render('userrecipes', { title: 'User`s recipes', recipeList});
     } catch (e) {

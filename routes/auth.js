@@ -8,9 +8,9 @@ const router = new Router();
 router.get('/login', userController.getLogin);
 router.get('/register', userController.getRegister);
 
-router.post('/registration', validate(validation.register), userController.registration);
+router.post('/register', validate(validation.register), userController.registration);
 router.post('/login', validate(validation.login), userController.login);
-router.post('/logout', userController.logout);
+router.get('/logout', userController.logout);
 
 router.get('/activate/:link', userController.activate);
 router.get('/refresh', userController.refresh);

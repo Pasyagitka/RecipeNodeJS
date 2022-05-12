@@ -1,8 +1,8 @@
 @media screen and (max-width: 980px) {
-    .project-item-wrapper-default {
+    .recipe-item-wrapper-default {
         width: 50%;
     }
-    .projects-statistics-data-container {
+    .recipes-statistics-data-container {
         font-size: 0.8em;
     }
     
@@ -54,7 +54,7 @@
     .left-menu-container {
         display: none;
     }
-    .project-item-wrapper-default {
+    .recipe-item-wrapper-default {
         width: 100%;
     }
     .main-container {

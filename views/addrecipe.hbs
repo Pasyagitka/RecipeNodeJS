@@ -1,25 +1,26 @@
-<article class="create-recipe-container">
-    {{!-- <div>
-        {{recipe.mealId}}, {{recipe.categoryId}}
+<article class="add-recipe-container">
+    <h1 class="add-recipe-header">Creating a new recipe</h1>
+    <div>
+        <form class="add-recipe-form" action="/recipes/add" method="post">
+            <input type="text" name="authorId" value="27" class="add-input-text"/>
+            <input type="text"  class="add-input-text" placeholder="image uri"/>
+            <input type='text' name='title' value='title' class="add-input-text" required/>
+            <div class="add-select-container">
+                <select name="categoryId" class="add-input-select" required>
+                    {{#each categories}}
+                        <option value="{{id}}">{{category}}</option>
+                    {{/each}}
+                </select>
+                <select name="mealId"  class="add-input-select" required>
+                    {{#each meals}}
+                        <option value="{{id}}">{{meal}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <input type='number' class="add-input-text" style="width: 150px;" name='timeToCook' required placeholder='time to cook (m)'/>
+            <textarea class="instruction-input" type='text' name='instruction' required value='instruction'/></textarea><br/>
+            <input type='submit' class="big-green-button" value='Confirm'/><br/>
+        </form>
     </div>
-    <h1>{{recipe.title}}</h1>
-    <div>Posted by {{recipe.authorId}} {{recipe.datePublished}}</div>
-    <div>Time to cook: {{recipe.timeToCook}}m</div>
-        <div>
-            <h4>Ingredients</h4>
-        </div>
-        <h4>Instructions</h4>
-        {{recipe.instruction}}
-    </div> --}}
-    <h1 style="margin: 0 auto; display:block">Creating a new recipe</h1>
-    <form class="add-recipe-form">
-        <input type='text' name='title' value='title'/><br/>
-        <input type='text' name='category' value='category'/> <br/>
-        <input type='number' name='time-to-cook' placeholder='time-to-cook (numeric)'/><br/>
-        <input type='text' name='instruction' value='instruction'/><br/>
-        <input type='text' name='images' value='instruction'/><br/>
-        <input type='text' name='ingredients' value='ingredients'/><br/>
-        <input type='submit' name='add' value='add'/><br/>
-    </form>
     <a href="javascript:(history.back());">Back</a>
 </article>

@@ -20,6 +20,11 @@ const {
     validateRefreshToken,
 } = require('./tokenService');
 
+async function findUserById(id) {
+    const findById = await Users.findByPk(id);
+    return findById;
+}
+
 async function registration(login, email, password) {
     const findByEmail = await Users.findOne({ where: { email } });
     if (findByEmail) {
@@ -152,4 +157,5 @@ module.exports = {
     refresh,
     sendResetPassword,
     resetConfirm,
-};
+    findUserById,
+}

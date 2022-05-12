@@ -7,13 +7,13 @@ const authMiddleware = require('../middlewares/auth');
 const validation = require('../helpers/validators/recipesValidation');
 
 router.get('/', controller.findAll);
-router.post('/', authMiddleware, validate(validation.create), controller.create);
-router.put('/', authMiddleware, validate(validation.update), controller.update);
-router.delete('/:id', authMiddleware, validate(validation.remove), controller.delete);
+router.post('/add', validate(validation.create), controller.create);
+router.put('/update', validate(validation.update), controller.update);
+router.delete('/delete/:id', validate(validation.remove), controller.delete);
 
-router.get('/userrecipes', controller.getUserRecipes);
-router.get('/addrecipe', controller.getAddRecipes);
-router.get('/recipe', controller.getRecipe);
+router.get('/get/:id', validate(validation.get),controller.getRecipe);
+router.get('/userrecipes/', controller.getUserRecipes);
+router.get('/add', controller.getAddRecipes);
 
 
 module.exports = router;

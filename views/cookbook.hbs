@@ -1,20 +1,36 @@
+{{!-- request for removing - DELETE - user(body), recipeId(query) --}}
+{{!-- change default -> row class, add filter, remove search (top), confirm removing recipe --}}
 <main class="main-container">
         {{!-- {{>leftmenu}} --}}
-        <div class="projects-container">
-            {{>searchinput}}
-            <div class="projects-container-header">
+        <div class="cookbook-container">
+            {{!-- {{>searchinput}} --}}
+            <div class="recipes-container-header">
                 <p>My cookbook</p>
                 <p>All recipes</p>
             </div>
-            <div class="projects-items-container">
-                 <table class="cookbook-table">
+            <div class="recipes-items-container cookbook-projects-items">
+                     <div class="cookbook-recipe-list-wrapper">
                     {{#each recipeList}}
+                        <div class="cookbook-recipe-wrapper">
+                            {{>recipe}}
+                            <a data-pjax='cookbook-projects-items' 
+                                href="/cookbooks/delete/{{id}}"
+                                onclick="return confirm('Are you sure you want to delete this item?');">
+                                Delete</a>
+                        </div>
+                     {{/each}}
+                    </div>
+                    {{!-- {{#each recipeList}}
                             <tr>
                                 <td>{{>recipe}}</td>
-                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper delete-button-wrapper' buttonClasses='list-view-button '}}</td>
+                                <td>
+                                    {{>minibutton 
+                                        wrapperClasses='grid-view-button-wrapper delete-button-wrapper' 
+                                        buttonClasses='grid-view-button'
+                                    }}
+                                </td>
                             </tr> 
-                    {{/each}}
-                </table>
+                    {{/each}} --}}
             </div>
         </div>
 </main>
