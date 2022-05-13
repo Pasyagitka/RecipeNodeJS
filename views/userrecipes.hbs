@@ -1,5 +1,5 @@
 {{!-- fetch recipes GET by userid(body) --}}
-{{!-- PUT recipe -by Id --}}
+{{!-- get ->  PUT recipe -by Id --}}
 {{!-- confirm DELETE --}}
 {{!-- filter, search --}}
 
@@ -10,25 +10,39 @@
             <p>My recipes</p>
             <p>All recipes</p>
         </div>
-        <div class="recipes-items-container user-recipes-items-container">
+        <div class="recipes-items-container" id="user-recipes-items-container">
                 <div>
-                    {{#each recipeList}}
-                        <div style="">
-                            {{>recipe}}
-                            <a href="/userrecipes/update" style="flex: 2;">Update</a>
-                            <button data-pjax='user-recipes-items-container'
-                            
-                               onclick="deleteUserRecipe({{id}})"
-                               >Delete</button>
-                        </div>
-                    {{/each}}
+                   
                 </div>
             </table>
         </div>
     </div>
 </main>
-
-{{!-- <script type = "text/javascript">
-    var url = "/js/APICall.js";
+<script type = "text/javascript">
+    var url = "/js/recipe.js";
     $.getScript(url);
-</script> --}}
+</script>
+<script>
+    $(document).ready(async function() {
+        let response = await fetch("/userrecipes", { 
+        method: 'POST',
+        headers: { 
+            'Authorization': `${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json', 
+            'Accept': 'application/json' 
+        }, });
+        
+        let recipesContainer = document.getElementById('user-recipes-items-container');
+        if (response.status === 200) {
+            let resp = await response.json();
+            let tr = '';
+            let pdata = resp.recipeList;
+            
+            pdata.forEach(function (value) {
+                let r = recipe(value);
+                tr += r;
+            });
+            recipesContainer.innerHTML = tr;
+        }
+    });   
+</script>

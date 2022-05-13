@@ -9,11 +9,11 @@ const get = {
 const create = {
     body: Joi.object({
         categoryId: Joi.number().required(),
-        authorId: Joi.number().required(),
         mealId: Joi.number().required(),
         timeToCook: Joi.number().required(),
         instruction: Joi.string().required(),
         title: Joi.string().required(),
+        ingredients: Joi.array(),
     }),
 };
 
@@ -21,7 +21,6 @@ const update = {
     body: Joi.object({
         id: Joi.number().required(),
         category: Joi.string(),
-        authorId: Joi.number(),
         meal: Joi.string(),
         timeToCook: Joi.number(),
         instruction: Joi.string(),

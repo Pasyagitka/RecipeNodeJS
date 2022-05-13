@@ -31,6 +31,7 @@ module.exports = function DefineRecipeIngredients(sequelize, DataTypes) {
         tableName: 'recipe_ingredients',
         schema: 'public',
         timestamps: false,
+        //paranoid: true,
         indexes: [
             {
                 name: 'recipe_ingredients_pkey',

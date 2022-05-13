@@ -9,8 +9,8 @@
                 <p>All recipes</p>
             </div>
             <div class="recipes-items-container cookbook-projects-items">
-                     <div class="cookbook-recipe-list-wrapper">
-                    {{#each recipeList}}
+                     <div class="cookbook-recipe-list-wrapper" id="cookbook-recipe-list">
+                    {{!-- {{#each recipeList}}
                         <div class="cookbook-recipe-wrapper">
                             {{>recipe}}
                             <a data-pjax='cookbook-projects-items' 
@@ -18,7 +18,7 @@
                                 onclick="return confirm('Are you sure you want to delete this item?');">
                                 Delete</a>
                         </div>
-                     {{/each}}
+                     {{/each}} --}}
                     </div>
                     {{!-- {{#each recipeList}}
                             <tr>
@@ -34,3 +34,31 @@
             </div>
         </div>
 </main>
+<script type = "text/javascript">
+    var url = "/js/recipe.js";
+    $.getScript(url);
+</script>
+<script>
+     $(document).ready(async function() {
+        let response = await fetch("/cookbooks", { 
+        method: 'POST',
+        headers: { 
+            'Authorization': `${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json', 
+            'Accept': 'application/json' 
+        }, });
+        
+        let recipesContainer = document.getElementById('cookbook-recipe-list');
+        if (response.status === 200) {
+            let resp = await response.json();
+            let tr = '';
+            let pdata = resp.cookbooks;
+            console.log(pdata[0].recipe);
+            pdata.forEach(function (value) {
+                let r = recipe(value.recipe);
+                tr += r;
+            });
+            recipesContainer.innerHTML = tr;
+        }
+    });
+</script>

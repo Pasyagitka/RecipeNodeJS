@@ -15,6 +15,7 @@ module.exports = function DefineMeals(sequelize, DataTypes) {
         sequelize,
         tableName: 'meals',
         schema: 'public',
+        //paranoid: true,
         timestamps: false,
         indexes: [
             {

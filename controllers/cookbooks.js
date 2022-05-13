@@ -3,9 +3,7 @@ const recipesService = require('../services/recipesService');
 
 async function getCookbook(req, res, next) {
     try {
-        let recipeList = await recipesService.findAll();
-        res.render('cookbook', { title: 'Cookbook', recipeList  });
-        // res.render('cookbook', { title: 'Cookbook'});
+        res.render('cookbook', { title: 'Cookbook'  });
     } catch (e) {
         next(e);
     }
@@ -13,9 +11,10 @@ async function getCookbook(req, res, next) {
 
 async function findAllForUser(req, res, next) {
     try {
-        const { userId } = req.body;
+        console.log(req.user);
+        const userId = req.user.id;
         const all = await cookbooksService.findAllForUser(userId);
-        return res.json(all);
+        return res.json({cookbooks: all});
     } catch (e) {
         next(e);
     }
@@ -23,8 +22,7 @@ async function findAllForUser(req, res, next) {
 
 async function create(req, res, next) {
     try {
-        const { recipeId, userId } = req.body;
-        const data = await cookbooksService.create({ recipeId, userId });
+        const data = await cookbooksService.create({userId: req.user.id, recipeId: req.params.recipeId});
         return res.json(data);
     } catch (e) {
         next(e);
@@ -33,12 +31,12 @@ async function create(req, res, next) {
 
 async function remove(req, res, next) {
     try {
-        console.log(req.params);
         const { recipeId } = req.params;
-        const { userId } = req.body;
+        const { userId } = req.user.id;
         const result = await cookbooksService.delete(recipeId, userId);
-        //return res.renderPjax(result);
-        return res.renderPjax('cookbook', { title: 'Cookbook', recipeList  });
+        //return res.render('cookbook', { title: 'Cookbook', recipeList  });
+        //return res.redirect('/');
+        return res.json(result);
 
     } catch (e) {
         next(e);

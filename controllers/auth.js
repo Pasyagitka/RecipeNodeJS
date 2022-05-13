@@ -38,14 +38,15 @@ async function login(req, res, next) {
     try {
         const { email, password } = req.body;
         const userData = await authService.login(email, password);
-        let recipeList = await recipeService.findAll();
+        //let recipeList = await recipeService.findAll();
         //console.log(userData);
         //req.headers.authorization = 'Bearer ' + userData.accessToken;
         //console.log(req.headers);
         //console.log(r.split(' ')[1])
         //console.log('contoler', req.headers);
+        //res.seauthorization = 'Bearer ' + userData.accessToken;
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
-        res.redirect('/');
+        res.json('Bearer ' + userData.accessToken);
     } catch (e) {
         next(e);
     }

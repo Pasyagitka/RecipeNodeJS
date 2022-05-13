@@ -10,43 +10,14 @@ const Images  = require('../models').images;
 const { NotExistsError } = require('../helpers/errors/customError');
 
 exports.findAll = async () => {
-    let all = await Recipes.findAll({
-		//raw: true,
-		nest: true,
-        attributes: ['id', 'datePublished', 'timeToCook', 'title'],
-		include: [
-        {
-            model: Users,
-            required: true,
-            as: "author",
-            attributes: ['login'],
-        },
-        {
-            model: Meals,
-            required: true,
-            as: "meal",
-            // attributes: ['meal'],
-        },
-        {
-            model: Categories,
-            required: true,
-            as: "category",
-        },
-        {
-            model: Images,
-            // required: true,
-            as: "images",
-            attributes: ['uri', 'description'],
-        },
-        {
-            model: RecipeIngredients,
-            as: "recipe_ingredients",
-            include: [{
-				model: Ingredients,
-				as: "ingredient",
-			},],
-        },
-        ],
+    let all = await Recipes.scope('details').findAll();
+    all = all.map(r => r.toJSON());
+    return all;
+};
+
+exports.findAllForUser = async (authorId) => {
+    let all = await Recipes.scope('details').findAll({
+        where: {authorId},
 	});
     all = all.map(r => r.toJSON());
     return all;
@@ -103,49 +74,15 @@ exports.findAll = async () => {
 // };
 
 exports.findOne = async (id) => {
-    let recipe = await Recipes.findOne({
+    let recipe = await Recipes.scope('details-full').findOne({
         where: {id},
-		nest: true,
-        attributes: ['id', 'datePublished', 'timeToCook', 'title', 'instruction'],
-		include: [
-        {
-            model: Users,
-            required: true,
-            as: "author",
-            attributes: ['login'],
-        },
-        {
-            model: Meals,
-            required: true,
-            as: "meal",
-        },
-        {
-            model: Categories,
-            required: true,
-            as: "category",
-        },
-        {
-            model: Images,
-            // required: true,
-            as: "images",
-            attributes: ['uri', 'description'],
-        },
-        {
-            model: RecipeIngredients,
-            as: "recipe_ingredients",
-            include: [{
-				model: Ingredients,
-				as: "ingredient",
-			},],
-        },
-        ],
 	});
     return recipe ? recipe.toJSON() : null;
 };
 
 
-
 exports.create = async (data) => {
+    console.log(data);
     const category = await Categories.findOne({ where: { id: data.categoryId } });
     if (!category) throw new NotExistsError('categoryId');
 
@@ -154,6 +91,7 @@ exports.create = async (data) => {
 
     const meal = await Meals.findOne({ where: { id: data.mealId } });
     if (!meal) throw new NotExistsError('mealId');
+
 
     const result = await Recipes.create({
         categoryId: category.id,

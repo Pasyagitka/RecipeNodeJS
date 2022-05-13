@@ -12,14 +12,14 @@ exports.findAllForRecipe = async (recipeId) => {
     return all;
 };
 
-exports.create = async (data) => {
-    const recipe = await Recipes.findOne({ where: { id: data.id } });
+exports.create = async ({id, uri, description}) => {
+    const recipe = await Recipes.findOne({ where: { id } });
     if (!recipe) throw new NotExistsError('recipe');
 
     const result = await Images.create({
         recipeId: recipe.id,
-        uri: data.uri,
-        description: data.id,
+        uri: uri,
+        description: description,
     });
     return result;
 };

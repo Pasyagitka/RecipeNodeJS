@@ -1,17 +1,18 @@
 <div class="recipe-item-wrapper  recipe-item-wrapper-row">
-    <a href="/recipes/get/{{id}}">
+    <div>
     <div class="recipe-item">
         <div class="recipe-item-header">
             <p>by {{author.login}}</p>
-            <button class="recipe-more-button" type="button">
+            <a class="recipe-more-button" href="/recipes/get/{{id}}"></a>
         </div>
+        <a href="/recipes/get/{{id}}">
         <div class="recipe-item-body">
             <h2>{{title}}</h2>
             <div class="recipe-item-short-details">
                 {{#each images}}
-                    <img src="{{uri}}" alt="{{description}}">
+                   <img src="{{uri}}" alt="{{description}}">
                 {{/each}}
-                {{!-- <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"> --}}
+                <img src="{{uri}}" alt="{{description}}">
                 <ul class="recipe-ingredients">
                      {{#each recipe_ingredients}}
                         <li>{{ingredient.name}} {{quantity}} {{ingredient.measurement}}</li>
@@ -19,6 +20,7 @@
                 </ul>
             </div>
         </div>
+        </a>
         <div class="recipe-item-footer">
             <div></div>
             <div class="rounded-sign">{{category.category}}</div>
@@ -26,5 +28,5 @@
             <div class="rounded-sign">{{timeToCook}}m</div>
         </div>
     </div>
-    </a>
+    </div>
 </div>

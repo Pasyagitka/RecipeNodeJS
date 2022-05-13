@@ -22,6 +22,7 @@ module.exports = function DefineCookbooks(sequelize, DataTypes) {
         sequelize,
         tableName: 'cookbooks',
         schema: 'public',
+        //paranoid: true,
         timestamps: false,
         indexes: [
             {

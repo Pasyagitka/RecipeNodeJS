@@ -2,6 +2,7 @@ const recipesService = require('../services/recipesService');
 const categoriesService = require('../services/categoriesService');
 const mealsService = require('../services/mealsService');
 const ingredientsService = require('../services/ingredientsService');
+//add to cookbook/remove from cookbook
 
 // async function getIndex(req, res, next) {
 //     try {
@@ -76,23 +77,26 @@ const ingredientsService = require('../services/ingredientsService');
 //     }
 // }
 
+//recipes & filter
+
 async function getIndex(req, res, next) {
     try {
         let meals = await mealsService.findAll();
         let categories = await categoriesService.findAll();
         let data = await recipesService.findAll();
         let ingredients = await ingredientsService.findAll();
-        const filters = req.query;
-        const recipeList = data.filter(r => {
-            let isValid = true;
-            for (key in filters) {
-              let keys = filters[key].split(',');
-              console.log(key, r[key][key], filters[key]);
-              isValid = isValid &&  keys.includes(r[key][key]);
-            }
-            return isValid;
-        });
-        res.render('main', { title: 'Recipes', recipeList, categories, meals, ingredients  });
+        
+        // const filters = req.query;
+        // const recipeList = data.filter(r => {
+        //     let isValid = true;
+        //     for (key in filters) {
+        //       let keys = filters[key].split(',');
+        //       console.log(key, r[key][key], filters[key]);
+        //       isValid = isValid &&  keys.includes(r[key][key]);
+        //     }
+        //     return isValid;
+        // });
+        res.render('main', { title: 'Recipes', categories, meals, ingredients, username: req.user?.email  });
     } catch (e) {
         next(e);
     }

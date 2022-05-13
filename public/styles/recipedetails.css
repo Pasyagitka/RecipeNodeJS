@@ -21,7 +21,7 @@
 
 pre {
     font-family: inherit;
-    
+    width: 100%;
 }
 
 @media print {

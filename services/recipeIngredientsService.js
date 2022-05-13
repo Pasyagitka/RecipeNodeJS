@@ -13,9 +13,7 @@ exports.findAllForRecipe = async (recipeId) => {
     return all;
 };
 
-exports.create = async (data) => {
-    const { recipeId, ingredientId, quantity } = data;
-
+exports.create = async ({ recipeId, ingredientId, quantity }) => {
     const recipe = await Recipes.findOne({ where: { id: recipeId } });
     if (!recipe) throw new NotExistsError('recipe');
 

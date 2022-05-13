@@ -3,6 +3,7 @@ const { UnauthorizedError } = require('../helpers/errors/customError');
 
 module.exports = function (req, res, next) {
     try {
+        console.log('auth', req.headers.authorization)
         const authorizationHeader = req.headers.authorization;
         if (!authorizationHeader) {
             return next(new UnauthorizedError());

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const expressHbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const hbs = require('handlebars');
 // const hbs = require('handlebars');
 const { ValidationError } = require('express-validation');
 
@@ -82,13 +83,14 @@ app.use((req, res, next) => {
     res.status(404).render('error', {message: '404 Not found', isNoHeaderPage: true});
 });
   
-// app.use((error, req, res, next) => { 
-//     if (error instanceof ValidationError) {
-//         return res.status(error.statusCode).json(error.details.body[0].message);
-//     }
-//     if (!error.statusCode) error.statusCode = 500;
-//     res.status(error.statusCode).send(error.error);
-// });
+app.use((error, req, res, next) => { 
+    console.log(error);
+    if (error instanceof ValidationError) {
+        return res.status(error.statusCode).json(error.details.body[0].message);
+    }
+    if (!error.statusCode) error.statusCode = 500;
+    res.status(error.statusCode).json(error.error);
+});
 
 const connectMongo = async() => {
     try{

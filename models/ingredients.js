@@ -19,6 +19,7 @@ module.exports = function DefineIngredients(sequelize, DataTypes) {
         sequelize,
         tableName: 'ingredients',
         schema: 'public',
+        //paranoid: true,
         timestamps: false,
         indexes: [
             {

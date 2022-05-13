@@ -7,7 +7,11 @@ const { AlreadyExistsError, NotExistsError } = require('../helpers/errors/custom
 exports.findAllForUser = async (userId) => {
     const all = await Cookbooks.findAll({
         where: { userId },
-        raw: true,
+        include: [{ 
+                model: Recipes.scope('details'),
+                as: "recipe",
+             }
+        ],
         nest: true,
     });
     return all;

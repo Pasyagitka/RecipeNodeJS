@@ -42,6 +42,74 @@ module.exports = function initModels(sequelize) {
     cookbooks.belongsTo(recipes, { as: "recipe", foreignKey: "recipeId", onDelete: 'cascade'});
     recipes.hasMany(cookbooks, { as: "cookbooks", foreignKey: "recipeId"});
 
+
+    recipes.addScope("details", {
+		nest: true,
+		attributes: ["id", "datePublished", "timeToCook", "title"],
+		include: [ {
+				model: users,
+				required: true,
+				as: "author",
+				attributes: ["login"],
+			}, {
+				model: meals,
+				required: true,
+				as: "meal",
+			}, {
+				model: categories,
+				required: true,
+				as: "category",
+			}, {
+				model: images,
+				as: "images",
+				attributes: ["uri", "description"],
+			}, {
+				model: recipeIngredients,
+				as: "recipe_ingredients",
+				include: [ {
+						model: ingredients,
+						as: "ingredient",
+					},
+				],
+			},
+		],
+	});
+
+    recipes.addScope("details-full", {
+		nest: true,
+		attributes: ["id", "datePublished", "timeToCook", "title", "instruction"],
+		include: [ {
+				model: users,
+				required: true,
+				as: "author",
+				attributes: ["login"],
+			}, {
+				model: meals,
+				required: true,
+				as: "meal",
+			}, {
+				model: categories,
+				required: true,
+				as: "category",
+			}, {
+				model: images,
+				as: "images",
+				attributes: ["uri", "description"],
+			}, {
+				model: recipeIngredients,
+				as: "recipe_ingredients",
+				include: [ {
+						model: ingredients,
+						as: "ingredient",
+					},
+				],
+			},
+		],
+	});
+
+
+
+
     return {
         categories,
         images,
