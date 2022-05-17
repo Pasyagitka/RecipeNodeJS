@@ -4,6 +4,17 @@ const mealsService = require('../services/mealsService');
 
 const { NotExistsError } = require('../helpers/errors/customError');
 
+async function getRecipeJSON(req, res, next) {
+    try {
+        const { id } = req.params;
+        let recipe = await recipesService.findOne(id);
+        if(!recipe) throw new NotExistsError('recipe');
+        res.json(recipe);
+    } catch (e) {
+        next(e);
+    }
+}
+
 async function getRecipe(req, res, next) {
     try {
         const { id } = req.params;
@@ -50,4 +61,5 @@ module.exports = {
     getUserRecipes,
     getAllRecipes,
     getRecipe,
+    getRecipeJSON,
 };

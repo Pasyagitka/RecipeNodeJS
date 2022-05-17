@@ -1,7 +1,8 @@
 const Recipes = require('../models').recipes;
 const Images = require('../models').images;
+const cloudinary = require('cloudinary').v2;
 
-const { NotExistsError } = require('../errors/customError');
+const { NotExistsError } = require('../helpers/errors/customError');
 
 exports.findAllForRecipe = async (recipeId) => {
     const all = await Images.findAll({
@@ -12,36 +13,46 @@ exports.findAllForRecipe = async (recipeId) => {
     return all;
 };
 
-exports.create = async ({id, uri, description}) => {
+exports.create = async ({id, file, description}) => {
+    let resultF;
     const recipe = await Recipes.findOne({ where: { id } });
     if (!recipe) throw new NotExistsError('recipe');
 
+    if(file)
+    resultF = cloudinary.uploader.upload(file, function(error, result) { console.log(result, error); return result?.url;});
+    
     const result = await Images.create({
         recipeId: recipe.id,
-        uri: uri,
+        uri: (await resultF)?.secure_url || 'https://res.cloudinary.com/dblablirp/image/upload/v1652823561/1024px-No_image_available.svg_kaq6mb.png',
         description: description,
     });
     return result;
 };
 
-exports.update = async (data) => {
-    let recipe;
-    if (data.recipeId) {
-        recipe = await Recipes.findOne({ where: { id: data.recipeId } });
+exports.update = async ({recipeId, file, description}) => {
+    let recipe, resultF;
+    if (recipeId) {
+        recipe = await Recipes.findOne({ where: { id: recipeId } });
         if (!recipe) throw new NotExistsError('recipe');
     }
 
-    const { id } = data;
-    const exists = await Images.findOne({ where: { id } });
-    if (!exists) throw new NotExistsError('image');
+    const exists = await Images.findAll({
+        where: { recipeId },
+        raw: true,
+        nest: true,
+    });
+    //if (!exists) throw new NotExistsError('image');
+
+    if(file) {
+        resultF = cloudinary.uploader.upload(file, function(error, result) { console.log(result, error); return result?.url;});
+    }
 
     const upd = await Images.update({
-        recipeId: data.recipeId ?? exists.recipeId,
-        uri: data.uri ?? exists.uri,
-        description: data.description ?? exists.description,
-    }, { where: { id } });
+        uri: (await resultF)?.secure_url ?? exists?.uri,
+        description: description ?? exists?.description,
+    }, { where: { recipeId } });
 
-    return upd ? data : null;
+    return upd ? 1 : null;
 };
 
 exports.delete = async (id) => {

@@ -32,10 +32,8 @@ async function create(req, res, next) {
 async function remove(req, res, next) {
     try {
         const { recipeId } = req.params;
-        const { userId } = req.user.id;
+        const userId = req.user.id;
         const result = await cookbooksService.delete(recipeId, userId);
-        //return res.render('cookbook', { title: 'Cookbook', recipeList  });
-        //return res.redirect('/');
         return res.json(result);
 
     } catch (e) {

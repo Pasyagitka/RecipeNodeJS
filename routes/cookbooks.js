@@ -8,8 +8,9 @@ const validation = require('../helpers/validators/cookbooksValidation');
 
 router.get('/', controller.getCookbook);
 router.post('/', authMiddleware, validate(validation.findAllForUser), controller.findAllForUser);
-router.get('/add/:recipeId', authMiddleware, validate(validation.create), controller.create);
-router.delete('/:recipeId', authMiddleware, validate(validation.remove), controller.delete);
+
+router.post('/add/:recipeId', authMiddleware, validate(validation.create), controller.create);
+router.delete('/delete/:recipeId', authMiddleware, validate(validation.remove), controller.delete);
 
 
 module.exports = router;

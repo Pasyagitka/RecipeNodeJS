@@ -1,10 +1,22 @@
 document.addEventListener("DOMContentLoaded", function() {
-    document.querySelector('.client-messages-close-button').addEventListener('click', messageContainerClose);
-    document.querySelector('.client-messages-open-button').addEventListener('click', messageContainerShow);
+    document.querySelector('.client-messages-close-button')?.addEventListener('click', messageContainerClose);
+    document.querySelector('.client-messages-open-button')?.addEventListener('click', messageContainerShow);
 
-    document.querySelector('.list-view-button').addEventListener('click', switchToRowView);
-    document.querySelector('.grid-view-button').addEventListener('click', switchToDefaultView);
+    document.querySelector('.list-view-button')?.addEventListener('click', switchToRowView);
+    document.querySelector('.grid-view-button')?.addEventListener('click', switchToDefaultView);
+
+    document.querySelector('.myBtn')?.addEventListener('click', openModal);
+    document.querySelector('.close')?.addEventListener('click', closeModal);
 });
+
+
+function openModal() {
+    document.querySelector('#myModal').style.display = "block";
+}
+
+function closeModal() {
+    document.querySelector('#myModal').style.display = "none";
+}
 
 function messageContainerShow() {
     document.querySelector('.client-messages-container').classList.add('client-messages-container-wide');

@@ -13,6 +13,15 @@ exports.findAllForRecipe = async (recipeId) => {
     return all;
 };
 
+exports.findOneForRecipe = async(recipeId, ingredientId) => {
+    const all = await RecipeIngredients.findOne({
+        where: { recipeId, ingredientId },
+        raw: true,
+        nest: true,
+    });
+    return all;
+}
+
 exports.create = async ({ recipeId, ingredientId, quantity }) => {
     const recipe = await Recipes.findOne({ where: { id: recipeId } });
     if (!recipe) throw new NotExistsError('recipe');
@@ -28,36 +37,41 @@ exports.create = async ({ recipeId, ingredientId, quantity }) => {
     return result;
 };
 
-exports.update = async (data) => {
+
+
+
+exports.update = async ({ recipeId, ingredientId, quantity }) => {
     let recipe; let ingredient;
 
-    if (data.recipe) {
-        recipe = await Recipes.findOne({ where: { recipeId: data.recipeId } });
+    if (recipeId) {
+        recipe = await Recipes.findOne({ where: { id: recipeId } });
         if (!recipe) throw new NotExistsError('recipe');
     }
 
-    if (data.ingredient) {
-        ingredient = await Ingredients.findOne({ where: { ingredientId: data.ingredientId } });
+    if (ingredientId) {
+        ingredient = await Ingredients.findOne({ where: { id: ingredientId } });
         if (!ingredient) throw new NotExistsError('ingredient');
     }
 
-    const { id } = data;
-
-    const exists = await RecipeIngredients.findOne({ where: { id } });
+    const exists = await RecipeIngredients.findOne({
+        where: { recipeId, ingredientId },
+        raw: true,
+        nest: true,
+    });
     if (!exists) throw new NotExistsError('recipe ingredient');
 
     const upd = await RecipeIngredients.update({
         ingredientId: ingredient?.id ?? exists.ingredientId,
         recipeId: recipe?.id ?? exists.recipeId,
-        quantity: data.quantity ?? exists.quantity,
-    }, { where: { id } });
+        quantity: quantity ?? exists.quantity,
+    }, { where: { recipeId, ingredientId } });
 
-    return upd ? data : null;
+    return upd ? {id, recipeId, ingredientId, quantity} : null;
 };
 
-exports.delete = async (id) => {
-    const exists = await RecipeIngredients.findOne({ where: { id } });
-    if (!exists) throw new NotExistsError('recipe ingredients record');
+exports.delete = async (recipeId, ingredientId) => {
+    const exists = await RecipeIngredients.findOne({ where: { recipeId, ingredientId } });
+    //if (!exists) throw new NotExistsError('recipe ingredients record');
     const result = await exists.destroy();
     return result ? exists : null;
 };

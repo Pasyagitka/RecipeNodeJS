@@ -3,5 +3,6 @@
         "ssl": {
             "rejectUnauthorized": false
         }
-    }
+    },
+    "logging": false
 }

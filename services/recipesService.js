@@ -82,7 +82,7 @@ exports.findOne = async (id) => {
 
 
 exports.create = async (data) => {
-    console.log(data);
+    //console.log(data);
     const category = await Categories.findOne({ where: { id: data.categoryId } });
     if (!category) throw new NotExistsError('categoryId');
 
@@ -105,38 +105,36 @@ exports.create = async (data) => {
     return result;
 };
 
-exports.update = async (data) => {
-    let category; let author; let meal;
-    if (data.category) {
-        category = await Categories.findOne({ where: { category: data.category } });
-        if (!category) throw new NotExistsError('category');
+exports.update = async ({category, authorId, meal, id, timeToCook, instruction, title}) => {
+    let categoryExists; let authorExists; let mealExists;
+    if (category) {
+        categoryExists = await Categories.findOne({ where: { category: category } });
+        if (!categoryExists) throw new NotExistsError('category');
     }
 
-    if (data.authorId) {
-        author = await Users.findOne({ where: { id: data.authorId } });
-        if (!author) throw new NotExistsError('user (author)');
+    if (authorId) {
+        authorExists = await Users.findOne({ where: { id: authorId } });
+        if (!authorExists) throw new NotExistsError('user (author)');
     }
 
-    if (data.meal) {
-        meal = await Meals.findOne({ where: { meal: data.meal } });
-        if (!meal) throw new NotExistsError('meal');
+    if (meal) {
+        mealExists = await Meals.findOne({ where: { meal: meal } });
+        if (!mealExists) throw new NotExistsError('meal');
     }
-
-    const { id } = data;
 
     const exists = await Recipes.findOne({ where: { id } });
     if (!exists) throw new NotExistsError('recipe');
 
     const upd = await Recipes.update({
-        categoryId: category?.id ?? exists.categoryId,
-        authorId: author?.id ?? exists.authorId,
-        mealId: meal?.id ?? exists.mealId,
-        timeToCook: data.timeToCook ?? exists.timeToCook,
-        instruction: data.instruction ?? exists.instruction,
-        title: data.title ?? exists.title,
+        categoryId: categoryExists?.id ?? exists.categoryId,
+        authorId: authorExists?.id ?? exists.authorId,
+        mealId: mealExists?.id ?? exists.mealId,
+        timeToCook: timeToCook ?? exists.timeToCook,
+        instruction: instruction ?? exists.instruction,
+        title: title ?? exists.title,
     }, { where: { id } });
 
-    return upd ? data : null;
+    return upd ? {category, authorId, meal, id, timeToCook, instruction, title} : null;
 };
 
 exports.delete = async (id) => {

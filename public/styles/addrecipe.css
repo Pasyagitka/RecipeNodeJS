@@ -9,6 +9,10 @@
     display:block;
 }
 
+input[type=file]{
+    
+}
+
 .add-recipe-container {
     display: flex;
     flex-direction: column;

@@ -8,22 +8,49 @@
         <a class="big-green-button" href="/userrecipes/add">Create new recipe</a>
         <div class="recipes-container-header">
             <p>My recipes</p>
-            <p>All recipes</p>
+            <p><span id="recipes-items-count"></span> recipe(s)</p>
         </div>
-        <div class="recipes-items-container" id="user-recipes-items-container">
+        <div id="myModal" class="modal">
+        <div class="modal-content" style="font-size: 0.8em;">
+            <span class="close">&times;</span>
+            {{>update-recipe-modal}}
+        </div>
+</div> 
+        <div class="recipes-items-container" id="user-recipes-items-container" style="display:block">
                 <div>
-                   
                 </div>
             </table>
         </div>
+
     </div>
 </main>
-<script type = "text/javascript">
-    var url = "/js/recipe.js";
-    $.getScript(url);
-</script>
 <script>
+    let base64;
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => { resolve(fileReader.result); };
+            fileReader.onerror = (error) => {   reject(error);  };
+        });
+    };
+    const uploadImage = async (event) => {
+        const file = event.target.files[0];
+        base64 = await convertBase64(file);
+    };
+    document.getElementById("recipe-image").addEventListener("change", (e) => {
+        uploadImage(e);
+    });
+
+
     $(document).ready(async function() {
+       await getUserRecipes();
+    });  
+    async function editAndUpdate(id) {
+        await fillModal(id);
+        document.querySelector('#myModal').style.display = "block";
+    }
+    async function getUserRecipes() {
         let response = await fetch("/userrecipes", { 
         method: 'POST',
         headers: { 
@@ -32,6 +59,7 @@
             'Accept': 'application/json' 
         }, });
         
+        let recipesItemsCount = document.getElementById('recipes-items-count');
         let recipesContainer = document.getElementById('user-recipes-items-container');
         if (response.status === 200) {
             let resp = await response.json();
@@ -40,9 +68,98 @@
             
             pdata.forEach(function (value) {
                 let r = recipe(value);
-                tr += r;
+                tr += '<div style="display: flex;">' +
+                    r +
+                    updateButton(value.id) + 
+                    deleteButton(value.id) + 
+                    '</div>';
             });
             recipesContainer.innerHTML = tr;
+            recipesItemsCount.innerHTML = pdata.length || 0;
         }
-    });   
+    } 
+    async function fillModal(id) {
+
+        let response = await fetch(`/recipes/getJSON/${id}`, { 
+        method: 'GET',
+        headers: { 
+            'Authorization': `${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json', 
+            'Accept': 'application/json', 
+        }, });
+
+        document.getElementById('recipe-image').value = "";
+        if (response.status === 200) {
+            let recipe = await response.json();
+            document.getElementById("recipe-id").value = recipe.id;
+            document.getElementById("recipe-authorId").value = recipe.author.id;
+            document.getElementById("recipe-title").value = recipe.title;
+            document.getElementById("recipe-category").value = recipe.category.id;
+            document.getElementById("recipe-meal").value = recipe.meal.id;
+            document.getElementById("recipe-time").value = recipe.timeToCook;
+            document.getElementById("recipe-instruction").value = recipe.instruction;
+            document.getElementById("update-recipe-image").src = recipe?.images[0]?.uri;
+            document.getElementById("update-recipe-image").alt = recipe?.images[0]?.description;
+
+            await FillIngredients(recipe.recipe_ingredients);
+        }
+    }
+    async function FillIngredients(recipe_ingredients) {
+        let ingredientsInputItems = document.getElementsByClassName("ingredients-input");
+        Array.prototype.forEach.call(ingredientsInputItems, (item) => {
+            item.value = 0;
+        });
+        Array.prototype.forEach.call(recipe_ingredients, (item) => {
+            document.querySelector(`input[name="${item.ingredientId}"]`).value = item.quantity;
+        });
+    }
+
+     async function UpdateRecipe() {
+        let id =  document.getElementById("recipe-id").value;
+        let authorId =  document.getElementById("recipe-authorId").value;
+        let title = document.getElementById("recipe-title").value;
+        let categoryId = $('#recipe-category option:selected').val();
+        let mealId = $('#recipe-meal option:selected').val();  
+        let timeToCook = document.getElementById("recipe-time").value;
+        let instruction = document.getElementById("recipe-instruction").value;
+        let file = base64;
+        let ingredients = await AddIngredients();
+        console.log(ingredients);
+        let response = await fetch("/userrecipes/update", { 
+            method: 'PUT',
+            headers: { 
+                'Authorization': `${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json', 
+            },
+            body: JSON.stringify({ id, authorId, title, categoryId, mealId,  file,
+                    timeToCook, instruction, ingredients})   
+        });
+        if (response.status === 200) {
+            document.querySelector('#myModal').style.display = "none";
+            getUserRecipes();
+        }
+    }
+    async function AddIngredients() {
+        let ingredientsInputItems = document.getElementsByClassName("ingredients-input");
+        let ingredients = [];
+        Array.prototype.forEach.call(ingredientsInputItems, (item) => {
+            ingredients.push({ingredientId: item.name, quantity: item.value})
+        });
+        return ingredients;
+    }
+
+    async function deleteAndUpdate(id) {
+        let response = await fetch(`/userrecipes/delete/${id}`, { 
+            method: 'DELETE',
+            headers: { 
+                'Authorization': `${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json', 
+            },
+        });
+        if (response.status === 200) {
+            getUserRecipes();
+        }
+    }
 </script>

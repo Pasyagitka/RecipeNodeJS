@@ -14,12 +14,12 @@ const create = {
         instruction: Joi.string().required(),
         title: Joi.string().required(),
         ingredients: Joi.array(),
+        file: Joi.any(),
     }),
 };
 
 const update = {
     body: Joi.object({
-        id: Joi.number().required(),
         category: Joi.string(),
         meal: Joi.string(),
         timeToCook: Joi.number(),

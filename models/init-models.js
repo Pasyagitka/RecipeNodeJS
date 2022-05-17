@@ -50,7 +50,7 @@ module.exports = function initModels(sequelize) {
 				model: users,
 				required: true,
 				as: "author",
-				attributes: ["login"],
+				attributes: ["login", "id"],
 			}, {
 				model: meals,
 				required: true,
@@ -82,7 +82,7 @@ module.exports = function initModels(sequelize) {
 				model: users,
 				required: true,
 				as: "author",
-				attributes: ["login"],
+				attributes: ["login", "id"],
 			}, {
 				model: meals,
 				required: true,
