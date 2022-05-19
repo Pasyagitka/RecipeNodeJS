@@ -73,6 +73,9 @@ module.exports = function initModels(sequelize) {
 				],
 			},
 		],
+		order: [
+			['datePublished', 'DESC'],
+		]
 	});
 
     recipes.addScope("details-full", {
@@ -105,6 +108,9 @@ module.exports = function initModels(sequelize) {
 				],
 			},
 		],
+		order: [
+			['datePublished', 'DESC'],
+		]
 	});
 
 

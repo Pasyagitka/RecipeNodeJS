@@ -82,6 +82,10 @@
         if (response.status === 200) {
             document.location.assign('/userrecipes');
         }
+        else if (response.status === 401) {
+            alert('You need to login to create a new recipe!');
+            document.location.assign('/login');
+        }
         else {
             alert(await response.json());
         }

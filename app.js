@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const hbs = require('handlebars');
 // const hbs = require('handlebars');
 const { ValidationError } = require('express-validation');
+const { UnauthorizedError } = require('./helpers/errors/customError');
 
 
 const pjax = require('express-pjax');
@@ -84,9 +85,12 @@ app.use((req, res, next) => {
 });
   
 app.use((error, req, res, next) => { 
-    console.log(error);
+    console.log('!!!!!!', error);
     if (error instanceof ValidationError) {
         return res.status(error.statusCode).json(error.details.body[0].message);
+    }
+    if (error instanceof UnauthorizedError) {
+        return res.render('error').json(error.details.body[0].message);
     }
     if (!error.statusCode) error.statusCode = 500;
     res.status(error.statusCode).json(error.error);

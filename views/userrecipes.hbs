@@ -1,7 +1,3 @@
-{{!-- fetch recipes GET by userid(body) --}}
-{{!-- get ->  PUT recipe -by Id --}}
-{{!-- confirm DELETE --}}
-{{!-- filter, search --}}
 
 <main class="main-container">
     <div class="recipes-container">
@@ -15,15 +11,15 @@
             <span class="close">&times;</span>
             {{>update-recipe-modal}}
         </div>
-</div> 
+    </div> 
         <div class="recipes-items-container" id="user-recipes-items-container" style="display:block">
                 <div>
                 </div>
             </table>
         </div>
-
     </div>
 </main>
+
 <script>
     let base64;
     const convertBase64 = (file) => {
@@ -41,7 +37,6 @@
     document.getElementById("recipe-image").addEventListener("change", (e) => {
         uploadImage(e);
     });
-
 
     $(document).ready(async function() {
        await getUserRecipes();
@@ -77,6 +72,10 @@
             recipesContainer.innerHTML = tr;
             recipesItemsCount.innerHTML = pdata.length || 0;
         }
+        else {
+            document.location.href = '/login';
+        }
+
     } 
     async function fillModal(id) {
 

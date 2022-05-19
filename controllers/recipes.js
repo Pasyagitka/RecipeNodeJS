@@ -29,15 +29,27 @@ async function getRecipe(req, res, next) {
 
 async function getAllRecipes(req, res, next) {
     try {
-        console.log('getall')
         const filters = req.query;
         let data = await recipesService.findAll();
+        console.log('filters', filters);
+        
         const recipeList = data.filter(r => {
             let isValid = true;
             for (key in filters) {
-              let keys = filters[key].split(',');
-              console.log(key, r[key][key], filters[key]);
-              isValid = isValid &&  keys.includes(r[key][key]);
+              let filterKeysArray = filters[key].split(',');
+              if (key == 'category' || key == 'meal') {
+                  isValid = isValid && filterKeysArray.includes(r[key][key]);
+              }
+              if (key == 'include') {
+                let recipeIngredientNames = r['recipe_ingredients'].map(x=> x.ingredient.name);
+                let allFounded = filterKeysArray.every(ai => {return recipeIngredientNames.includes(ai)} );
+                isValid = isValid &&  allFounded;
+              }
+              if (key == 'exclude') {
+                let recipeIngredientNames = r['recipe_ingredients'].map(x=> x.ingredient.name);
+                let allFounded = filterKeysArray.some(ai => {return recipeIngredientNames.includes(ai)} );
+                isValid = isValid &&  !allFounded;
+              }
             }
             return isValid;
         });

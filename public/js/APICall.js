@@ -53,6 +53,11 @@ async function getCookbooks() {
         recipesContainer.innerHTML = tr;
         cookbookItemsCount.innerHTML = pdata.length || 0;
     }
+    else if (response.status === 401) {
+        //alert('401');
+        document.location.assign('/login');
+        
+    }
 }
 
 

@@ -10,7 +10,7 @@
         <div class="recipes-statistics-container">
             <div class="recipes-statistics-data-container">
                 <div class="recipes-statistics-item">
-                    <div>45</div>
+                    <div>54</div>
                     <div>In Progress</div>    
                 </div>
                 <div class="recipes-statistics-item">
@@ -18,7 +18,7 @@
                     <div>Upcoming</div>    
                 </div>
                 <div class="recipes-statistics-item">
-                    <div>62</div>
+                    <div><span id='all-recipes-count'>45</span></div>
                     <div>Total Recipes</div>    
                 </div>
             </div>
@@ -54,6 +54,7 @@
         await getRecipes();
     });   
     async function getRecipes(qs='') {
+        console.log('qsss', qs)
         let response = await fetch("/recipes?" + qs, { 
         method: 'GET',
         headers: { 
@@ -61,7 +62,8 @@
             'Content-Type': 'application/json', 
             'Accept': 'application/json',
         }, });
-        
+       
+        let allRecipesCount = document.getElementById('all-recipes-count');
         let recipesContainer = document.getElementById('recipes-items-container');
         if (response.status === 200) {
             let resp = await response.json();
@@ -73,6 +75,10 @@
                 tr += r;
             });
             recipesContainer.innerHTML = tr;
+            allRecipesCount.innerHTML = pdata.length;
+        }
+        else {
+            document.location.assign('/error');
         }
     }
 </script>
