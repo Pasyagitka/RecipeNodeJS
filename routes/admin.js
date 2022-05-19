@@ -1,5 +1,5 @@
 const express = require('express');
-//const { validate } = require('express-validation');
+const { validate } = require('express-validation');
 
 const router = express.Router();
 const controllerContent = require('../controllers/adminContent');
