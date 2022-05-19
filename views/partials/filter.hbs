@@ -1,0 +1,62 @@
+{{!-- recipes/ filter - query params --}}
+<form class="filter-form" name="filter">
+    <div>
+        <h2>Filter</h2>
+        <h3>Categories</h3>
+        <fieldset class="filter-fieldset">
+            {{#each categories}}
+                <div class="rounded-sign" style="background-color: #e0f5c8;">
+                    <input type="checkbox" name="category" value="{{category}}"><span>{{category}}</span>
+                </div>
+            {{/each}}
+        </fieldset>
+        <h3>Meals</h3>
+        <fieldset class="filter-fieldset">
+            {{#each meals}}
+                <div class="rounded-sign" style="background-color: #fee4cb;">
+                    <input type="checkbox" name="meal" value="{{meal}}"><span>{{meal}}</span>
+                </div>
+            {{/each}}
+            </fieldset>
+        <h3>Include ingredients</h3>
+        <fieldset class="filter-fieldset">
+            {{#each ingredients}}
+                <div class="rounded-sign" style="background-color: #ffd3e2;">
+                    <input type="checkbox" name="include" value="{{name}}"><span>{{name}}</span>
+                </div>
+            {{/each}}
+        </fieldset>
+        <h3>Exclude ingredients</h3>
+        <fieldset class="filter-fieldset" >
+            {{#each ingredients}}
+                <div class="rounded-sign" style="background-color: #e9e7fd;">
+                    <input type="checkbox" name="exclude" value="{{name}}"><span>{{name}}</span>
+                </div>
+            {{/each}}
+        </fieldset>
+    </div>
+    <div>
+        <div>
+            <a href="javascript:filter()" class="big-green-button" style="width: 70px;">Apply</a>
+        </div>
+    </div>
+</form>
+
+<script>
+    async function filter() {
+        let form = document.forms.filter;
+        let formData = new FormData(form);
+        let f = {};
+        [...formData.entries()].forEach(e => {
+            if(e[0] in f) {
+                f[encodeURIComponent(e[0])].push(encodeURIComponent(e[1]))
+            }
+            else {
+                f[e[0]] = [];
+                f[encodeURIComponent(e[0])].push(encodeURIComponent(e[1]))
+            }
+        })
+        let qs =  new URLSearchParams(f).toString();
+        await getRecipes(qs);
+    }
+</script>

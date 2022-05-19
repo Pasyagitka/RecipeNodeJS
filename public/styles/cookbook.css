@@ -1,0 +1,26 @@
+.cookbook-container {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    row-gap: 20px;
+    background-color: #ffffff;
+    border-radius: 25px;
+    margin: 15px;
+    padding: 25px 25px 0 25px;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.cookbook-recipe-list-wrapper {
+    display: flex; 
+    flex-direction: column; 
+    width: 100%;
+}
+
+.cookbook-recipe-wrapper {
+    display: flex; 
+    flex-direction:row; 
+    gap: 5px;
+}

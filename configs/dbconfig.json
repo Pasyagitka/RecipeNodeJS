@@ -1,0 +1,8 @@
+{
+    "dialectOptions": {
+        "ssl": {
+            "rejectUnauthorized": false
+        }
+    },
+    "logging": false
+}

@@ -1,0 +1,32 @@
+<main class="moderate-main-container">
+        <div class="moderate-container">
+            {{>searchinput}}
+            <div class="recipes-container-header">
+                <p>New recipes</p>
+            </div>
+            <div >
+                 <table>
+                    {{#each recipeList}}
+                            <tr>
+                                <td>{{>recipe}}</td>
+                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
+                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
+                            </tr> 
+                    {{/each}}
+                </table>
+            </div>
+            <div class="recipes-container-header">
+                <p>All recipes</p>
+            </div>
+            <div>
+                 <table>
+                    {{#each recipeList}}
+                            <tr>
+                                <td>{{>recipe}}</td>
+                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
+                            </tr> 
+                    {{/each}}
+                </table>
+            </div>
+        </div>
+</main>

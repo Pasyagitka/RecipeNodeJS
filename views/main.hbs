@@ -1,0 +1,84 @@
+{{!-- cookbook add/remove --}}
+<main class="main-container">
+    {{>leftmenu}}
+    <div class="recipes-container">
+        <div class="recipes-container-header">
+            <p>Recipes...</p>
+            <p>...</p>
+        </div>
+            {{>filter}}
+        <div class="recipes-statistics-container">
+            <div class="recipes-statistics-data-container">
+                <div class="recipes-statistics-item">
+                    <div>54</div>
+                    <div>In Progress</div>    
+                </div>
+                <div class="recipes-statistics-item">
+                    <div>24</div>
+                    <div>Upcoming</div>    
+                </div>
+                <div class="recipes-statistics-item">
+                    <div><span id='all-recipes-count'>45</span></div>
+                    <div>Total Recipes</div>    
+                </div>
+            </div>
+            <div class="view-buttons-container">
+                <div class="list-view-button-wrapper">
+                    <button class="list-view-button inverted-colors">
+                </div>
+                <div class="grid-view-button-wrapper">
+                    <button class="grid-view-button">
+                </div>
+            </div>
+        </div>
+        <div class="recipes-items-container" id="recipes-items-container">
+        </div>
+    </div>
+    <div class="client-messages-container">
+        <div class="client-messages-container-header">
+            <p>Client Messages</p>
+            <button class="client-messages-close-button">
+                <img src="/images/close.svg"/>
+            </button>
+        </div>
+        <div class="client-messages-items-container">
+            {{>message}}
+            {{>message}}
+            {{>message}}
+            {{>message}}
+        </div>
+    </div>
+</main>
+<script>
+    $(document).ready(async function() {
+        await getRecipes();
+    });   
+    async function getRecipes(qs='') {
+        console.log('qsss', qs)
+        let response = await fetch("/recipes?" + qs, { 
+        method: 'GET',
+        headers: { 
+            'Authorization': `${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json', 
+            'Accept': 'application/json',
+        }, });
+       
+        let allRecipesCount = document.getElementById('all-recipes-count');
+        let recipesContainer = document.getElementById('recipes-items-container');
+        if (response.status === 200) {
+            let resp = await response.json();
+            let tr = '';
+            let pdata = resp.recipeList;
+            
+            pdata.forEach(function (value) {
+                let r = recipe(value);
+                tr += r;
+            });
+            recipesContainer.innerHTML = tr;
+            allRecipesCount.innerHTML = pdata.length;
+        }
+        else {
+            document.location.assign('/error');
+        }
+    }
+</script>

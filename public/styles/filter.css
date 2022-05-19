@@ -1,0 +1,20 @@
+.filter-fieldset {
+    display:flex; 
+    gap: 7px; 
+    flex-wrap:wrap; 
+    border: none;
+    padding: 0;
+}
+
+.filter-form {
+    display: flex;
+}
+
+.filter-form > div:first-child {
+    font-size: 0.6em; 
+    gap: 5px; 
+    display: flex; 
+    flex-direction: column; 
+    margin: 10px; 
+    flex: 8;
+}

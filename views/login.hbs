@@ -1,0 +1,36 @@
+<div class="auth-form-wrapper">
+    <form class="auth-form">
+        <h3>Login</h3>
+        <img src="/images/logo.png">
+
+        <label for="email" class="login-label">Email</label>
+        <input type="text" placeholder="Email" id="email" name="email" class="login-input">
+
+        <label for="password" class="login-label">Password</label>
+        <input type="password" placeholder="Password" id="password" name="password" class="login-input">
+
+        <a class="big-green-button" style="width: 100%;" href="javascript:login();">Log In</a>
+        <a class="auth-link" href='/register'>Do not have an account? Register</a>
+        <div class="social" hidden>
+          <div class="go"><i class="fab fa-google"></i>  Google</div>
+          <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
+        </div>
+    </form>
+</div>
+<script>
+  async function login() {
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+
+    let response = await fetch("/login", { 
+      method: 'POST',  
+      redirect:"follow",
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
+      body: JSON.stringify({ email, password })
+    });
+    if (response.status === 200) {
+      localStorage.setItem("token", await response.json());
+      document.location.assign('/');
+    }
+  }
+</script>

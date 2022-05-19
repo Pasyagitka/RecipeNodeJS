@@ -1,0 +1,26 @@
+{{!--  add filter, remove search (top)}}
+<main class="main-container">
+        {{!-- {{>leftmenu}} --}}
+        <div class="cookbook-container">
+            {{!-- {{>searchinput}} --}}
+            <div class="recipes-container-header">
+                <p>My cookbook</p>
+                <p><span id="cookbook-items-count"></span> recipe(s)</p>
+            </div>
+            <div class="recipes-items-container cookbook-projects-items">
+                     <div class="cookbook-recipe-list-wrapper" id="cookbook-recipe-list">
+                         
+                    </div>
+            </div>
+        </div>
+</main>
+<script>
+     $(document).ready(async function() {
+        await getCookbooks();
+    });
+
+    async function deleteAndUpdate(id) {
+        await deleteCookbookRecord(id);
+        await getCookbooks();
+    }
+</script>

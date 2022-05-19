@@ -1,0 +1,101 @@
+<article class="add-recipe-container">
+    <h1 class="add-recipe-header">Creating a new recipe</h1>
+    <div>
+        <form class="add-recipe-form" action="/userrecipes/add" method="post">
+            <h1 style="font-size: 1em;">Title</h1>
+            <input type='text' name='title' value='title' id="recipe-title" class="add-input-text" required/>
+            <h1 style="font-size: 1em;">Image</h1>
+            <input type="file" id="recipe-image" class="add-input-text"  placeholder="image uri" required/>
+            <div class="add-select-container">
+                <select name="categoryId" id="recipe-category" class="add-input-select" required>
+                    {{#each categories}}
+                        <option value="{{id}}">{{category}}</option>
+                    {{/each}}
+                </select>
+                <select name="mealId" id="recipe-meal" class="add-input-select" required>
+                    {{#each meals}}
+                        <option value="{{id}}">{{meal}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div>
+                <h1 style="font-size: 1em;">Select ingredients</h1>
+                <div class="add-ingredients-table">
+                    {{#each ingredients}}
+                        <div class="add-ingredients-item">
+                            <div>{{name}}</div>
+                            <div>
+                                <input type="number" class="add-input-text ingredients-input" name="{{id}}" style="height: 20px; margin: 0" min="0" value="0">
+                            </div>
+                            <div>
+                                {{measurement}}
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+            <input type='number' class="add-input-text" id="recipe-time" style="width: 150px;" name='timeToCook' required placeholder='time to cook (m)'/>
+            <textarea class="instruction-input" type='text' id="recipe-instruction" name='instruction' required value='instruction'/></textarea><br/>
+            <a class="big-green-button" href="javascript:(AddRecipe());">Confirm</a>
+        </form>
+    </div>
+    <a href="javascript:(history.back());">Back</a>
+</article>
+<script>
+    let base64;
+
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+            fileReader.onload = () => { resolve(fileReader.result); };
+            fileReader.onerror = (error) => {   reject(error);  };
+        });
+    };
+    
+    const uploadImage = async (event) => {
+        const file = event.target.files[0];
+        base64 = await convertBase64(file);
+    };
+
+    document.getElementById("recipe-image").addEventListener("change", (e) => {
+        uploadImage(e);
+    });
+
+
+    async function AddRecipe() {
+        let title = document.getElementById("recipe-title").value;
+        let categoryId = $('#recipe-category option:selected').val();
+        let mealId = $('#recipe-meal option:selected').val();  
+        let timeToCook = document.getElementById("recipe-time").value;
+        let instruction = document.getElementById("recipe-instruction").value;
+        let file = base64;
+        let response = await fetch("/userrecipes/add", { 
+            method: 'POST',
+            headers: { 
+                'Authorization': `${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json', 
+            },
+            body: JSON.stringify({ title, categoryId, mealId,  timeToCook, instruction, file, ingredients: await AddIngredients()})   
+        });
+        if (response.status === 200) {
+            document.location.assign('/userrecipes');
+        }
+        else if (response.status === 401) {
+            alert('You need to login to create a new recipe!');
+            document.location.assign('/login');
+        }
+        else {
+            alert(await response.json());
+        }
+    }
+    async function AddIngredients() {
+        let ingredientsInputItems = document.getElementsByClassName("ingredients-input");
+        let ingredients = [];
+        Array.prototype.forEach.call(ingredientsInputItems, (item) => {
+            if(item.value > 0) ingredients.push({ingredientId: item.name, quantity: item.value})
+        });
+        return ingredients;
+    }
+</script>

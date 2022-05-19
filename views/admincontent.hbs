@@ -1,0 +1,52 @@
+<main class="admincontent-main-container"> 
+        <div class="admincontent-container" style="display: flex; flex-direction: row; gap: 15px;">
+            {{!-- {{>searchinput}} --}}
+            {{!-- {{>table}} --}}
+            <div style="flex: 1;">
+                <div class="recipes-container-header" >
+                    <h4 style="margin: auto;">Meals</h4>
+                </div>
+                <div>
+                    <table class="admin-content-table">
+                        <tr><th>name</th></tr>
+                        {{#each mealsList}}
+                                <tr>
+                                    <td>{{meal}}</td>
+                                </tr> 
+                        {{/each}}
+                    </table>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div class="recipes-container-header">
+                    <h4 style="margin: auto;">Ingredients</h4>
+                </div>
+                <div>
+                    <table class="admin-content-table">
+                        <tr><th>name</th></tr>
+                        {{#each categoriesList}}
+                                <tr>
+                                    <td>{{category}}</td>
+                                </tr> 
+                        {{/each}}
+                    </table>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div class="recipes-container-header">
+                    <h4 style="margin: auto;">Categories</h4>
+                </div>
+                <div>
+                    <table class="admin-content-table">
+                        <tr><th>name</th><th>measurement</th></tr>
+                        {{#each ingredientsList}}
+                                <tr>
+                                    <td>{{name}}</td>
+                                    <td>{{measurement}}</td>
+                                </tr> 
+                        {{/each}}
+                    </table>
+                </div>
+            </div>
+        </div>
+</main>

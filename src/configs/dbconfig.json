@@ -1,7 +1,0 @@
-{
-    "dialectOptions": {
-        "ssl": {
-            "rejectUnauthorized": false
-        }
-    }
-}

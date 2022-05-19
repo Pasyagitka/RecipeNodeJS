@@ -1,0 +1,32 @@
+<div class="recipe-item-wrapper  recipe-item-wrapper-row">
+    <div>
+    <div class="recipe-item">
+        <div class="recipe-item-header">
+            <p>by {{author.login}}</p>
+            <a class="recipe-more-button" href="/recipes/get/{{id}}"></a>
+        </div>
+        <a href="/recipes/get/{{id}}">
+        <div class="recipe-item-body">
+            <h2>{{title}}</h2>
+            <div class="recipe-item-short-details">
+                {{#each images}}
+                   <img src="{{uri}}" alt="{{description}}">
+                {{/each}}
+                <img src="{{uri}}" alt="{{description}}">
+                <ul class="recipe-ingredients">
+                     {{#each recipe_ingredients}}
+                        <li>{{ingredient.name}} {{quantity}} {{ingredient.measurement}}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+        </a>
+        <div class="recipe-item-footer">
+            <div></div>
+            <div class="rounded-sign">{{category.category}}</div>
+            <div class="rounded-sign">{{meal.meal}}</div>
+            <div class="rounded-sign">{{timeToCook}}m</div>
+        </div>
+    </div>
+    </div>
+</div>

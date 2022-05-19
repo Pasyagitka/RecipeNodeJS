@@ -1,0 +1,24 @@
+.moderate-main-container {
+    display: flex;
+    flex: 1;
+    align-items: stretch;
+    justify-content: center;
+    height: 100%;
+    padding: 15px 25px;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.moderate-container {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    row-gap: 20px;
+    background-color: #ffffff;
+    border-radius: 25px;
+    margin: 15px;
+    padding: 25px;
+    width: 100%;
+    height: fit-content;
+}
+
