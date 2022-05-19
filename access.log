@@ -3489,3 +3489,5 @@ POST /userrecipes 200 4841 - 74.031 ms
 GET /recipes/get/37 200 6333 - 74.544 ms
 GET / 304 - - 276.769 ms
 GET /recipes? 200 9719 - 72.974 ms
+GET /userrecipes 200 18145 - 1266.272 ms
+POST /userrecipes 200 4841 - 91.223 ms
