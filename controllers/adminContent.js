@@ -2,7 +2,7 @@ const ingredientsService = require('../services/ingredientsService');
 const categoriesService = require('../services/categoriesService');
 const mealsService = require('../services/mealsService');
 
-async function getAdminContent(req, res, next) {
+async function renderAdminContent(req, res, next) {
     try {
         let mealsList = await mealsService.findAll();
         let categoriesList = await categoriesService.findAll();
@@ -15,5 +15,5 @@ async function getAdminContent(req, res, next) {
 }
 
 module.exports = {
-    getAdminContent,
+    renderAdminContent,
 }

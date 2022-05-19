@@ -1,32 +1,142 @@
 <main class="moderate-main-container">
+    {{>leftmenu}}
         <div class="moderate-container">
             {{>searchinput}}
-            <div class="recipes-container-header">
-                <p>New recipes</p>
-            </div>
-            <div >
-                 <table>
-                    {{#each recipeList}}
-                            <tr>
-                                <td>{{>recipe}}</td>
-                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
-                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
-                            </tr> 
-                    {{/each}}
-                </table>
-            </div>
-            <div class="recipes-container-header">
-                <p>All recipes</p>
+            <div> 
+                <div class="recipes-container-header">
+                    <p>New recipes</p>
+                    <p><span id="new-recipes-items-count"></span>&nbspnew recipe(s)</p>
+                </div>
+                <div> 
+                    <div class="recipes-items-container" id="new-recipes-items-container" style="display:block"></div>
+                </div>
             </div>
             <div>
-                 <table>
-                    {{#each recipeList}}
-                            <tr>
-                                <td>{{>recipe}}</td>
-                                <td>{{>minibutton wrapperClasses='list-view-button-wrapper' buttonClasses='list-view-button'}}</td>
-                            </tr> 
-                    {{/each}}
-                </table>
+                 <div class="recipes-container-header">
+                    <p>All recipes</p>
+                    <p><span id="recipes-items-count"></span>&nbsp recipe(s)</p>
+                </div>
+                <div> 
+                    <div class="recipes-items-container" id="admin-recipes-items-container" style="display:block"></div>
+                </div>
+            </div>
             </div>
         </div>
 </main>
+<script>
+    $(document).ready(async function() {
+       await getRecipesToModerate();
+       await getAdminRecipes();
+    });  
+    async function getRecipesToModerate() {
+        let response = await fetch("/admin/adminmoderate", { 
+        method: 'POST',
+        headers: { 
+            'Authorization': `${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json', 
+            'Accept': 'application/json',
+        }, });
+        
+        let recipesItemsCount = document.getElementById('new-recipes-items-count');
+        let recipesContainer = document.getElementById('new-recipes-items-container');
+        if (response.status === 200) {
+            let resp = await response.json();
+            let tr = '';
+            let pdata = resp.recipeList;
+            console.log(pdata);
+            pdata.forEach(function (value) {
+                let r = recipe(value);
+                tr += '<div style="display: flex;">' +
+                    r +
+                    approveButton(value.id) + 
+                    disapproveButton(value.id) + 
+                    '</div>';
+            });
+            recipesContainer.innerHTML = tr;
+            recipesItemsCount.innerHTML = pdata.length || 0;
+        }
+        else {
+            //document.location.href = '/login';
+        }
+    }
+    async function approveRecipe(id) {
+        let response = await fetch(`/admin/approve/${id}`, { 
+            method: 'PUT',
+            headers: {
+                'Authorization': `${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json', 
+            }, 
+        });
+        if (response.status === 200) {
+            alert('Recipe approved');
+            await getRecipesToModerate();
+            await getAdminRecipes();
+        }
+        else {
+            alert(response.status)
+        }
+    }
+    async function disapproveRecipe(id) {
+        let response = await fetch(`/admin/disapprove/${id}`, { 
+            method: 'PUT',
+            headers: {
+                'Authorization': `${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json', 
+            }, 
+        });
+        if (response.status === 200) {
+            alert('Recipe disapproved. It will be deleted');
+            await getRecipesToModerate();
+            await getAdminRecipes();
+        }
+        else {
+            alert(response.status)
+        }
+    }
+   async function getAdminRecipes() {
+        let response = await fetch("/admin/adminrecipes", { 
+        method: 'POST',
+        headers: { 
+            'Authorization': `${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json', 
+            'Accept': 'application/json',
+        }, });
+        
+        let recipesItemsCount = document.getElementById('recipes-items-count');
+        let recipesContainer = document.getElementById('admin-recipes-items-container');
+        if (response.status === 200) {
+            let resp = await response.json();
+            let tr = '';
+            let pdata = resp.recipeList;
+            console.log(pdata);
+            pdata.forEach(function (value) {
+                let r = recipe(value);
+                tr += '<div style="display: flex;">' +
+                    r +
+                    deleteButton(value.id, value.author.id) + 
+                    '</div>';
+            });
+            recipesContainer.innerHTML = tr;
+            recipesItemsCount.innerHTML = pdata.length || 0;
+        }
+        else {
+            //document.location.href = '/login';
+        }
+    }
+    async function deleteAndUpdateRecipe(id, authorId) {
+        let response = await fetch(`/userrecipes/delete/${id}`, { 
+            method: 'DELETE',
+            headers: { 
+                'Authorization': `${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json', 
+                'Accept': 'application/json', 
+            },
+            body: JSON.stringify({ authorId })   
+        });
+        if (response.status === 200) {
+            await getAdminRecipes();
+        }
+    }
+</script>

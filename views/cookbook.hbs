@@ -19,7 +19,7 @@
         await getCookbooks();
     });
 
-    async function deleteAndUpdate(id) {
+    async function deleteAndUpdateCookbook(id) {
         await deleteCookbookRecord(id);
         await getCookbooks();
     }

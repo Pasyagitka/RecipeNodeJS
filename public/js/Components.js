@@ -47,7 +47,7 @@ function recipe_ingredients(recipe_ingredients) {
     return t;
 }
 
-const deleteButton = function(id) {
+const deleteButton = function(id, authorId) {
     return (
         `
         <div class='delete-button-wrapper' style="width: 70px;
@@ -55,7 +55,48 @@ const deleteButton = function(id) {
                 display: flex;
                 justify-content: center;
                 align-items: center;">
-            <a href='javascript:deleteAndUpdate(${id});' onclick="return confirm('Are you sure you want to delete the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">&times</a>
+            <a href='javascript:deleteAndUpdateRecipe(${id}, ${authorId});' onclick="return confirm('Are you sure you want to delete the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">&times</a>
+        </div>
+        `
+    )
+
+const deleteButtonCookbook = function(id) {
+    return (
+        `
+        <div class='delete-button-wrapper' style="width: 70px;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;">
+            <a href='javascript:deleteAndUpdateCookbook(${id});' onclick="return confirm('Are you sure you want to delete the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">&times</a>
+        </div>
+        `
+    )
+}
+
+const approveButton = function(id) {
+    return (
+        `
+        <div class='delete-button-wrapper' style="width: 70px;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;">
+            <a href='javascript:approveRecipe(${id});' onclick="return confirm('Approve the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">YES</a>
+        </div>
+        `
+    )
+}
+
+const disapproveButton = function(id) {
+    return (
+        `
+        <div class='delete-button-wrapper' style="width: 70px;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;">
+            <a href='javascript:disapproveRecipe(${id});' onclick="return confirm('Disapprove the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">NO</a>
         </div>
         `
     )

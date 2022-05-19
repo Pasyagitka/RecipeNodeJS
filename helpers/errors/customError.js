@@ -14,6 +14,10 @@ function UnauthorizedError() {
     return new CustomError('Unauthorized', 401);
 }
 
+function ForbiddenError() {
+    return new CustomError('Forbidden', 403);
+}
+
 function BadActivationLinkError() {
     return new CustomError('Bad activation link');
 }
@@ -34,4 +38,5 @@ module.exports = {
     BadActivationLinkError,
     WrongPasswordError,
     BadResetPasswordLinkError,
+    ForbiddenError,
 }

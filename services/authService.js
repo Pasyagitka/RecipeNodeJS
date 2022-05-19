@@ -82,6 +82,7 @@ async function login(email, password) {
         id: findUser.id,
         email: findUser.email,
         isActivated: findUser.isActivated,
+        isGranted: findUser.isGranted,
     };
     const tokens = generateTokens(user);
     await saveToken(user.id, tokens.refreshToken);
@@ -107,6 +108,7 @@ async function refresh(refreshToken) {
         id: findUser.id,
         email: findUser.email,
         isActivated: findUser.isActivated,
+        isGranted: findUser.isGranted,
     };
     const tokens = generateTokens(user);
 

@@ -4,7 +4,7 @@ const mealsService = require('../services/mealsService');
 
 const { NotExistsError } = require('../helpers/errors/customError');
 
-async function getRecipeJSON(req, res, next) {
+async function getRecipe(req, res, next) {
     try {
         const { id } = req.params;
         let recipe = await recipesService.findOne(id);
@@ -15,7 +15,7 @@ async function getRecipeJSON(req, res, next) {
     }
 }
 
-async function getRecipe(req, res, next) {
+async function renderRecipeDetails(req, res, next) {
     try {
         const { id } = req.params;
         let recipe = await recipesService.findOne(id);
@@ -27,7 +27,7 @@ async function getRecipe(req, res, next) {
 }
 
 
-async function getAllRecipes(req, res, next) {
+async function getAllRecipesWithFilter(req, res, next) {
     try {
         const filters = req.query;
         let data = await recipesService.findAll();
@@ -59,19 +59,18 @@ async function getAllRecipes(req, res, next) {
     }
 }
 
-async function getUserRecipes(req, res, next) {
-    try {
-        // console.log('user', req.user);
-        let recipeList = await recipesService.findAll();
-        res.render('userrecipes', { title: 'User`s recipes', recipeList});
-    } catch (e) {
-        next(e);
-    }
-}
+// async function renderUserRecipes(req, res, next) {
+//     try {
+//         // console.log('user', req.user);
+//         let recipeList = await recipesService.findAll();
+//         res.render('userrecipes', { title: 'User`s recipes', recipeList});
+//     } catch (e) {
+//         next(e);
+//     }
+// }
 
 module.exports = {
-    getUserRecipes,
-    getAllRecipes,
-    getRecipe,
-    getRecipeJSON,
+    getAllRecipes: getAllRecipesWithFilter,
+    getRecipe: renderRecipeDetails,
+    getRecipeJSON: getRecipe,
 };

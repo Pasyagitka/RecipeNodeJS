@@ -1,7 +1,6 @@
 const cookbooksService = require('../services/cookbooksService');
-const recipesService = require('../services/recipesService');
 
-async function getCookbook(req, res, next) {
+async function renderCookbook(req, res, next) {
     try {
         res.render('cookbook', { title: 'Cookbook'  });
     } catch (e) {
@@ -11,7 +10,7 @@ async function getCookbook(req, res, next) {
 
 async function findAllForUser(req, res, next) {
     try {
-        console.log(req.user);
+        //console.log(req.user);
         const userId = req.user.id;
         const all = await cookbooksService.findAllForUser(userId);
         return res.json({cookbooks: all});
@@ -45,5 +44,5 @@ module.exports = {
     findAllForUser,
     create,
     delete: remove,
-    getCookbook,
+    renderCookbook,
 };

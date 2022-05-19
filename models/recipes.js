@@ -44,6 +44,10 @@ module.exports = function DefineRecipes(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        isApproved:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
     }, {
         sequelize,
         tableName: 'recipes',

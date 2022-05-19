@@ -13,7 +13,7 @@ exports.findAllForRecipe = async (recipeId) => {
     return all;
 };
 
-exports.findOneForRecipe = async(recipeId, ingredientId) => {
+exports.findByIdForRecipe = async(recipeId, ingredientId) => {
     const all = await RecipeIngredients.findOne({
         where: { recipeId, ingredientId },
         raw: true,
@@ -36,9 +36,6 @@ exports.create = async ({ recipeId, ingredientId, quantity }) => {
     });
     return result;
 };
-
-
-
 
 exports.update = async ({ recipeId, ingredientId, quantity }) => {
     let recipe; let ingredient;

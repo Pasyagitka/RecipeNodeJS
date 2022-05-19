@@ -13,6 +13,5 @@ router.get('/', controller.getAllRecipes);
 
 router.get('/getJSON/:id', validate(validation.get),  controller.getRecipeJSON);
 router.get('/get/:id', validate(validation.get),controller.getRecipe);
-router.get('/userrecipes/', controller.getUserRecipes);
 
 module.exports = router;

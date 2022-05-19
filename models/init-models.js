@@ -45,6 +45,43 @@ module.exports = function initModels(sequelize) {
 
     recipes.addScope("details", {
 		nest: true,
+		where: { isApproved: true},
+		attributes: ["id", "datePublished", "timeToCook", "title"],
+		include: [ {
+				model: users,
+				required: true,
+				as: "author",
+				attributes: ["login", "id"],
+			}, {
+				model: meals,
+				required: true,
+				as: "meal",
+			}, {
+				model: categories,
+				required: true,
+				as: "category",
+			}, {
+				model: images,
+				as: "images",
+				attributes: ["uri", "description"],
+			}, {
+				model: recipeIngredients,
+				as: "recipe_ingredients",
+				include: [ {
+						model: ingredients,
+						as: "ingredient",
+					},
+				],
+			},
+		],
+		order: [
+			['datePublished', 'DESC'],
+		]
+	});
+
+	recipes.addScope("details-not-approved", {
+		nest: true,
+		where: { isApproved: false},
 		attributes: ["id", "datePublished", "timeToCook", "title"],
 		include: [ {
 				model: users,
@@ -112,9 +149,6 @@ module.exports = function initModels(sequelize) {
 			['datePublished', 'DESC'],
 		]
 	});
-
-
-
 
     return {
         categories,
