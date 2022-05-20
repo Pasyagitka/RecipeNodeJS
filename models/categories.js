@@ -15,7 +15,6 @@ module.exports = function DefineCategories(sequelize, DataTypes) {
         sequelize,
         tableName: 'categories',
         schema: 'public',
-        //paranoid: true,
         timestamps: false,
         indexes: [
             {

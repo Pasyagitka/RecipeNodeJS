@@ -26,7 +26,6 @@ module.exports = function DefineImages(sequelize, DataTypes) {
         sequelize,
         tableName: 'images',
         schema: 'public',
-        //paranoid: true,
         timestamps: false,
         indexes: [
             {

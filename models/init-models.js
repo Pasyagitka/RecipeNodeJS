@@ -42,10 +42,20 @@ module.exports = function initModels(sequelize) {
     cookbooks.belongsTo(recipes, { as: "recipe", foreignKey: "recipeId", onDelete: 'cascade'});
     recipes.hasMany(cookbooks, { as: "cookbooks", foreignKey: "recipeId"});
 
-
-    recipes.addScope("details", {
-		nest: true,
+    recipes.addScope("approved", {
 		where: { isApproved: true},
+	});
+
+	recipes.addScope("not-approved", {
+		where: { isApproved: false},
+	});
+
+	recipes.addScope("full", {
+		attributes: ["id", "datePublished", "timeToCook", "title", "instruction"],
+	});
+
+	recipes.addScope("details", {
+		nest: true,
 		attributes: ["id", "datePublished", "timeToCook", "title"],
 		include: [ {
 				model: users,
@@ -73,77 +83,6 @@ module.exports = function initModels(sequelize) {
 					},
 				],
 				
-			},
-		],
-		order: [
-			['datePublished', 'DESC'],
-		]
-	});
-
-	recipes.addScope("details-not-approved", {
-		nest: true,
-		where: { isApproved: false},
-		attributes: ["id", "datePublished", "timeToCook", "title"],
-		include: [ {
-				model: users,
-				required: true,
-				as: "author",
-				attributes: ["login", "id"],
-			}, {
-				model: meals,
-				required: true,
-				as: "meal",
-			}, {
-				model: categories,
-				required: true,
-				as: "category",
-			}, {
-				model: images,
-				as: "images",
-				attributes: ["uri", "description"],
-			}, {
-				model: recipeIngredients,
-				as: "recipe_ingredients",
-				include: [ {
-						model: ingredients,
-						as: "ingredient",
-					},
-				],
-			},
-		],
-		order: [
-			['datePublished', 'DESC'],
-		]
-	});
-
-    recipes.addScope("details-full", {
-		nest: true,
-		attributes: ["id", "datePublished", "timeToCook", "title", "instruction"],
-		include: [ {
-				model: users,
-				required: true,
-				as: "author",
-				attributes: ["login", "id"],
-			}, {
-				model: meals,
-				required: true,
-				as: "meal",
-			}, {
-				model: categories,
-				required: true,
-				as: "category",
-			}, {
-				model: images,
-				as: "images",
-				attributes: ["uri", "description"],
-			}, {
-				model: recipeIngredients,
-				as: "recipe_ingredients",
-				include: [ {
-						model: ingredients,
-						as: "ingredient",
-					},
-				],
 			},
 		],
 		order: [

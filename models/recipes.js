@@ -53,7 +53,6 @@ module.exports = function DefineRecipes(sequelize, DataTypes) {
         tableName: 'recipes',
         schema: 'public',
         timestamps: false,
-        //paranoid: true,
         indexes: [
             {
                 name: 'recipes_pkey',

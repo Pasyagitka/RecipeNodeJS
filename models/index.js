@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const options = require('../configs/dbconfig.json');
+const options = require('../configs/sequelizeconfig.json');
 
 const connection = new Sequelize(process.env.DATABASE_URL, options);
 

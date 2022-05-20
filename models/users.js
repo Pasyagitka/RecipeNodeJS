@@ -46,7 +46,6 @@ module.exports = function DefineUsers(sequelize, DataTypes) {
         sequelize,
         tableName: 'users',
         schema: 'public',
-        // paranoid: true,
         timestamps: false,
         indexes: [
             {
