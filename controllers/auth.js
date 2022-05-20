@@ -1,9 +1,5 @@
 const authService = require('../services/authService');
-
-const cookieConfig = {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-};
+const cookieConfig = require('../configs/cookieconfig.json');
 
 async function getLogin(req, res, next) {
     try {
