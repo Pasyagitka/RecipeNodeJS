@@ -13,7 +13,7 @@ exports.findAllForRecipe = async (recipeId) => {
     return all;
 };
 
-exports.findByIdForRecipe = async(recipeId, ingredientId) => {
+exports.findByIdForRecipe = async({recipeId, ingredientId}) => {
     const all = await RecipeIngredients.findOne({
         where: { recipeId, ingredientId },
         raw: true,
@@ -63,10 +63,10 @@ exports.update = async ({ recipeId, ingredientId, quantity }) => {
         quantity: quantity ?? exists.quantity,
     }, { where: { recipeId, ingredientId } });
 
-    return upd ? {id, recipeId, ingredientId, quantity} : null;
+    return upd;
 };
 
-exports.delete = async (recipeId, ingredientId) => {
+exports.delete = async ({recipeId, ingredientId}) => {
     const exists = await RecipeIngredients.findOne({ where: { recipeId, ingredientId } });
     //if (!exists) throw new NotExistsError('recipe ingredients record');
     const result = await exists.destroy();

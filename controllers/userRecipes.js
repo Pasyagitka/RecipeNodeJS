@@ -77,21 +77,26 @@ async function update(req, res, next) {
 
         const num = await recipesService.update(req.body);
 
+        console.log(ingredients);
         ingredients.forEach(async (ingredient) => {
             let {ingredientId, quantity} = ingredient;
-            let ingrFound = await recipeIngredientsService.findOneForRecipe(id, ingredientId);
-            console.log(ingrFound);
+            let ingrFound = await recipeIngredientsService.findByIdForRecipe({recipeId: id, ingredientId});
+            console.log(quantity, ingredientId);
             if (quantity != 0) {
                     if (ingrFound) {
                         await recipeIngredientsService.update({ recipeId: id, ingredientId, quantity });
+                        console.log('upd')
                     }
                     else {
                         await recipeIngredientsService.create({ recipeId: id, ingredientId, quantity });
+                        console.log('create');
                     }
                 }
             else {
                 if (ingrFound) {
-                    await recipeIngredientsService.delete(id, ingredientId);
+                    await recipeIngredientsService.delete({recipeId: id, ingredientId});
+                    console.log('delete')
+
                 }
             } 
         });

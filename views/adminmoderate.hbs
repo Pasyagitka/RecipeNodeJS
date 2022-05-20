@@ -29,13 +29,7 @@
        await getAdminRecipes();
     });  
     async function getRecipesToModerate() {
-        let response = await fetch("/admin/adminmoderate", { 
-        method: 'POST',
-        headers: { 
-            'Authorization': `${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json', 
-            'Accept': 'application/json',
-        }, });
+        let response = await postGetModerateDataAdmin();
         
         let recipesItemsCount = document.getElementById('new-recipes-items-count');
         let recipesContainer = document.getElementById('new-recipes-items-container');
@@ -60,14 +54,7 @@
         }
     }
     async function approveRecipe(id) {
-        let response = await fetch(`/admin/approve/${id}`, { 
-            method: 'PUT',
-            headers: {
-                'Authorization': `${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json', 
-            }, 
-        });
+        let response = await putApproveRecipeAdmin(id);
         if (response.status === 200) {
             alert('Recipe approved');
             await getRecipesToModerate();
@@ -78,14 +65,7 @@
         }
     }
     async function disapproveRecipe(id) {
-        let response = await fetch(`/admin/disapprove/${id}`, { 
-            method: 'PUT',
-            headers: {
-                'Authorization': `${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json', 
-            }, 
-        });
+        let response = await putDisapproveRecipeAdmin(id);
         if (response.status === 200) {
             alert('Recipe disapproved. It will be deleted');
             await getRecipesToModerate();
@@ -96,13 +76,7 @@
         }
     }
    async function getAdminRecipes() {
-        let response = await fetch("/admin/adminrecipes", { 
-        method: 'POST',
-        headers: { 
-            'Authorization': `${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json', 
-            'Accept': 'application/json',
-        }, });
+        let response = await postGetRecipesDataAdmin();
         
         let recipesItemsCount = document.getElementById('recipes-items-count');
         let recipesContainer = document.getElementById('admin-recipes-items-container');
@@ -126,15 +100,7 @@
         }
     }
     async function deleteAndUpdateRecipe(id, authorId) {
-        let response = await fetch(`/userrecipes/delete/${id}`, { 
-            method: 'DELETE',
-            headers: { 
-                'Authorization': `${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json', 
-            },
-            body: JSON.stringify({ authorId })   
-        });
+        let response = await deleteDeleteUserRecipe({id, authorId});
         if (response.status === 200) {
             await getAdminRecipes();
         }

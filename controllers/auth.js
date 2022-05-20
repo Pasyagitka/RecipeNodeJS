@@ -1,5 +1,4 @@
 const authService = require('../services/authService');
-const recipeService = require('../services/recipesService');
 
 const cookieConfig = {
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -28,7 +27,6 @@ async function registration(req, res, next) {
         const userData = await authService.registration(login, email, password);
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
         res.redirect('/login');
-        //return res.json(userData);
     } catch (e) {
         next(e);
     }
@@ -38,13 +36,6 @@ async function login(req, res, next) {
     try {
         const { email, password } = req.body;
         const userData = await authService.login(email, password);
-        //let recipeList = await recipeService.findAll();
-        //console.log(userData);
-        //req.headers.authorization = 'Bearer ' + userData.accessToken;
-        //console.log(req.headers);
-        //console.log(r.split(' ')[1])
-        //console.log('contoler', req.headers);
-        //res.seauthorization = 'Bearer ' + userData.accessToken;
         res.cookie('refreshToken', userData.refreshToken, cookieConfig);
         res.json('Bearer ' + userData.accessToken);
     } catch (e) {

@@ -47,7 +47,7 @@ function recipe_ingredients(recipe_ingredients) {
     return t;
 }
 
-const deleteButton = function(id, authorId) {
+const commonButton = function(href, content = '&times', message = 'Are you sure you want to delete the recipe?') {
     return (
         `
         <div class='delete-button-wrapper' style="width: 70px;
@@ -55,114 +55,28 @@ const deleteButton = function(id, authorId) {
                 display: flex;
                 justify-content: center;
                 align-items: center;">
-            <a href='javascript:deleteAndUpdateRecipe(${id}, ${authorId});' onclick="return confirm('Are you sure you want to delete the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">&times</a>
+            <a href='javascript:${href}' onclick="return confirm('${message}');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">${content}</a>
         </div>
         `
     )
+}
+
+const deleteButton = function(id, authorId) {
+    return commonButton(`deleteAndUpdateRecipe(${id}, ${authorId})`);
+}
 
 const deleteButtonCookbook = function(id) {
-    return (
-        `
-        <div class='delete-button-wrapper' style="width: 70px;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;">
-            <a href='javascript:deleteAndUpdateCookbook(${id});' onclick="return confirm('Are you sure you want to delete the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">&times</a>
-        </div>
-        `
-    )
+    return commonButton(`deleteAndUpdateCookbook(${id})`);
 }
 
 const approveButton = function(id) {
-    return (
-        `
-        <div class='delete-button-wrapper' style="width: 70px;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;">
-            <a href='javascript:approveRecipe(${id});' onclick="return confirm('Approve the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">YES</a>
-        </div>
-        `
-    )
+    return commonButton(`approveRecipe(${id})`, 'YES', 'Approve the recipe?');
 }
 
 const disapproveButton = function(id) {
-    return (
-        `
-        <div class='delete-button-wrapper' style="width: 70px;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;">
-            <a href='javascript:disapproveRecipe(${id});' onclick="return confirm('Disapprove the recipe?');" style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;">NO</a>
-        </div>
-        `
-    )
+    return commonButton(`disapproveRecipe(${id})`, 'NO', 'Disapprove the recipe?');
 }
 
 const updateButton = function(id) {
-    return (
-        `
-        <div class='delete-button-wrapper' style="width: 70px;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;">
-            <a href='javascript:editAndUpdate(${id});' 
-                class='myBtn'
-                style="text-decoration: none; color: inherit; font-weight: bold; font-size: 1.2em;"'">e</a>
-        </div>
-        `
-    )
+    return commonButton(`editAndUpdate(${id})`, 'e', 'Update the recipe?');
 }
-
-// function UpdateRecipeModal() {
-//     return (
-//     `
-//         <article class="add-recipe-container">
-//         <h1 class="add-recipe-header">Update your recipe</h1>
-//         <div>
-//             <form class="add-recipe-form" action="/userrecipes/add" method="post">
-//                 <h1 style="font-size: 1em;">Title</h1>
-//                 <input type='text' name='title' value='title' id="recipe-title" class="add-input-text" required/>
-//                 <h1 style="font-size: 1em;">Image</h1>
-//                 <input type="file" id="recipe-image" class="add-input-text"  placeholder="image uri"/>
-//                 <div class="add-select-container">
-//                     <select name="categoryId" id="recipe-category" class="add-input-select" required>
-//                         {{#each categories}}
-//                             <option value="{{id}}">{{category}}</option>
-//                         {{/each}}
-//                     </select>
-//                     <select name="mealId" id="recipe-meal" class="add-input-select" required>
-//                         {{#each meals}}
-//                             <option value="{{id}}">{{meal}}</option>
-//                         {{/each}}
-//                     </select>
-//                 </div>
-//                 <div>
-//                     <h1 style="font-size: 1em;">Select ingredients</h1>
-//                     <div class="add-ingredients-table">
-//                         {{#each ingredients}}
-//                             <div class="add-ingredients-item">
-//                                 <div>{{name}}</div>
-//                                 <div>
-//                                     <input type="number" class="add-input-text ingredients-input" name="{{id}}" style="height: 20px; margin: 0" min="0" value="0">
-//                                 </div>
-//                                 <div>
-//                                     {{measurement}}
-//                                 </div>
-//                             </div>
-//                         {{/each}}
-//                     </div>
-//                 </div>
-//                 <input type='number' class="add-input-text" id="recipe-time" style="width: 150px;" name='timeToCook' required placeholder='time to cook (m)'/>
-//                 <textarea class="instruction-input" type='text' id="recipe-instruction" name='instruction' required value='instruction'/></textarea><br/>
-//                 <a class="big-green-button" href="javascript:(AddRecipe());">Confirm</a>
-//             </form>
-//         </div>
-//         </article>
-//     `
-//     );
-// }

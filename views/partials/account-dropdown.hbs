@@ -10,14 +10,7 @@
 </div>
 <script>
  async function getUserRecipes() {
-    let response = await fetch("/userrecipes", { 
-      method: 'GET',
-      headers: { 
-        'Authorization': `${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json', 
-        'Accept': 'application/json' 
-      }, 
-    });
+    let response = await getGetUserRecipes();
     if (response.status === 200) {
       document.location.assign('/userrecipes');
     }

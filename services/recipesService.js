@@ -2,7 +2,7 @@ const Recipes = require('../models').recipes;
 const Categories = require('../models').categories;
 const Users = require('../models').users;
 const Meals = require('../models').meals;
-
+const { Op } = require("sequelize");
 const { NotExistsError } = require('../helpers/errors/customError');
 
 exports.findAll = async () => {
@@ -31,6 +31,19 @@ exports.findOne = async (id) => {
 	});
     return recipe ? recipe.toJSON() : null;
 };
+
+exports.search = async (query) => {
+    let all = await Recipes.scope('details').findAll({
+        where: {
+            [Op.or]: [
+              { 'title': { [Op.iLike]: `%${query}%` } },
+              { 'instruction': { [Op.iLike]: `%${query}%` } },
+            ]
+          },
+    });
+    all = all.map(r => r.toJSON());
+    return all;
+}    
 
 exports.create = async (data) => {
     const category = await Categories.findOne({ where: { id: data.categoryId } });

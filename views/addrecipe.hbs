@@ -70,14 +70,14 @@
         let timeToCook = document.getElementById("recipe-time").value;
         let instruction = document.getElementById("recipe-instruction").value;
         let file = base64;
-        let response = await fetch("/userrecipes/add", { 
-            method: 'POST',
-            headers: { 
-                'Authorization': `${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json', 
-            },
-            body: JSON.stringify({ title, categoryId, mealId,  timeToCook, instruction, file, ingredients: await AddIngredients()})   
+        let response = await postAddRecipe({ 
+            title, 
+            categoryId, 
+            mealId,  
+            timeToCook, 
+            instruction, 
+            file, 
+            ingredients: await AddIngredients(),
         });
         if (response.status === 200) {
             document.location.assign('/userrecipes');

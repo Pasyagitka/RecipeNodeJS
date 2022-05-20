@@ -7,14 +7,7 @@
 
 <script>
      async function getAdminContent() {
-    let response = await fetch("/admin/admincontent", { 
-      method: 'GET',
-      headers: { 
-        'Authorization': `${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json', 
-        'Accept': 'application/json' 
-      }, 
-    });
+    let response = await getGetAdminContent();
     if (response.status === 200) {
       document.location.assign('/admin/admincontent');
     }
@@ -23,14 +16,7 @@
     }
   }
     async function getAdminModerate() {
-    let response = await fetch("/admin/adminmoderate", { 
-      method: 'GET',
-      headers: { 
-        'Authorization': `${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json', 
-        'Accept': 'application/json' 
-      }, 
-    });
+    let response = await getGetAdminModerate();
     if (response.status === 200) {
       document.location.assign('/admin/adminmoderate');
     }

@@ -54,13 +54,7 @@
     });   
     async function getRecipes(qs='') {
         console.log('qsss', qs)
-        let response = await fetch("/recipes?" + qs, { 
-        method: 'GET',
-        headers: { 
-            'Authorization': `${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json', 
-            'Accept': 'application/json',
-        }, });
+        let response = await getRecipesFilterSearch(qs);
        
         let allRecipesCount = document.getElementById('all-recipes-count');
         let recipesContainer = document.getElementById('recipes-items-container');

@@ -45,13 +45,7 @@
         document.querySelector('#myModal').style.display = "block";
     }
     async function getUserRecipes() {
-        let response = await fetch("/userrecipes", { 
-        method: 'POST',
-        headers: { 
-            'Authorization': `${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json', 
-            'Accept': 'application/json' 
-        }, });
+        let response = await postGetUserRecipes();
         
         let recipesItemsCount = document.getElementById('recipes-items-count');
         let recipesContainer = document.getElementById('user-recipes-items-container');
@@ -76,14 +70,7 @@
         }
     } 
     async function fillModal(id) {
-
-        let response = await fetch(`/recipes/getJSON/${id}`, { 
-        method: 'GET',
-        headers: { 
-            'Authorization': `${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json', 
-            'Accept': 'application/json', 
-        }, });
+        let response = await getRecipesJSON(id);
 
         document.getElementById('recipe-image').value = "";
         if (response.status === 200) {
@@ -122,19 +109,20 @@
         let file = base64;
         let ingredients = await AddIngredients();
         console.log(ingredients);
-        let response = await fetch("/userrecipes/update", { 
-            method: 'PUT',
-            headers: { 
-                'Authorization': `${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json', 
-            },
-            body: JSON.stringify({ id, authorId, title, categoryId, mealId,  file,
-                    timeToCook, instruction, ingredients})   
+        let response = await putUpdateUserRecipe({ 
+            id, 
+            authorId, 
+            title, 
+            categoryId, 
+            mealId,  
+            file, 
+            timeToCook, 
+            instruction, 
+            ingredients,
         });
         if (response.status === 200) {
             document.querySelector('#myModal').style.display = "none";
-            getUserRecipes();
+            await getUserRecipes();
         }
     }
     async function AddIngredients() {
@@ -146,15 +134,7 @@
         return ingredients;
     }
     async function deleteAndUpdateRecipe(id, authorId) {
-        let response = await fetch(`/userrecipes/delete/${id}`, { 
-            method: 'DELETE',
-            headers: { 
-                'Authorization': `${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json', 
-            },
-            body: JSON.stringify({ authorId })   
-        });
+        let response = await deleteDeleteUserRecipe({id, authorId});
         if (response.status === 200) {
             await getUserRecipes();
         }

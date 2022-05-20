@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Op } = require('sequelize');
 const Categories = require('./categories');
 const Images = require('./images');
 const Ingredients = require('./ingredients');
@@ -72,6 +72,7 @@ module.exports = function initModels(sequelize) {
 						as: "ingredient",
 					},
 				],
+				
 			},
 		],
 		order: [
@@ -158,6 +159,6 @@ module.exports = function initModels(sequelize) {
         recipes,
         users,
         recipeIngredients,
-        cookbooks
+        cookbooks,
     };
 };
