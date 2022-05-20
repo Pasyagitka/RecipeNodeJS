@@ -51,13 +51,10 @@
 <script>
     $(document).ready(async function() {
         await getRecipes();
-    });   
+    });
+    
     async function getRecipes(qs='') {
-        console.log('qsss', qs)
         let response = await getRecipesFilterSearch(qs);
-       
-        let allRecipesCount = document.getElementById('all-recipes-count');
-        let recipesContainer = document.getElementById('recipes-items-container');
         if (response.status === 200) {
             let resp = await response.json();
             let tr = '';
@@ -67,8 +64,8 @@
                 let r = recipe(value);
                 tr += r;
             });
-            recipesContainer.innerHTML = tr;
-            allRecipesCount.innerHTML = pdata.length;
+            document.getElementById('recipes-items-container').innerHTML = tr;
+            document.getElementById('all-recipes-count').innerHTML = pdata.length;
         }
         else {
             document.location.assign('/error');

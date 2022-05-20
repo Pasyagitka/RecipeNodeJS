@@ -7,7 +7,6 @@
        let input = document.getElementsByClassName('search-input')[0];
         input.oninput = async function() {
             await getRecipes(`search=${input.value}`);
-            //document.getElementById('result').innerHTML = input.value;
         };
     });  
 </script>

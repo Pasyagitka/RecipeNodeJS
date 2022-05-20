@@ -9,10 +9,10 @@
   </div>
 </div>
 <script>
- async function getUserRecipes() {
-    let response = await getGetUserRecipes();
-    if (response.status === 200) {
-      document.location.assign('/userrecipes');
+    async function getUserRecipes() {
+        let response = await getGetUserRecipes();
+        if (response.status === 200) {
+            document.location.assign('/userrecipes');
+        }
     }
-  }
 </script>
