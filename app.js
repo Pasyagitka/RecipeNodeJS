@@ -14,11 +14,6 @@ require('dotenv').config();
 //TODO transactions?
 const app = express();
 
-//const http = require('http').Server(app);
-//const io = require('socket.io')(http);
-
-
-
 app.use(passport.initialize());
 
 app.use(express.json({limit: '200mb'}));
