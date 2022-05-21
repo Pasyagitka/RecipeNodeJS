@@ -5,8 +5,10 @@
  */
 
 var app = require('../app');
+var fs = require('fs');
 var debug = require('debug')('recipes:server');
-var http = require('http');
+var https = require('https');
+let socketapi = require("../helpers/socketapi");
 
 /**
  * Get port from environment and store in Express.
@@ -15,11 +17,18 @@ var http = require('http');
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+
+const httpsOptions = {
+  key: fs.readFileSync(__dirname + '/../helpers/cert/zei.key'),
+  cert: fs.readFileSync(__dirname + '/../helpers/cert/zei.crt'),
+};
+
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = https.createServer(httpsOptions, app);
+socketapi.io.attach(server);
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -18,19 +18,14 @@
     </form>
 </div>
 <script>
-  async function login() {
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
+    async function login() {
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
 
-    let response = await fetch("/login", { 
-      method: 'POST',  
-      redirect:"follow",
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
-      body: JSON.stringify({ email, password })
-    });
-    if (response.status === 200) {
-      localStorage.setItem("token", await response.json());
-      document.location.assign('/');
+        let response = await postLogin({email, password});
+        if (response.status === 200) {
+            localStorage.setItem("token", await response.json());
+            document.location.assign('/');
+        }
     }
-  }
 </script>

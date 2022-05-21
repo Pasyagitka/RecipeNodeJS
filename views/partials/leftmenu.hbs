@@ -1,6 +1,23 @@
- <div class="left-menu-container">
+<div class="left-menu-container">
     <button class="home-button" hidden></button>
-    <a class="button-link chart-button" href="/admin/admincontent"></a>
-    <a class="button-link calendar-button" href="/admin/adminmoderate"></a>
-    <a class="button-link settings-button" hidden></a>
+    <a class="button-link chart-button" href="javascript:getAdminContent()"></a>
+    <a class="button-link calendar-button" href="javascript:getAdminModerate()"></a>
 </div>
+<script>
+    async function getAdminContent() {
+        let response = await getGetAdminContent();
+        if (response.status === 200) {
+            document.location.assign("/admin/admincontent");
+        } else {
+            alert("Forbidden!");
+        }
+    }
+    async function getAdminModerate() {
+        let response = await getGetAdminModerate();
+        if (response.status === 200) {
+            document.location.assign("/admin/adminmoderate");
+        } else {
+            alert("Forbidden!");
+        }
+    }
+</script>

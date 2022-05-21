@@ -47,7 +47,7 @@ async function getCookbooks() {
             let r = recipe(value.recipe);
             tr += '<div style="display: flex;">' +
                     r + 
-                    deleteButton(value.recipe.id) + 
+                    deleteButtonCookbook(value.recipe.id) + 
                     '</div>';
         });
         recipesContainer.innerHTML = tr;
@@ -60,22 +60,3 @@ async function getCookbooks() {
     }
 }
 
-
-// function sendRequest(url, body, ok_callback, bad_callback) {
-//     return fetch(url,
-//     {
-//         method: 'POST',
-//         body: body,
-//         headers: { 'Content-Type':'application/json' }
-//     }).then(response =>
-//         {
-//             if(response.ok)
-//             {
-//                 response.json().then(data => { ok_callback(data); });
-//             }
-//             else
-//             {
-//                 response.json().then(data => { bad_callback(data); });
-//             }
-//         }).catch((err)=>{ bad_callback(err); });
-// }

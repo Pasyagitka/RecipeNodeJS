@@ -44,12 +44,15 @@ module.exports = function DefineRecipes(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        isApproved:{
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
     }, {
         sequelize,
         tableName: 'recipes',
         schema: 'public',
         timestamps: false,
-        //paranoid: true,
         indexes: [
             {
                 name: 'recipes_pkey',

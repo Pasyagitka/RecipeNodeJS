@@ -1,8 +1,5 @@
-{{!--  add filter, remove search (top)}}
 <main class="main-container">
-        {{!-- {{>leftmenu}} --}}
         <div class="cookbook-container">
-            {{!-- {{>searchinput}} --}}
             <div class="recipes-container-header">
                 <p>My cookbook</p>
                 <p><span id="cookbook-items-count"></span> recipe(s)</p>
@@ -19,7 +16,7 @@
         await getCookbooks();
     });
 
-    async function deleteAndUpdate(id) {
+    async function deleteAndUpdateCookbook(id) {
         await deleteCookbookRecord(id);
         await getCookbooks();
     }

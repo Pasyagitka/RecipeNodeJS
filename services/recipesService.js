@@ -1,88 +1,53 @@
-const Op = require('sequelize').Op;
 const Recipes = require('../models').recipes;
 const Categories = require('../models').categories;
 const Users = require('../models').users;
 const Meals = require('../models').meals;
-const RecipeIngredients = require('../models').recipeIngredients;
-const Ingredients  = require('../models').ingredients;
-const Images  = require('../models').images;
-
+const { Op } = require("sequelize");
 const { NotExistsError } = require('../helpers/errors/customError');
 
+//XXX Project.findAll({ offset: 5, limit: 5 });
+
 exports.findAll = async () => {
-    let all = await Recipes.scope('details').findAll();
+    let all = await Recipes.scope('details', 'approved').findAll();
+    all = all.map(r => r.toJSON());
+    return all;
+};
+
+exports.findAllNotApproved = async () => {
+    let all = await Recipes.scope('details', 'not-approved').findAll({where: {isApproved: false}});
     all = all.map(r => r.toJSON());
     return all;
 };
 
 exports.findAllForUser = async (authorId) => {
-    let all = await Recipes.scope('details').findAll({
+    let all = await Recipes.scope('details', 'approved').findAll({
         where: {authorId},
 	});
     all = all.map(r => r.toJSON());
     return all;
 };
 
-// exports.findAllFiltered = async (categoriesFilter, mealsFilter, includesFilter, excludesFilter) => {
-//     let all = await Recipes.findAll({
-// 		nest: true,
-//         attributes: ['id', 'datePublished', 'timeToCook', 'title'],
-// 		include: [
-//         {
-//             model: Users,
-//             required: true,
-//             as: "author",
-//             attributes: ['login'],
-//         },
-//         {
-//             model: Meals,
-//             required: true,
-//             as: "meal",
-//             // attributes: ['meal'],
-//             where: {meal: {[Op.in]: mealsFilter}},
-//         },
-//         {
-//             model: Categories,
-//             required: true,
-//             as: "category",
-//             where: {category: {[Op.in]: categoriesFilter}},
-//         },
-//         {
-//             model: Images,
-//             // required: true,
-//             as: "images",
-//             attributes: ['uri', 'description'],
-//         },
-//         {
-//             model: RecipeIngredients,
-//             as: "recipe_ingredients",
-//             include: [{
-// 				model: Ingredients,
-// 				as: "ingredient",
-//                 where: {
-//                     [Op.and]: [ 
-//                         { name: {[Op.in]: includesFilter} },
-//                         { name: {[Op.notIn]: excludesFilter} }
-//                     ],
-//                 }},
-//             ],
-//         },
-//         ],
-// 	});
-//     all = all.map(r => r.toJSON());
-//     return all;
-// };
-
 exports.findOne = async (id) => {
-    let recipe = await Recipes.scope('details-full').findOne({
+    let recipe = await Recipes.scope('details', 'approved', 'full').findOne({
         where: {id},
 	});
     return recipe ? recipe.toJSON() : null;
 };
 
+exports.search = async (query) => {
+    let all = await Recipes.scope('details', 'approved').findAll({
+        where: {
+            [Op.or]: [
+              { 'title': { [Op.iLike]: `%${query}%` } },
+              { 'instruction': { [Op.iLike]: `%${query}%` } },
+            ]
+          },
+    });
+    all = all.map(r => r.toJSON());
+    return all;
+}    
 
 exports.create = async (data) => {
-    //console.log(data);
     const category = await Categories.findOne({ where: { id: data.categoryId } });
     if (!category) throw new NotExistsError('categoryId');
 
@@ -101,8 +66,9 @@ exports.create = async (data) => {
         timeToCook: data.timeToCook,
         instruction: data.instruction,
         title: data.title,
+        isApproved: false,
     });
-    return result;
+    return {recipe: result, author: author.login};
 };
 
 exports.update = async ({category, authorId, meal, id, timeToCook, instruction, title}) => {
@@ -136,6 +102,14 @@ exports.update = async ({category, authorId, meal, id, timeToCook, instruction, 
 
     return upd ? {category, authorId, meal, id, timeToCook, instruction, title} : null;
 };
+
+exports.approve = async (id) => {
+    const exists = await Recipes.scope('details', 'not-approved').findOne({ where: { id } });
+    //const exists = await Recipes.findOne({ where: { id } });
+    if (!exists) throw new NotExistsError('recipe');
+    exists.isApproved = true;
+    return await exists.save();
+}
 
 exports.delete = async (id) => {
     const exists = await Recipes.findOne({ where: { id } });

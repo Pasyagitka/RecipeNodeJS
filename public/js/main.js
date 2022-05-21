@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelector('.close')?.addEventListener('click', closeModal);
 });
 
-
 function openModal() {
     document.querySelector('#myModal').style.display = "block";
 }
@@ -35,6 +34,7 @@ function switchToRowView() {
     document.querySelector('.grid-view-button-wrapper').style.backgroundColor = 'transparent';
     document.querySelector('.grid-view-button-wrapper > button').classList.remove('inverted-colors');
 }
+
 function switchToDefaultView() {
     document.querySelectorAll('.recipe-item-wrapper').forEach((item) => {
         item.classList.add('recipe-item-wrapper-default');

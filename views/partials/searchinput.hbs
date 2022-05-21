@@ -1,4 +1,12 @@
 <div class="search-input-container">
     <input class="search-input" type="text" placeholder="Search"/>
     <img src="/images/search.svg" width="20px"/>
- </div>
+</div>
+<script>
+    $(document).ready(async function() {
+       let input = document.getElementsByClassName('search-input')[0];
+        input.oninput = async function() {
+            await getRecipes(`search=${input.value}`);
+        };
+    });  
+</script>

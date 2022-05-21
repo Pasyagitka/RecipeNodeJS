@@ -42,8 +42,19 @@ module.exports = function initModels(sequelize) {
     cookbooks.belongsTo(recipes, { as: "recipe", foreignKey: "recipeId", onDelete: 'cascade'});
     recipes.hasMany(cookbooks, { as: "cookbooks", foreignKey: "recipeId"});
 
+    recipes.addScope("approved", {
+		where: { isApproved: true},
+	});
 
-    recipes.addScope("details", {
+	recipes.addScope("not-approved", {
+		where: { isApproved: false},
+	});
+
+	recipes.addScope("full", {
+		attributes: ["id", "datePublished", "timeToCook", "title", "instruction"],
+	});
+
+	recipes.addScope("details", {
 		nest: true,
 		attributes: ["id", "datePublished", "timeToCook", "title"],
 		include: [ {
@@ -71,50 +82,13 @@ module.exports = function initModels(sequelize) {
 						as: "ingredient",
 					},
 				],
+				
 			},
 		],
 		order: [
 			['datePublished', 'DESC'],
 		]
 	});
-
-    recipes.addScope("details-full", {
-		nest: true,
-		attributes: ["id", "datePublished", "timeToCook", "title", "instruction"],
-		include: [ {
-				model: users,
-				required: true,
-				as: "author",
-				attributes: ["login", "id"],
-			}, {
-				model: meals,
-				required: true,
-				as: "meal",
-			}, {
-				model: categories,
-				required: true,
-				as: "category",
-			}, {
-				model: images,
-				as: "images",
-				attributes: ["uri", "description"],
-			}, {
-				model: recipeIngredients,
-				as: "recipe_ingredients",
-				include: [ {
-						model: ingredients,
-						as: "ingredient",
-					},
-				],
-			},
-		],
-		order: [
-			['datePublished', 'DESC'],
-		]
-	});
-
-
-
 
     return {
         categories,
@@ -124,6 +98,6 @@ module.exports = function initModels(sequelize) {
         recipes,
         users,
         recipeIngredients,
-        cookbooks
+        cookbooks,
     };
 };

@@ -1,5 +1,6 @@
 const { Joi } = require('express-validation');
 
+//TODO return back validations
 const register = {
     body: Joi.object({
         login: Joi.string().required(),

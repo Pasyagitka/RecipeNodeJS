@@ -8,7 +8,7 @@ const { NotExistsError, UnauthorizedError } = require('../helpers/errors/customE
 const imagesService = require('../services/imagesService');
 
 
-async function getAddRecipes(req, res, next) {
+async function renderAddRecipe(req, res, next) {
     try {
         let categories = await categoriesService.findAll();
         let meals = await mealsService.findAll();
@@ -19,7 +19,7 @@ async function getAddRecipes(req, res, next) {
     }
 }
 
-async function getRecipe(req, res, next) {
+async function renderRecipeDetails(req, res, next) {
     try {
         const { id } = req.params;
         let recipe = await recipesService.findOne(id);
@@ -30,7 +30,7 @@ async function getRecipe(req, res, next) {
     }
 }
 
-async function getUserRecipes(req, res, next) {
+async function renderUserRecipes(req, res, next) {
     try {
         let categories = await categoriesService.findAll();
         let meals = await mealsService.findAll();
@@ -43,31 +43,33 @@ async function getUserRecipes(req, res, next) {
 
 async function findAllForUser(req, res, next) {
     try {
+        console.log(req.user);
         const all = await recipesService.findAllForUser(req.user.id);
         return res.json({recipeList: all});
     } catch (e) {
         next(e);
-        
     }
 }
 
+//XXX create = activate acccount
 async function create(req, res, next) {
     try {
         let {ingredients, file} = req.body;
-        const recipe = await recipesService.create({authorId: req.user.id, ...req.body});
+        const {recipe, author} = await (await recipesService.create({authorId: req.user.id, ...req.body}));
         let recipeId = recipe.id;
         ingredients.forEach(async (ingredient) => {
             let {ingredientId, quantity} = ingredient;
             if(quantity !== 0) await recipeIngredientsService.create({ recipeId, ingredientId, quantity });
         });
-            await imagesService.create({id: recipeId, file});
+        await imagesService.create({id: recipeId, file});
         
-        return res.json(recipe);
+        return res.json({recipe, author});
     } catch (e) {
         next(e);
     }
 }
 
+//BUG not updates if create new ingredient
 async function update(req, res, next) {
     try {
         let {id, category, authorId, meal, timeToCook, instruction, title, file} = req.body;
@@ -77,30 +79,31 @@ async function update(req, res, next) {
 
         const num = await recipesService.update(req.body);
 
+        console.log(ingredients);
         ingredients.forEach(async (ingredient) => {
             let {ingredientId, quantity} = ingredient;
-            let ingrFound = await recipeIngredientsService.findOneForRecipe(id, ingredientId);
-            console.log(ingrFound);
+            let ingrFound = await recipeIngredientsService.findByIdForRecipe({recipeId: id, ingredientId});
+            console.log(quantity, ingredientId);
             if (quantity != 0) {
                     if (ingrFound) {
                         await recipeIngredientsService.update({ recipeId: id, ingredientId, quantity });
+                        console.log('upd')
                     }
                     else {
                         await recipeIngredientsService.create({ recipeId: id, ingredientId, quantity });
+                        console.log('create');
                     }
                 }
             else {
                 if (ingrFound) {
-                    await recipeIngredientsService.delete(id, ingredientId);
+                    await recipeIngredientsService.delete({recipeId: id, ingredientId});
+                    console.log('delete')
+
                 }
             } 
         });
-
         await imagesService.update({recipeId: id, file: file, description: req.body.description});
-
         return res.json(num);
-
-        //return res.redirect('/userrecipes/');
     } catch (e) {
         next(e);
     }
@@ -109,21 +112,22 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
     try {
         const { id } = req.params;
+        const {authorId} = req.body;
+        console.log('del', req.body);
+        if (req.user.id != authorId && req.user.isGranted === false) throw new UnauthorizedError();
         const result = await recipesService.delete(id);
         return res.json(result);
-        //return res.redirect('/userrecipes/');
     } catch (e) {
         next(e);
     }
 }
 
 module.exports = {
-    // findAll,
+    renderAddRecipe,
+    renderUserRecipes,
+    renderRecipeDetails,
     create,
     update,
     delete: remove,
-    getAddRecipes,
-    getUserRecipes,
-    getRecipe,
     findAllForUser,
 };
