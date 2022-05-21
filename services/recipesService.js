@@ -104,10 +104,11 @@ exports.update = async ({category, authorId, meal, id, timeToCook, instruction, 
 };
 
 exports.approve = async (id) => {
-    const exists = await Recipes.findOne({ where: { id } });
+    const exists = await Recipes.scope('details', 'not-approved').findOne({ where: { id } });
+    //const exists = await Recipes.findOne({ where: { id } });
     if (!exists) throw new NotExistsError('recipe');
     exists.isApproved = true;
-    return exists.save();
+    return await exists.save();
 }
 
 exports.delete = async (id) => {

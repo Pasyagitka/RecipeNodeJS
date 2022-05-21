@@ -56,7 +56,9 @@
     async function approveRecipe(id) {
         let response = await putApproveRecipeAdmin(id);
         if (response.status === 200) {
+            let pdata = (await response.json()).recipe;
             alert('Recipe approved');
+            socket.emit('recipe added', {user : pdata.author.login, title: pdata.title});
             await getRecipesToModerate();
             await getAdminRecipes();
         }

@@ -43,8 +43,8 @@ async function getRecipesToModerate(req, res, next) {
 async function approveRecipe(req, res, next) {
     try {
         let {id} = req.params;
-        await recipesService.approve(id);
-        return res.end();
+        let recipe = await recipesService.approve(id);
+        return res.json({recipe});
     } catch (e) {
         next(e);
     }

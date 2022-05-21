@@ -44,6 +44,7 @@
 <script>
     let base64;
 
+
     const convertBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
@@ -80,9 +81,7 @@
             ingredients: await AddIngredients(),
         });
         if (response.status === 200) {
-            let data = await response.json();
-            socket.emit('recipe added', {user : data.author, title});
-            //document.location.assign('/userrecipes');
+            document.location.assign('/userrecipes');
         }
         else if (response.status === 401) {
             alert('You need to login to create a new recipe!');
