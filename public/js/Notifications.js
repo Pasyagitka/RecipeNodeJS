@@ -6,7 +6,7 @@ socket.on('broad', function(data) {
     notifyMe(data.user, data.title);
 });
 
-function notifyMe(user,message) {
+function notifyMe(user, message) {
     if (!("Notification" in window)) {
         alert("This browser does not support desktop notification");
     }
@@ -14,6 +14,7 @@ function notifyMe(user,message) {
         var options = {
                 body: message,
                 dir : "ltr",
+                icon: "../images/logo.png",
             };
         var notification = new Notification(user + " published a new recipe",options);
     }
@@ -26,9 +27,9 @@ function notifyMe(user,message) {
             if (permission === "granted") {
                 var options = {
                         body: message,
-                        dir : "ltr"
+                        dir : "ltr",
                 };
-                var notification = new Notification(user + " published a new recipe",options);
+                var notification = new Notification(user + " published a new recipe", options);
             }
         });
     }

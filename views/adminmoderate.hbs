@@ -91,7 +91,7 @@
                 let r = recipe(value);
                 tr += '<div style="display: flex;">' +
                     r +
-                    deleteButton(value.id, value.author.id) + 
+                    deleteButtonAdmin(value.id, value.author.id) + 
                     '</div>';
             });
             document.getElementById('admin-recipes-items-container').innerHTML = tr;
@@ -102,7 +102,7 @@
         }
     }
     
-    async function deleteAndUpdateRecipe(id, authorId) {
+    async function DeleteRecipeAdmin(id, authorId) {
         let response = await deleteDeleteUserRecipe({id, authorId});
         if (response.status === 200) {
             await getAdminRecipes();

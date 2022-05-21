@@ -65,6 +65,10 @@ const deleteButton = function(id, authorId) {
     return commonButton(`DeleteUserRecipe(${id}, ${authorId})`);
 }
 
+const deleteButtonAdmin = function(id, authorId) {
+    return commonButton(`DeleteRecipeAdmin(${id}, ${authorId})`);
+}
+
 const deleteButtonCookbook = function(id) {
     return commonButton(`deleteAndUpdateCookbook(${id})`);
 }
