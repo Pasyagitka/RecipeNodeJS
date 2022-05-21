@@ -62,7 +62,7 @@ const commonButton = function(href, content = '&times', message = 'Are you sure 
 }
 
 const deleteButton = function(id, authorId) {
-    return commonButton(`deleteAndUpdateRecipe(${id}, ${authorId})`);
+    return commonButton(`DeleteUserRecipe(${id}, ${authorId})`);
 }
 
 const deleteButtonCookbook = function(id) {

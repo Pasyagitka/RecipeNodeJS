@@ -51,10 +51,11 @@ async function findAllForUser(req, res, next) {
     }
 }
 
+//XXX create = activate acccount
 async function create(req, res, next) {
     try {
         let {ingredients, file} = req.body;
-        const recipe = await recipesService.create({authorId: req.user.id, ...req.body});
+        const {recipe, author} = await (await recipesService.create({authorId: req.user.id, ...req.body}));
         let recipeId = recipe.id;
         ingredients.forEach(async (ingredient) => {
             let {ingredientId, quantity} = ingredient;
@@ -62,12 +63,13 @@ async function create(req, res, next) {
         });
         await imagesService.create({id: recipeId, file});
         
-        return res.json(recipe);
+        return res.json({recipe, author});
     } catch (e) {
         next(e);
     }
 }
 
+//BUG not updates if create new ingredient
 async function update(req, res, next) {
     try {
         let {id, category, authorId, meal, timeToCook, instruction, title, file} = req.body;

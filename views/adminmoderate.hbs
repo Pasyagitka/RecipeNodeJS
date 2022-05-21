@@ -28,11 +28,10 @@
        await getRecipesToModerate();
        await getAdminRecipes();
     });  
+
     async function getRecipesToModerate() {
         let response = await postGetModerateDataAdmin();
         
-        let recipesItemsCount = document.getElementById('new-recipes-items-count');
-        let recipesContainer = document.getElementById('new-recipes-items-container');
         if (response.status === 200) {
             let resp = await response.json();
             let tr = '';
@@ -46,13 +45,14 @@
                     disapproveButton(value.id) + 
                     '</div>';
             });
-            recipesContainer.innerHTML = tr;
-            recipesItemsCount.innerHTML = pdata.length || 0;
+            document.getElementById('new-recipes-items-container').innerHTML = tr;
+            document.getElementById('new-recipes-items-count').innerHTML = pdata.length || 0;
         }
         else {
             //document.location.href = '/login';
         }
     }
+
     async function approveRecipe(id) {
         let response = await putApproveRecipeAdmin(id);
         if (response.status === 200) {
@@ -61,9 +61,10 @@
             await getAdminRecipes();
         }
         else {
-            alert(response.status)
+            alert(response.status);
         }
     }
+
     async function disapproveRecipe(id) {
         let response = await putDisapproveRecipeAdmin(id);
         if (response.status === 200) {
@@ -72,14 +73,13 @@
             await getAdminRecipes();
         }
         else {
-            alert(response.status)
+            alert(response.status);
         }
     }
-   async function getAdminRecipes() {
+
+    async function getAdminRecipes() {
         let response = await postGetRecipesDataAdmin();
         
-        let recipesItemsCount = document.getElementById('recipes-items-count');
-        let recipesContainer = document.getElementById('admin-recipes-items-container');
         if (response.status === 200) {
             let resp = await response.json();
             let tr = '';
@@ -92,13 +92,14 @@
                     deleteButton(value.id, value.author.id) + 
                     '</div>';
             });
-            recipesContainer.innerHTML = tr;
-            recipesItemsCount.innerHTML = pdata.length || 0;
+            document.getElementById('admin-recipes-items-container').innerHTML = tr;
+            document.getElementById('recipes-items-count').innerHTML = pdata.length || 0;
         }
         else {
             //document.location.href = '/login';
         }
     }
+    
     async function deleteAndUpdateRecipe(id, authorId) {
         let response = await deleteDeleteUserRecipe({id, authorId});
         if (response.status === 200) {

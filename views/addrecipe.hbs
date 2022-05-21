@@ -43,13 +43,11 @@
 </article>
 <script>
     let socket = io();
-    socket.set('nickname', 'superman');
     socket.on('connect', function(data) {
         socket.emit('join', 'Hello World from client');
     });
     socket.on('broad', function(data) {
-        //alert(data);
-        notifyMe('msg.user','msg.comment');
+        notifyMe(data.user, data.title);
     });
 
     let base64;
@@ -90,8 +88,8 @@
             ingredients: await AddIngredients(),
         });
         if (response.status === 200) {
-            //notify admin
-            socket.emit('recipe added', {user : 'userName', comment : 'userComment'});
+            let data = await response.json();
+            socket.emit('recipe added', {user : data.author, title});
             //document.location.assign('/userrecipes');
         }
         else if (response.status === 401) {
@@ -123,7 +121,7 @@
                 body: message,
                 dir : "ltr"
             };
-        var notification = new Notification(user + " Posted a comment",options);
+        var notification = new Notification(user + " created a new recipe",options);
         }
         // Otherwise, we need to ask the user for permission
         // Note, Chrome does not implement the permission static property
@@ -140,7 +138,7 @@
                         body: message,
                         dir : "ltr"
                 };
-                var notification = new Notification(user + " Posted a comment",options);
+                var notification = new Notification(user + " created a new recipe",options);
             }
             });
         }

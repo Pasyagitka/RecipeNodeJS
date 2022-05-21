@@ -5,20 +5,22 @@ const Meals = require('../models').meals;
 const { Op } = require("sequelize");
 const { NotExistsError } = require('../helpers/errors/customError');
 
+//XXX Project.findAll({ offset: 5, limit: 5 });
+
 exports.findAll = async () => {
-    let all = await Recipes.scope('details').findAll();
+    let all = await Recipes.scope('details', 'approved').findAll();
     all = all.map(r => r.toJSON());
     return all;
 };
 
 exports.findAllNotApproved = async () => {
-    let all = await Recipes.scope('details-not-approved').findAll({where: {isApproved: false}});
+    let all = await Recipes.scope('details', 'not-approved').findAll({where: {isApproved: false}});
     all = all.map(r => r.toJSON());
     return all;
 };
 
 exports.findAllForUser = async (authorId) => {
-    let all = await Recipes.scope('details').findAll({
+    let all = await Recipes.scope('details', 'approved').findAll({
         where: {authorId},
 	});
     all = all.map(r => r.toJSON());
@@ -26,14 +28,14 @@ exports.findAllForUser = async (authorId) => {
 };
 
 exports.findOne = async (id) => {
-    let recipe = await Recipes.scope('details-full').findOne({
+    let recipe = await Recipes.scope('details', 'approved', 'full').findOne({
         where: {id},
 	});
     return recipe ? recipe.toJSON() : null;
 };
 
 exports.search = async (query) => {
-    let all = await Recipes.scope('details').findAll({
+    let all = await Recipes.scope('details', 'approved').findAll({
         where: {
             [Op.or]: [
               { 'title': { [Op.iLike]: `%${query}%` } },
@@ -66,7 +68,7 @@ exports.create = async (data) => {
         title: data.title,
         isApproved: false,
     });
-    return result;
+    return {recipe: result, author: author.login};
 };
 
 exports.update = async ({category, authorId, meal, id, timeToCook, instruction, title}) => {

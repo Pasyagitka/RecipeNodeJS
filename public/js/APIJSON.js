@@ -73,10 +73,6 @@ async function deleteDeleteUserRecipe({ id, authorId}) {
 async function postLogin({email, password}) {
     return await fetch("/login", { method: 'POST', headers: requestHeaders, body: JSON.stringify({ email, password })});
 }
-async function postRegister({login, email, password}) {
-    return await fetch("/register", { method: 'POST', headers: requestHeaders, body: JSON.stringify({ login, email, password })});
-}
-
 
 //recipes
 async function getRecipesFilterSearch(qs) {

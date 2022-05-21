@@ -16,16 +16,16 @@ const socketapi = {
 // });
 
 io.on('connection', function(client) {
-    console.log('Client connected...', client.server.eio.clients);
+    client.join("admin");
+    //console.log('Client connected...', client.server.eio.clients);
     client.on('join', function(data) {
         //console.log(data);
         client.on('recipe added', function(data) {
-            client.emit('broad', data);
+            client.to("admin").emit('broad', data);
             //console.log(client);
-            client.broadcast.emit('broad',data);
+            //client.broadcast.emit('broad',data); // will emit to all connected clients, except the socket itself.
         });
     });
 });
-
 
 module.exports = socketapi;

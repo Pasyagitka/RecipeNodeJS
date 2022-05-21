@@ -1,5 +1,4 @@
 const recipesService = require('../services/recipesService');
-
 const { NotExistsError } = require('../helpers/errors/customError');
 
 async function getRecipe(req, res, next) {
@@ -24,14 +23,12 @@ async function renderRecipeDetails(req, res, next) {
     }
 }
 
-
 async function getAllRecipesWithFilter(req, res, next) {
     try {
         const filters = req.query;    
         //console.log('filters', filters.search);
         
-        let data = filters.search ? await recipesService.search(filters.search) :
-                                    await recipesService.findAll();
+        let data = filters.search ? await recipesService.search(filters.search) : await recipesService.findAll();
   
         const recipeList = data.filter(r => {
             let isValid = true;

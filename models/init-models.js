@@ -1,4 +1,4 @@
-const { DataTypes, Op } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const Categories = require('./categories');
 const Images = require('./images');
 const Ingredients = require('./ingredients');
