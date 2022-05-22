@@ -48,6 +48,10 @@
             document.getElementById('new-recipes-items-container').innerHTML = tr;
             document.getElementById('new-recipes-items-count').innerHTML = pdata.length || 0;
         }
+        else if (response.status === 403) {  
+            alert('Forbidden: You don`t have rights to perform this action!');
+            history.back();
+        }
         else await handleResponseErrors(response);
     }
 
