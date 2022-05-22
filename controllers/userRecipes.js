@@ -51,11 +51,11 @@ async function findAllForUser(req, res, next) {
     }
 }
 
-//XXX create = activate acccount
 async function create(req, res, next) {
     try {
         let {ingredients, file} = req.body;
-        const {recipe, author} = (await recipesService.create({authorId: req.user.id, ...req.body}));
+        let {isGranted} = req.user;
+        const {recipe, author} = (await recipesService.create({authorId: req.user.id, isGranted, ...req.body}));
         let recipeId = recipe.id;
         ingredients.forEach(async (ingredient) => {
             let {ingredientId, quantity} = ingredient;

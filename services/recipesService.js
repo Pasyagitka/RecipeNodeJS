@@ -5,8 +5,6 @@ const Meals = require('../models').meals;
 const { Op } = require("sequelize");
 const { NotExistsError } = require('../helpers/errors/customError');
 
-//XXX Project.findAll({ offset: 5, limit: 5 });
-
 exports.findAll = async () => {
     let all = await Recipes.scope('details', 'approved').findAll();
     all = all.map(r => r.toJSON());
@@ -57,7 +55,6 @@ exports.create = async (data) => {
     const meal = await Meals.findOne({ where: { id: data.mealId } });
     if (!meal) throw new NotExistsError('mealId');
 
-
     const result = await Recipes.create({
         categoryId: category.id,
         authorId: author.id,
@@ -66,7 +63,7 @@ exports.create = async (data) => {
         timeToCook: data.timeToCook,
         instruction: data.instruction,
         title: data.title,
-        isApproved: false,
+        isApproved: data.isGranted? true: false,
     });
     return {recipe: result, author: author.login};
 };
