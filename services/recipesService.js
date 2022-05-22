@@ -71,10 +71,10 @@ exports.create = async (data) => {
     return {recipe: result, author: author.login};
 };
 
-exports.update = async ({category, authorId, meal, id, timeToCook, instruction, title}) => {
+exports.update = async ({id, categoryId, authorId, mealId, timeToCook, instruction, title}) => {
     let categoryExists; let authorExists; let mealExists;
-    if (category) {
-        categoryExists = await Categories.findOne({ where: { category: category } });
+    if (categoryId) {
+        categoryExists = await Categories.findOne({ where: { id: categoryId } });
         if (!categoryExists) throw new NotExistsError('category');
     }
 
@@ -83,8 +83,8 @@ exports.update = async ({category, authorId, meal, id, timeToCook, instruction, 
         if (!authorExists) throw new NotExistsError('user (author)');
     }
 
-    if (meal) {
-        mealExists = await Meals.findOne({ where: { meal: meal } });
+    if (mealId) {
+        mealExists = await Meals.findOne({ where: { meal: mealId } });
         if (!mealExists) throw new NotExistsError('meal');
     }
 
@@ -100,7 +100,7 @@ exports.update = async ({category, authorId, meal, id, timeToCook, instruction, 
         title: title ?? exists.title,
     }, { where: { id } });
 
-    return upd ? {category, authorId, meal, id, timeToCook, instruction, title} : null;
+    return upd ? {category: categoryId, authorId, meal: mealId, id, timeToCook, instruction, title} : null;
 };
 
 exports.approve = async (id) => {

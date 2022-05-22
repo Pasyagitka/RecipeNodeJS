@@ -13,18 +13,31 @@ const create = {
         timeToCook: Joi.number().required(),
         instruction: Joi.string().required(),
         title: Joi.string().required(),
-        ingredients: Joi.array(),
+        ingredients: Joi.array().items(
+            Joi.object().keys({
+                ingredientId: Joi.number().required(),
+                quantity: Joi.number().required(),
+            })
+        ),
         file: Joi.any(),
     }),
 };
 
 const update = {
     body: Joi.object({
-        category: Joi.string(),
-        meal: Joi.string(),
+        categoryId: Joi.number(),
+        authorId: Joi.number(),
+        mealId: Joi.number(),
         timeToCook: Joi.number(),
         instruction: Joi.string(),
         title: Joi.string(),
+        ingredients: Joi.array().items(
+            Joi.object().keys({
+                ingredientId: Joi.number().required(),
+                quantity: Joi.number().required(),
+            })
+        ),
+        file: Joi.any(),
     }),
 };
 
