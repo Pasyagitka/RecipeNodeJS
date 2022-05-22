@@ -7,7 +7,7 @@ const authMiddleware = require('../middlewares/auth');
 const validation = require('../helpers/validators/cookbooksValidation');
 
 router.get('/', controller.renderCookbook);
-router.post('/', authMiddleware, validate(validation.findAllForUser), controller.findAllForUser);
+router.post('/', authMiddleware, controller.findAllForUser);
 router.post('/add/:recipeId', authMiddleware, validate(validation.create), controller.create);
 router.delete('/delete/:recipeId', authMiddleware, validate(validation.remove), controller.delete);
 

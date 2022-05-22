@@ -48,9 +48,7 @@
             document.getElementById('new-recipes-items-container').innerHTML = tr;
             document.getElementById('new-recipes-items-count').innerHTML = pdata.length || 0;
         }
-        else {
-            //document.location.href = '/login';
-        }
+        else await handleResponseErrors(response);
     }
 
     async function approveRecipe(id) {
@@ -62,9 +60,7 @@
             await getRecipesToModerate();
             await getAdminRecipes();
         }
-        else {
-            alert(response.status);
-        }
+        else await handleResponseErrors(response);
     }
 
     async function disapproveRecipe(id) {
@@ -74,9 +70,7 @@
             await getRecipesToModerate();
             await getAdminRecipes();
         }
-        else {
-            alert(response.status);
-        }
+        else await handleResponseErrors(response);
     }
 
     async function getAdminRecipes() {
@@ -97,9 +91,7 @@
             document.getElementById('admin-recipes-items-container').innerHTML = tr;
             document.getElementById('recipes-items-count').innerHTML = pdata.length || 0;
         }
-        else {
-            //document.location.href = '/login';
-        }
+        else await handleResponseErrors(response);
     }
     
     async function DeleteRecipeAdmin(id, authorId) {
@@ -107,5 +99,6 @@
         if (response.status === 200) {
             await getAdminRecipes();
         }
+        else await handleResponseErrors(response);
     }
 </script>

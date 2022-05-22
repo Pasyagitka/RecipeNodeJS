@@ -6,7 +6,6 @@
             </div>
             <div class="recipes-items-container cookbook-projects-items">
                      <div class="cookbook-recipe-list-wrapper" id="cookbook-recipe-list">
-                         
                     </div>
             </div>
         </div>
@@ -19,5 +18,27 @@
     async function deleteAndUpdateCookbook(id) {
         await deleteCookbookRecord(id);
         await getCookbooks();
+    }
+
+    async function getCookbooks() {
+        let response = await postGetCookbooks();
+        
+        let cookbookItemsCount = document.getElementById('cookbook-items-count');
+        let recipesContainer = document.getElementById('cookbook-recipe-list');
+        if (response.status === 200) {
+            let resp = await response.json();
+            let tr = '';
+            let pdata = resp.cookbooks;
+            pdata.forEach(function (value) {
+                let r = recipe(value.recipe);
+                tr += '<div style="display: flex;">' +
+                        r + 
+                        deleteButtonCookbook(value.recipe.id) + 
+                        '</div>';
+            });
+            recipesContainer.innerHTML = tr;
+            cookbookItemsCount.innerHTML = pdata.length || 0;
+        }
+        else await handleResponseErrors(response);
     }
 </script>

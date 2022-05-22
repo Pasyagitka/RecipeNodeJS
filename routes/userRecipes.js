@@ -7,10 +7,10 @@ const authMiddleware = require('../middlewares/auth');
 const validation = require('../helpers/validators/recipesValidation');
 
 router.get('/', controller.renderUserRecipes);
-router.post('/', authMiddleware, controller.findAllForUser);
 router.get('/add', controller.renderAddRecipe);
+router.post('/', authMiddleware, controller.findAllForUser);
 router.post('/add', authMiddleware, validate(validation.create), controller.create);
-router.put('/update', authMiddleware, controller.update);
+router.put('/update', authMiddleware, validate(validation.update), controller.update);
 router.delete('/delete/:id', authMiddleware, validate(validation.remove), controller.delete);
 
 module.exports = router;

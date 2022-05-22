@@ -55,7 +55,7 @@ async function findAllForUser(req, res, next) {
 async function create(req, res, next) {
     try {
         let {ingredients, file} = req.body;
-        const {recipe, author} = await (await recipesService.create({authorId: req.user.id, ...req.body}));
+        const {recipe, author} = (await recipesService.create({authorId: req.user.id, ...req.body}));
         let recipeId = recipe.id;
         ingredients.forEach(async (ingredient) => {
             let {ingredientId, quantity} = ingredient;
@@ -72,8 +72,7 @@ async function create(req, res, next) {
 //BUG not updates if create new ingredient
 async function update(req, res, next) {
     try {
-        let {id, category, authorId, meal, timeToCook, instruction, title, file} = req.body;
-        let {ingredients} = req.body;
+        let {id, categoryId, authorId, mealId, timeToCook, instruction, title, file, ingredients} = req.body;
 
         if (req.user.id != authorId) throw new UnauthorizedError();
 

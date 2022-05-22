@@ -10,7 +10,6 @@ async function renderCookbook(req, res, next) {
 
 async function findAllForUser(req, res, next) {
     try {
-        //console.log(req.user);
         const userId = req.user.id;
         const all = await cookbooksService.findAllForUser(userId);
         return res.json({cookbooks: all});
@@ -34,7 +33,6 @@ async function remove(req, res, next) {
         const userId = req.user.id;
         const result = await cookbooksService.delete(recipeId, userId);
         return res.json(result);
-
     } catch (e) {
         next(e);
     }

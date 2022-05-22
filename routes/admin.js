@@ -19,5 +19,4 @@ router.post('/adminrecipes', authMiddleware, authAdminMiddleware, controller.get
 router.put('/approve/:id', authMiddleware, authAdminMiddleware, controller.approveRecipe);
 router.put('/disapprove/:id', authMiddleware, authAdminMiddleware, controller.disapproveRecipe);
 
-
 module.exports = router;
