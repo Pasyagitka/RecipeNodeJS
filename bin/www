@@ -19,8 +19,8 @@ app.set('port', port);
 
 
 const httpsOptions = {
-  key: fs.readFileSync(__dirname + '/../helpers/cert/zei.key'),
-  cert: fs.readFileSync(__dirname + '/../helpers/cert/zei.crt'),
+  key: fs.readFileSync(__dirname + '/../helpers/cert/cert.key'),
+  cert: fs.readFileSync(__dirname + '/../helpers/cert/cert.crt'),
 };
 
 /**
