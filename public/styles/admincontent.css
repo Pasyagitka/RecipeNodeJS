@@ -4,6 +4,17 @@
     border-radius: 15px;
 }
 
+.admin-content-table a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.admin-content-table a:hover{
+    color: rgb(198, 198, 198);
+}
+
+
+
 .admincontent-main-container {
     display: flex;
     flex: 1;

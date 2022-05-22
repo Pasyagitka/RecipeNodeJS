@@ -9,6 +9,11 @@ exports.findAll = async () => {
     return (all);
 };
 
+exports.findOne = async (id) => {
+    const all = await Meals.findByPk(id);
+    return all;
+};
+
 exports.create = async (meal) => {
     const exists = await Meals.findOne({ where: { meal } });
     if (exists) throw new AlreadyExistsError('meal');
@@ -23,7 +28,7 @@ exports.update = async (data) => {
     if (!exists) throw new NotExistsError('meal');
 
     const duplicateName = await Meals.findOne({ where: { meal } });
-    if (duplicateName && duplicateName.id !== id) {
+    if (duplicateName && duplicateName.id != id) {
         throw new AlreadyExistsError('meal');
     }
 

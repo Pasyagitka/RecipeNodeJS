@@ -8,7 +8,7 @@ const expressHbs = require('express-handlebars');
 const mongoose = require('mongoose');
 const hbs = require('handlebars');
 const { ValidationError } = require('express-validation');
-const { UnauthorizedError } = require('./helpers/errors/customError');
+const { UnauthorizedError, BadResetPasswordLinkError } = require('./helpers/errors/customError');
 require('dotenv').config();
 
 const app = express();
@@ -72,12 +72,11 @@ app.use((error, req, res, next) => {
     if (error instanceof ValidationError) {
         return res.status(error.statusCode).json(error.details.body[0].message);
     }
-    if (error instanceof UnauthorizedError) {
-        return res.render('error').json(error.details.body[0].message);
+    if (error instanceof BadResetPasswordLinkError) {
+       return res.render('error', {statusCode: error.statusCode, message: error.error, isNoHeaderPage: true},)
     }
     if (!error.statusCode) error.statusCode = 500;
-    //res.status(error.statusCode).json(error.error);
-    res.render('error', {statusCode: error.statusCode, message: error.error, isNoHeaderPage: true},)
+    res.status(error.statusCode).json(error.error);
 });
 
 module.exports = app;

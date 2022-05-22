@@ -9,6 +9,11 @@ exports.findAll = async () => {
     return all;
 };
 
+exports.findOne = async (id) => {
+    const all = await Categories.findByPk(id);
+    return all;
+};
+
 exports.create = async (category) => {
     const exists = await Categories.findOne({ where: { category } });
     if (exists) throw new AlreadyExistsError();
@@ -22,7 +27,7 @@ exports.update = async (data) => {
     if (!exists) throw new NotExistsError('category');
 
     const duplicateName = await Categories.findOne({ where: { category } });
-    if (duplicateName && duplicateName.id !== id) {
+    if (duplicateName && duplicateName.id != id) {
         throw new AlreadyExistsError('category');
     }
     const upd = await Categories.update({

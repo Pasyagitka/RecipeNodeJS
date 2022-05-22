@@ -94,7 +94,6 @@ async function postRequestPasswordReset(email) {
     return await fetch("/reset-password", { method: 'POST', headers: requestHeaders, body: JSON.stringify({ email })});
 }
 
-
 //recipes
 async function getRecipesFilterSearch(qs) {
     return await fetch("/recipes?" + qs, { method: 'GET', headers: requestHeaders, });
@@ -104,9 +103,59 @@ async function getRecipesJSON(id) {
     return await fetch(`/recipes/getJSON/${id}`, { method: 'GET', headers: requestHeaders, });
 }
 
+//meals
+async function getGetMeal(id) {
+    return await fetch(`/meals/${id}`, { method: 'GET',  headers: requestHeaders, });
+}
+async function getGetMeals() {
+    return await fetch("/meals", { method: 'GET',  headers: requestHeaders, });
+}
+async function postAddMeal({ meal }) {
+    return await fetch("/meals", { method: 'POST',  headers: requestHeaders,  body: JSON.stringify({ meal })});
+}
+async function putUpdateMeal({ id, meal }) {
+    return await fetch("/meals", { method: 'PUT',  headers: requestHeaders,  body: JSON.stringify({ id, meal })});
+}
+async function deleteDeleteMeal(id) {
+    return await fetch(`/meals/${id}`, { method: 'DELETE',  headers: requestHeaders, });
+}
+
+//categories
+async function getGetCategory(id) {
+    return await fetch(`/categories/${id}`, { method: 'GET',  headers: requestHeaders, });
+}
+async function getGetCategories() {
+    return await fetch("/categories", { method: 'GET',  headers: requestHeaders, });
+}
+async function postAddCategory({ category }) {
+    return await fetch("/categories", { method: 'POST',  headers: requestHeaders,  body: JSON.stringify({ category })});
+}
+async function putUpdateCategory({ id, category }) {
+    return await fetch("/categories", { method: 'PUT',  headers: requestHeaders,  body: JSON.stringify({ id, category })});
+}
+async function deleteDeleteCategory(id) {
+    return await fetch(`/categories/${id}`, { method: 'DELETE',  headers: requestHeaders, });
+}
+
+//ingredients
+async function getGetIngredient(id) {
+    return await fetch(`/ingredients/${id}`, { method: 'GET',  headers: requestHeaders, });
+}
+async function getGetIngredients() {
+    return await fetch("/ingredients", { method: 'GET',  headers: requestHeaders, });
+}
+async function postAddIngredient({ name, measurement }) {
+    return await fetch("/ingredients", { method: 'POST',  headers: requestHeaders,  body: JSON.stringify({ name, measurement })});
+}
+async function putUpdateIngredient({ id, name, measurement }) {
+    return await fetch("/ingredients", { method: 'PUT',  headers: requestHeaders,  body: JSON.stringify({ id, name, measurement })});
+}
+async function deleteDeleteIngredient(id) {
+    return await fetch(`/ingredients/${id}`, { method: 'DELETE',  headers: requestHeaders, });
+}
+
 async function handleResponseErrors(response) {
-    if (response.status === 401) {
-        
+    if (response.status === 401) {  
         alert('Unauthorized: You need to login to perform this action!');
         document.location.assign('/login');
     }

@@ -1,35 +1,51 @@
-function CustomError(error, statusCode = 500){
-    return {error, statusCode};
+class CustomError{
+    constructor(error, statusCode = 500){
+        this.error = error;
+        this.statusCode = statusCode;
+    }
 }
 
-function AlreadyExistsError(data = '') {
-    return new CustomError(`Already exists ${data}`);
+class AlreadyExistsError extends CustomError {
+    constructor(data='') {
+        super(`Already exists ${data}`);
+    }
 }
 
-function NotExistsError(data = '') {
-    return new CustomError(`Not exists ${data}`);
+class NotExistsError extends CustomError {
+    constructor(data='') {
+        super(`Not exists ${data}`);
+    }
 }
 
-function UnauthorizedError() {
-    return new CustomError('Unauthorized', 401);
+class UnauthorizedError extends CustomError {
+    constructor() {
+        super('Unauthorized', 401);
+    }
 }
 
-function ForbiddenError() {
-    return new CustomError('Forbidden', 403);
+class ForbiddenError extends CustomError {
+    constructor() {
+        super('Forbidden', 403);
+    }
 }
 
-function BadActivationLinkError() {
-    return new CustomError('Bad activation link');
+class BadActivationLinkError extends CustomError {
+    constructor() {
+        super('Bad activation link');
+    }
 }
 
-function BadResetPasswordLinkError() {
-    return new CustomError('Bad reset password link');
+class BadResetPasswordLinkError extends CustomError{
+    constructor() {
+        super('Bad reset password link');
+    }
 }
 
-function WrongPasswordError() {
-    return new CustomError('Wrong password');
+class WrongPasswordError extends CustomError{
+    constructor() {
+        super('Wrong password');
+    }
 }
-
 
 module.exports = {
     AlreadyExistsError,

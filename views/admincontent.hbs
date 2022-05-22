@@ -6,13 +6,33 @@
                     <h4 style="margin: auto;">Meals</h4>
                 </div>
                 <div>
+                    <input type="text" id="meal-id-input" hidden readonly/>
+                    <input type="text" placeholder="name" class="add-input-text"  id="meal-name-input"/>
+                    <a href="javascript:addMeal()" class="button-link add-recipe-button" style="display: inline-block;"></a>
+                    <a href="javascript:updateMeal()" class="button-link edit-recipe-button" style="display: inline-block;"></a>
+                </div>
+                <div style="margin: 90px 0;">
                     <table class="admin-content-table">
-                        <tr><th>name</th></tr>
-                        {{#each mealsList}}
-                                <tr>
-                                    <td>{{meal}}</td>
-                                </tr> 
-                        {{/each}}
+                        <tr><th>id</th><th>name</th></tr>
+                        <tbody id="meals-table"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div style="flex: 1;">
+                <div class="recipes-container-header">
+                    <h4 style="margin: auto;">Categories</h4>
+                </div>
+                 <div>
+                    <input type="text" id="category-id-input" hidden readonly/>
+                    <input type="text" placeholder="category" class="add-input-text" id="category-name-input"/>
+                    <a href="javascript:addCategory()"  class="button-link add-recipe-button" style="display: inline-block;"></a>
+                    <a href="javascript:updateCategory()"  class="button-link edit-recipe-button" style="display: inline-block;"></a>
+                </div>
+                <div style="margin: 90px 0;">
+                    <table class="admin-content-table">
+                        <tr><th>id</th><th>name</th></tr>
+                        <tbody id="categories-table">
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -21,31 +41,227 @@
                     <h4 style="margin: auto;">Ingredients</h4>
                 </div>
                 <div>
-                    <table class="admin-content-table">
-                        <tr><th>name</th></tr>
-                        {{#each categoriesList}}
-                                <tr>
-                                    <td>{{category}}</td>
-                                </tr> 
-                        {{/each}}
-                    </table>
+                    <input type="text" id="ingredient-id-input" hidden readonly/>
+                    <input type="text" placeholder="name" class="add-input-text" id="ingredient-name-input"/>
+                    <input type="text" placeholder="measurement" class="add-input-text"id="ingredient-measurement-input"/>
+                    <a href="javascript:addIngredient()" class="button-link add-recipe-button" style="display: inline-block;"></a>
+                    <a href="javascript:updateIngredient()" class="button-link edit-recipe-button" style="display: inline-block;"></a>
                 </div>
-            </div>
-            <div style="flex: 1;">
-                <div class="recipes-container-header">
-                    <h4 style="margin: auto;">Categories</h4>
-                </div>
-                <div>
-                    <table class="admin-content-table">
-                        <tr><th>name</th><th>measurement</th></tr>
-                        {{#each ingredientsList}}
-                                <tr>
-                                    <td>{{name}}</td>
-                                    <td>{{measurement}}</td>
-                                </tr> 
-                        {{/each}}
+                <div style="margin: 30px 0;">
+                    <table class="admin-content-table" >
+                        <tr><th>id</th><th>name</th><th>measurement</th></tr>
+                        <tbody id="ingredients-table">
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
 </main>
+<script>
+    let ingredientId = document.getElementById('ingredient-id-input');
+    let ingredientName = document.getElementById('ingredient-name-input');
+    let ingredientMeasurement = document.getElementById('ingredient-measurement-input');
+
+    let mealId = document.getElementById('meal-id-input');
+    let mealName = document.getElementById('meal-name-input');
+
+    let categoryId = document.getElementById('category-id-input');
+    let categoryCategory = document.getElementById('category-name-input');
+
+    $(document).ready(async function() {
+        await getMeals();
+        await getCategories();
+        await getIngredients();
+    });  
+
+    async function getMeals() {
+        let response = await getGetMeals();
+        if (response.status === 200) {
+            let tr = '';
+            let pdata = (await response.json());
+            console.log(pdata)
+            pdata.forEach(function (value) {
+                let r = `
+                    <tr>
+                        <td>${value.id}</td>
+                        <td>${value.meal}</td>
+                        <td><a href="javascript:fillMeal(${value.id});">e</a></td>
+                        <td><a href="javascript:deleteMeal(${value.id});">&times</a></td>
+                    </tr>
+                `;
+                tr += r;
+            });
+            document.getElementById('meals-table').innerHTML = tr;
+        } 
+        else if (response.status === 403) {
+            alert('Forbidden: You don`t have rights to perform this action!');
+            history.back();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function getCategories() {
+        let response = await getGetCategories();
+        if (response.status === 200) {
+            let tr = '';
+            let pdata = (await response.json());
+            console.log(pdata)
+            pdata.forEach(function (value) {
+                let r = `
+                    <tr>
+                        <td>${value.id}</td>
+                        <td>${value.category}</td>
+                        <td><a href="javascript:fillCategory(${value.id});">e</a></td>
+                        <td><a href="javascript:deleteCategory(${value.id});">&times</a></td>
+                    </tr>
+                `;
+                tr += r;
+            });
+            document.getElementById('categories-table').innerHTML = tr;
+        } 
+        else if (response.status === 403) {
+            alert('Forbidden: You don`t have rights to perform this action!');
+            history.back();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function getIngredients() {
+        let response = await getGetIngredients();
+        if (response.status === 200) {
+            let tr = '';
+            let pdata = (await response.json());
+            console.log(pdata)
+            pdata.forEach(function (value) {
+                let r = `
+                    <tr>
+                        <td>${value.id}</td>
+                        <td>${value.name}</td>
+                        <td>${value.measurement ?? ''}</td>
+                        <td><a href="javascript:fillIngredient(${value.id});">e</a></td>
+                        <td><a href="javascript:deleteIngredient(${value.id});">&times</a></td>
+                    </tr>
+                `;
+                tr += r;
+            });
+            document.getElementById('ingredients-table').innerHTML = tr;
+        }
+        else if (response.status === 403) {
+            alert('Forbidden: You don`t have rights to perform this action!');
+            history.back();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function deleteIngredient(id) {
+         let response = await deleteDeleteIngredient(id);
+        if (response.status === 200) {
+            await getIngredients();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function deleteMeal(id) {
+         let response = await deleteDeleteMeal(id);
+        if (response.status === 200) {
+            await getMeals();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function deleteCategory(id) {
+         let response = await deleteDeleteCategory(id);
+        if (response.status === 200) {
+            await getCategories();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function addIngredient() {
+        let response = await postAddIngredient({ name: ingredientName.value, measurement: ingredientMeasurement.value });
+        if (response.status === 200) {
+            ingredientName.value = '';
+            ingredientMeasurement.value = '';
+            await getIngredients();
+        }
+        else await handleResponseErrors(response);
+    }
+
+     async function addMeal() {
+        let response = await postAddMeal({ meal: mealName.value });
+        if (response.status === 200) {
+            mealName.value = '';
+            mealName.value = '';
+            await getMeals();
+        }
+        else await handleResponseErrors(response);
+    }
+
+     async function addCategory() {
+        let response = await postAddCategory({ category: categoryCategory.value });
+        if (response.status === 200) {
+            categoryId.value = '';
+            categoryCategory.value = '';
+            await getCategories();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function updateIngredient() {
+        let response = await putUpdateIngredient({ id: ingredientId.value, name: ingredientName.value, measurement: ingredientMeasurement.value });
+        if (response.status === 200) {
+            ingredientName.value = '';
+            ingredientMeasurement.value = '';
+            await getIngredients();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function updateMeal() {
+        let response = await putUpdateMeal({ id: mealId.value, meal: mealName.value });
+        if (response.status === 200) {
+            mealId.value = '';
+            mealName.value = '';
+            await getMeals();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function updateCategory() {
+        let response = await putUpdateCategory({ id: categoryId.value, category: categoryCategory.value });
+        if (response.status === 200) {
+            categoryId.value = '';
+            categoryCategory.value = '';
+            await getCategories();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function fillIngredient(id) {
+        let response = await getGetIngredient(id);
+        if (response.status === 200) {
+            let pdata = await response.json();
+            ingredientId.value = pdata.id;
+            ingredientName.value = pdata.name;
+            ingredientMeasurement.value = pdata.measurement;
+        } else await handleResponseErrors(response);
+    }
+
+    async function fillMeal(id) {
+        let response = await getGetMeal(id);
+        if (response.status === 200) {
+            let pdata = await response.json();
+            mealId.value = pdata.id;
+            mealName.value = pdata.meal;
+        } else await handleResponseErrors(response);
+    }
+
+    async function fillCategory(id) {
+        let response = await getGetCategory(id);
+        if (response.status === 200) {
+            let pdata = await response.json();
+            categoryId.value = pdata.id;
+            categoryCategory.value = pdata.category;
+        } else await handleResponseErrors(response);
+    }
+</script>

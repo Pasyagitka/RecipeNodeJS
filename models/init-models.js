@@ -21,7 +21,7 @@ module.exports = function initModels(sequelize) {
     recipes.belongsTo(categories, { as: 'category', foreignKey: 'categoryId', onDelete: 'SET NULL' });
     categories.hasMany(recipes, { as: 'recipes', foreignKey: 'categoryId' });
 
-    recipeIngredients.belongsTo(ingredients, { as: 'ingredient', foreignKey: 'ingredientId', onDelete: 'SET NULL' });
+    recipeIngredients.belongsTo(ingredients, { as: 'ingredient', foreignKey: 'ingredientId', onDelete: 'cascade' });
     ingredients.hasMany(recipeIngredients, { as: 'recipe_ingredients', foreignKey: 'ingredientId' });
 
     recipes.belongsTo(meals, { as: 'meal', foreignKey: 'mealId', onDelete: 'SET NULL' });

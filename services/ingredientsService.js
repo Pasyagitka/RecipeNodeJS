@@ -9,6 +9,11 @@ exports.findAll = async () => {
     return all;
 };
 
+exports.findOne = async (id) => {
+    const all = await Ingredients.findByPk(id);
+    return all;
+};
+
 exports.create = async (name, measurement) => {
     const exists = await Ingredients.findOne({ where: { name } });
     if (exists) throw new AlreadyExistsError('ingredient (name)');
@@ -26,7 +31,8 @@ exports.update = async (data) => {
     if (!exists) throw new NotExistsError('ingredient');
 
     const duplicateName = await Ingredients.findOne({ where: { name } });
-    if (duplicateName && duplicateName.id !== id) {
+    console.log(duplicateName.id, id)
+    if (duplicateName && duplicateName.id != id) {
         throw new AlreadyExistsError('ingredient (name)');
     }
 

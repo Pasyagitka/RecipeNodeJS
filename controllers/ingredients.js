@@ -9,6 +9,16 @@ async function findAll(req, res, next) {
     }
 }
 
+async function get(req, res, next) {
+    try {
+        let {id} = req.params;
+        const all = await ingredientsService.findOne(id);
+        return res.json(all);
+    } catch (e) {
+        next(e);
+    }
+}
+
 async function create(req, res, next) {
     try {
         const { name, measurement } = req.body;
@@ -43,4 +53,5 @@ module.exports = {
     create,
     update,
     delete: remove,
+    get,
 };
