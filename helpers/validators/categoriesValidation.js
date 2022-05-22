@@ -6,6 +6,12 @@ const create = {
     }),
 };
 
+const get = {
+    params: Joi.object({
+        id: Joi.number().required(),
+    }),
+};
+
 const update = {
     body: Joi.object({
         id: Joi.number().required(),
@@ -20,6 +26,7 @@ const remove = {
 };
 
 module.exports = {
+    get,
     create,   
     update,
     remove,
