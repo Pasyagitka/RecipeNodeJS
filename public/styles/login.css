@@ -122,3 +122,9 @@
 .social i {
   margin-right: 4px;
 }
+
+.error-span {
+  font-size: small;
+  color: #f5806e;
+  font-weight: bold;
+}

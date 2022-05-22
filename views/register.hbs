@@ -1,18 +1,37 @@
 <div class="auth-form-wrapper">
-    <form class="auth-form" method="post" action="/register">
+    <form class="auth-form" style="height:fit-content;">
         <h3>Register</h3>
         <img src="/images/logo.png">
+        <span id="error-span" class="error-span"></span>
 
         <label for="login" class="login-label">Login</label>
-        <input type="text" placeholder="Login" id="login" name="login" class="login-input">
+        <input type="text" placeholder="Login" id="login" name="login" class="login-input" pattern="[a-zA-Z0-9а-яА-Я]+" minlength="3" maxlength="15">
 
         <label for="email" class="login-label">Email</label>
-        <input type="text" placeholder="Email" id="email" name="email" class="login-input">
+        <input type="email" placeholder="Email" id="email" name="email" class="login-input">
 
         <label for="password" class="login-label">Password</label>
-        <input type="password" placeholder="Password" id="password" name="password" class="login-input">
+        <input type="password" placeholder="Password" id="password" name="password" class="login-input" minlength="6" maxlength="15">
 
-        <input type="submit" class="big-green-button" style="width:100%;" value="Register"></input>
+        <a class="big-green-button" style="width: 100%;" href="javascript:register();">Register</a>
+        {{!-- <input type="submit" class="big-green-button" style="width:100%;" value="Register"></input> --}}
         <a class="auth-link" href='/login'>Already have an account? Log in</a>
+        <div></div>
     </form>
 </div>
+<script>
+    async function register() {
+        let login = document.getElementById('login').value;
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+
+        let response = await postRegister({login, email, password});
+        if (response.status === 200) {
+            document.location.href = '/login';
+        }
+        else {
+            let pdata = await response.json();
+            document.getElementById('error-span').innerHTML = pdata;
+        }
+    };
+</script>

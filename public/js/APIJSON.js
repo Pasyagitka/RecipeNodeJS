@@ -10,7 +10,7 @@ async function postAddCookbookRecord(id) {
 }
 
 async function deleteDeleteCookbookRecord(id) {
-    return await fetch(`/cookbooks/delete/${id}`, { method: 'DELETE', requestHeaders, });
+    return await fetch(`/cookbooks/delete/${id}`, { method: 'DELETE', headers: requestHeaders, });
 }
 
 async function postGetCookbooks() {
@@ -70,9 +70,30 @@ async function deleteDeleteUserRecipe({ id, authorId}) {
 
 
 //auth
+async function getGetUserName() {
+    return await fetch("/username", { method: 'GET', headers: requestHeaders,});
+}
+
+async function getGetUser() {
+    return await fetch("/user", { method: 'GET', headers: requestHeaders,});
+}
+
 async function postLogin({email, password}) {
     return await fetch("/login", { method: 'POST', headers: requestHeaders, body: JSON.stringify({ email, password })});
 }
+
+async function postRegister({login, email, password}) {
+    return await fetch("/register", { method: 'POST', headers: requestHeaders, body: JSON.stringify({ login, email, password })});
+}
+
+async function postChangePassword(newPassword) {
+    return await fetch("/change-password", { method: 'POST', headers: requestHeaders, body: JSON.stringify({ newPassword })});
+}
+
+async function postRequestPasswordReset(email) {
+    return await fetch("/reset-password", { method: 'POST', headers: requestHeaders, body: JSON.stringify({ email })});
+}
+
 
 //recipes
 async function getRecipesFilterSearch(qs) {
@@ -81,4 +102,18 @@ async function getRecipesFilterSearch(qs) {
 
 async function getRecipesJSON(id) {
     return await fetch(`/recipes/getJSON/${id}`, { method: 'GET', headers: requestHeaders, });
+}
+
+async function handleResponseErrors(response) {
+    if (response.status === 401) {
+        
+        alert('Unauthorized: You need to login to perform this action!');
+        document.location.assign('/login');
+    }
+    else if (response.status === 403) {
+        alert('Forbidden: You don`t have rights to perform this action!');
+    }
+    else {
+        alert(`Something went wrong (${response.status}): ${await response.json()}`);
+    }
 }

@@ -33,8 +33,8 @@ async function sendResetPasswordEmail(to, link, password) {
         html:
             `
                 <div>
-                    <h1>Confrim:</h1>
-                    <span>Your temporary password: ${password}</span>
+                    <h3>Confrim:</h3>
+                    <span>Your temporary password:</span><span>${password}</span>
                     <a href="${link}">${link}</a>
                 </div>
             `,

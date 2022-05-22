@@ -1,7 +1,8 @@
 <div class="auth-form-wrapper">
-    <form class="auth-form">
+    <form class="auth-form" style="height: 480px;">
         <h3>Login</h3>
         <img src="/images/logo.png">
+        <span id="error-span" class="error-span"></span>
 
         <label for="email" class="login-label">Email</label>
         <input type="text" placeholder="Email" id="email" name="email" class="login-input">
@@ -10,11 +11,12 @@
         <input type="password" placeholder="Password" id="password" name="password" class="login-input">
 
         <a class="big-green-button" style="width: 100%;" href="javascript:login();">Log In</a>
-        <a class="auth-link" href='/register'>Do not have an account? Register</a>
-        <div class="social" hidden>
+        <a class="auth-link" href='/register'>Do not have an account? Register</a><br>
+        <a class="auth-link" href='/forgot-password'>Forgot password?</a>
+        {{!-- <div class="social" hidden>
           <div class="go"><i class="fab fa-google"></i>  Google</div>
           <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
-        </div>
+        </div> --}}
     </form>
 </div>
 <script>
@@ -26,6 +28,10 @@
         if (response.status === 200) {
             localStorage.setItem("token", await response.json());
             document.location.assign('/');
+        }
+        else {
+            let pdata = await response.json();
+            document.getElementById('error-span').innerHTML = pdata;
         }
     }
 </script>

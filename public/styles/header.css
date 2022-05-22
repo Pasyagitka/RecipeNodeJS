@@ -35,6 +35,8 @@
     max-width: 500px;
     border-radius: 25px;
     overflow: hidden;
+    height: 40px;
+    flex-shrink: 0;
 }
 
 .search-input {

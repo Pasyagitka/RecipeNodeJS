@@ -1,62 +1,25 @@
 
-async function addCookbookRecord(id) {
-    let response = await fetch(`/cookbooks/add/${id}`, { 
-        method: 'POST',
-        headers: { 
-            'Authorization': `${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json', 
-            'Accept': 'application/json',
-    }, });
-        
-    if (response.status === 200) {
-        alert('Saved to your cookbook');
+    async function addCookbookRecord(id) {
+        let response = await postAddCookbookRecord(id);
+        if (response.status === 200) {
+            alert('Saved to your cookbook');
+        }
+        else await handleResponseErrors(response);
     }
-}
 
-async function deleteCookbookRecord(id) {
-    let response = await fetch(`/cookbooks/delete/${id}`, { 
-        method: 'DELETE',
-        headers: { 
-            'Authorization': `${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json', 
-            'Accept': 'application/json',
-    }, });
-        
-    if (response.status === 200) {
-        alert('Removed from your cookbook');
+    async function deleteCookbookRecord(id) {
+        let response = await deleteDeleteCookbookRecord(id);
+        if (response.status === 200) {
+            alert('Removed from your cookbook');
+        }
+        else await handleResponseErrors(response);
     }
-}
 
-async function getCookbooks() {
-    let response = await fetch("/cookbooks", { 
-    method: 'POST',
-    headers: { 
-        'Authorization': `${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json', 
-        'Accept': 'application/json' 
-    }, });
-    
-    
-    let cookbookItemsCount = document.getElementById('cookbook-items-count');
-    let recipesContainer = document.getElementById('cookbook-recipe-list');
-    if (response.status === 200) {
-        let resp = await response.json();
-        let tr = '';
-        let pdata = resp.cookbooks;
-        pdata.forEach(function (value) {
-            let r = recipe(value.recipe);
-            tr += '<div style="display: flex;">' +
-                    r + 
-                    deleteButtonCookbook(value.recipe.id) + 
-                    '</div>';
-        });
-        recipesContainer.innerHTML = tr;
-        cookbookItemsCount.innerHTML = pdata.length || 0;
+    async function getUsername() {
+        let username;
+        let response = await getGetUserName();
+        if (response.status === 200) {
+            username = (await response.json()).username;
+        } else username = 'guest';
+        return username;
     }
-    else if (response.status === 401) {
-        //alert('401');
-        document.location.assign('/login');
-        
-    }
-}
-

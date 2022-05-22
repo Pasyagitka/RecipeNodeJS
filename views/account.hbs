@@ -1,0 +1,55 @@
+<main class="main-container">
+    <div class="recipes-container">
+        <div class="auth-form-wrapper" style="border-radius: 25px;">
+                <form class="auth-form" style="height: 350px; width: 400px; margin: 70px auto; position:sticky; transform:none; top:auto; left:auto;">
+                    <label for="email" class="login-label">Email</label>
+                    <input type="text" placeholder="Email" id="email" name="email" class="login-input" readonly>
+
+                    <label for="password" class="login-label">New password</label>
+                    <input type="password" style="border: none;" class="login-input" placeholder="Password" id="password" autocomplete="off" required>
+                    <label for="confirm_password" class="login-label">Confirm new password</label>
+                    <input type="password" style="border: none;" class="login-input" placeholder="Confirm Password" id="confirm_password" autocomplete="off" required>
+                </form>
+            <a class="big-green-button disabled-button" href="javascript:changePassword()">Change password</a>
+        </div>
+    </div>
+</main>
+<script>
+    $(document).ready(async function() {
+        let response = await getGetUser();
+        if (response.status === 200) {
+            let pdata = await response.json();
+            document.getElementById('email').value = pdata.email;
+        } else await handleResponseErrors(response);
+    });
+
+    var password = document.getElementById("password"), 
+    confirm_password = document.getElementById("confirm_password");
+    password.onchange  = validatePassword;
+     password.onkeyup  = validatePassword;
+    confirm_password.onkeyup  = validatePassword;
+    confirm_password.onchange  = validatePassword;
+
+    function validatePassword(){
+        if(password.value !== confirm_password.value) {
+            confirm_password.style.backgroundColor  = '#fee4cb';
+            confirm_password.setCustomValidity("Passwords don't match");
+            document.querySelector('.big-green-button').classList.add('disabled-button');
+        } else {
+            confirm_password.style.backgroundColor  = '#f3f6fd';
+            confirm_password.setCustomValidity('');
+            document.querySelector('.big-green-button').classList.remove('disabled-button');
+        }
+    }
+
+    async function changePassword() {
+        let newPassword = document.getElementById("password").value;
+        let response = await postChangePassword(newPassword);
+        if (response.status === 200) {
+            let {message} = (await response.json())
+            alert(message);
+            document.location.assign('/');
+        }
+        else await handleResponseErrors(response);
+    }
+</script>

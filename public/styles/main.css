@@ -97,6 +97,10 @@ button {
     width: 30px;
     height: 30px;
 }
+.disabled-button {
+    pointer-events: none;
+    background-color: #acacac;
+}
 
  /* The Modal (background) */
  .modal {

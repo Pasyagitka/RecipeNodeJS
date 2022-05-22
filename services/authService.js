@@ -47,6 +47,7 @@ async function registration(login, email, password) {
 
     const user = {
         id: newUser.id,
+        login: newUser.login,
         email: newUser.email,
         isActivated: newUser.isActivated,
     };
@@ -80,6 +81,7 @@ async function login(email, password) {
     }
     const user = {
         id: findUser.id,
+        login: findUser.login,
         email: findUser.email,
         isActivated: findUser.isActivated,
         isGranted: findUser.isGranted,
@@ -106,6 +108,7 @@ async function refresh(refreshToken) {
     const findUser = await Users.findByPk(userData.id);
     const user = {
         id: findUser.id,
+        login: findUser.login,
         email: findUser.email,
         isActivated: findUser.isActivated,
         isGranted: findUser.isGranted,
@@ -131,7 +134,18 @@ async function sendResetPassword(email) {
         resetPasswordLink: link,
         temporaryPassword,
     }, { where: { email } });
-    await mailService.sendResetPasswordEmail(email, `${process.env.API_URL}/auth/reset-password/${findUser.login}/${link}`, password);
+    await mailService.sendResetPasswordEmail(email, `${process.env.API_URL}/reset-password/${findUser.login}/${link}`, password);
+}
+
+async function changePassword(login, newPassword) {
+    const findUser = await Users.findOne({ where: { login } });
+    if (!findUser) {
+        throw new NotExistsError('user (by login)');
+    }
+    const hashPassword = await bcrypt.hash(newPassword, 3);
+    findUser.password = hashPassword;
+    await findUser.save();
+    return true;
 }
 
 async function resetConfirm(login, resetPasswordLink) {
@@ -157,6 +171,7 @@ module.exports = {
     login,
     logout,
     refresh,
+    changePassword,
     sendResetPassword,
     resetConfirm,
     findUserById,

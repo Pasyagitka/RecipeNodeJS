@@ -11,7 +11,6 @@ const { ValidationError } = require('express-validation');
 const { UnauthorizedError } = require('./helpers/errors/customError');
 require('dotenv').config();
 
-//TODO transactions?
 const app = express();
 
 app.use(passport.initialize());
@@ -20,11 +19,6 @@ app.use(express.json({limit: '200mb'}));
 app.use(express.urlencoded({ limit: "200mb", extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use(passport.initialize());
-// require('./services/jwtStrategy');
-// require('./services/facebookStrategy');
-// require('./services/googleStrategy');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,7 +44,6 @@ app.use('/meals', require('./routes/meals'));
 app.use('/categories', require('./routes/categories'));
 app.use('/recipes', require('./routes/recipes'));
 app.use('/ingredients', require('./routes/ingredients'));
-app.use('/recipeIngredients', require('./routes/recipeIngredients'));
 app.use('/cookbooks', require('./routes/cookbooks'));
 app.use('/admin', require('./routes/admin'));
 app.use('/userrecipes', require('./routes/userRecipes'));
@@ -83,7 +76,8 @@ app.use((error, req, res, next) => {
         return res.render('error').json(error.details.body[0].message);
     }
     if (!error.statusCode) error.statusCode = 500;
-    res.status(error.statusCode).json(error.error);
+    //res.status(error.statusCode).json(error.error);
+    res.render('error', {statusCode: error.statusCode, message: error.error, isNoHeaderPage: true},)
 });
 
 module.exports = app;

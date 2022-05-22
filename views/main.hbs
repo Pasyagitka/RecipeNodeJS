@@ -5,6 +5,7 @@
             <p>Recipes...</p>
             <p>...</p>
         </div>
+            {{>searchinput}}
             {{>filter}}
         <div class="recipes-statistics-container">
             <div class="recipes-statistics-data-container">
@@ -67,8 +68,6 @@
             document.getElementById('recipes-items-container').innerHTML = tr;
             document.getElementById('all-recipes-count').innerHTML = pdata.length;
         }
-        else {
-            document.location.assign('/error');
-        }
+        else await handleResponseErrors(response);
     }
 </script>
