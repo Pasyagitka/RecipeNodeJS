@@ -1,0 +1,12 @@
+{ 
+    "dialect": "postgres",
+    "dialectOptions": {
+        "ssl": {
+            "rejectUnauthorized": false
+        }
+    },
+    "username": "iwkprkueyxyfwx",
+    "password": "758724408bd8266f3a450ff626e38ce186276096051baf6a95313ae988a00343",
+    "database": "dfj2fup9u62sah",
+    "host": "ec2-54-228-32-29.eu-west-1.compute.amazonaws.com"
+}
