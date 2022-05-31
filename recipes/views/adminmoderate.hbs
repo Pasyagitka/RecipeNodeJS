@@ -1,0 +1,111 @@
+<main class="moderate-main-container">
+    {{>leftmenu}}
+        <div class="moderate-container">
+            {{!-- {{>searchinput}} --}}
+            <div> 
+                <div class="recipes-container-header" style="margin: 15px;">
+                    <p>New recipes</p>
+                    <p><span id="new-recipes-items-count"></span>&nbspnew recipe(s)</p>
+                </div>
+                <hr style="margin: 15px;">
+                <div> 
+                    <div class="recipes-items-container" id="new-recipes-items-container" style="display:block; margin-bottom: 30px;"></div>
+                </div>
+            </div>
+            <div>
+                 <div class="recipes-container-header" style="margin: 15px;">
+                    <p>All recipes</p>
+                    <p><span id="recipes-items-count"></span>&nbsp recipe(s)</p>
+                </div>
+                <hr style="margin: 15px;">
+                <div> 
+                    <div class="recipes-items-container" id="admin-recipes-items-container" style="display:block"></div>
+                </div>
+            </div>
+            </div>
+        </div>
+</main>
+<script>
+    $(document).ready(async function() {
+       await getRecipesToModerate();
+       await getAdminRecipes();
+    });  
+
+    async function getRecipesToModerate() {
+        let response = await postGetModerateDataAdmin();
+        
+        if (response.status === 200) {
+            let resp = await response.json();
+            let tr = '';
+            let pdata = resp.recipeList;
+            console.log(pdata);
+            pdata.forEach(function (value) {
+                let r = recipe(value);
+                tr += '<div style="display: flex;">' +
+                    r + 
+                    '<div style="display: flex;">' +
+                    approveButton(value.id) + 
+                    disapproveButton(value.id) + 
+                    '</div></div>';
+            });
+            document.getElementById('new-recipes-items-container').innerHTML = tr;
+            document.getElementById('new-recipes-items-count').innerHTML = pdata.length || 0;
+        }
+        else if (response.status === 403) {  
+            alert('Forbidden: You don`t have rights to perform this action!');
+            history.back();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function approveRecipe(id) {
+        let response = await putApproveRecipeAdmin(id);
+        if (response.status === 200) {
+            let pdata = (await response.json()).recipe;
+            alert('Recipe approved');
+            socket.emit('recipe added', {user : pdata.author.login, title: pdata.title});
+            await getRecipesToModerate();
+            await getAdminRecipes();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function disapproveRecipe(id) {
+        let response = await putDisapproveRecipeAdmin(id);
+        if (response.status === 200) {
+            alert('Recipe disapproved. It will be deleted');
+            await getRecipesToModerate();
+            await getAdminRecipes();
+        }
+        else await handleResponseErrors(response);
+    }
+
+    async function getAdminRecipes() {
+        let response = await postGetRecipesDataAdmin();
+        
+        if (response.status === 200) {
+            let resp = await response.json();
+            let tr = '';
+            let pdata = resp.recipeList;
+            console.log(pdata);
+            pdata.forEach(function (value) {
+                let r = recipe(value);
+                tr += '<div style="display: flex;">' +
+                    r +
+                    deleteButtonAdmin(value.id, value.author.id) + 
+                    '</div>';
+            });
+            document.getElementById('admin-recipes-items-container').innerHTML = tr;
+            document.getElementById('recipes-items-count').innerHTML = pdata.length || 0;
+        }
+        else await handleResponseErrors(response);
+    }
+    
+    async function DeleteRecipeAdmin(id, authorId) {
+        let response = await deleteDeleteUserRecipe({id, authorId});
+        if (response.status === 200) {
+            await getAdminRecipes();
+        }
+        else await handleResponseErrors(response);
+    }
+</script>

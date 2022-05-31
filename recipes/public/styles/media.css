@@ -1,0 +1,80 @@
+@media screen and (max-width: 980px) {
+    .recipe-item-wrapper-default {
+        width: 50%;
+    }
+    .recipes-statistics-data-container {
+        font-size: 0.8em;
+    }
+    
+}
+@media screen and (max-width: 880px) { 
+    .client-messages-container {
+        display: none;
+    }
+    /* .client-messages-open-button {
+        display: block;
+    } */
+    .header-container {
+        padding: 15px 0 0 25px;
+    }
+    /* .client-messages-close-button{
+        display: block;
+    }    */
+}
+
+@media screen and (max-width: 720px) { 
+    /* .site-header {
+        display: none;
+    } */
+    .account-container > p {
+        display: none;
+    }
+    .header-right-container > button {
+        width: 15px;
+        height: 15px;
+    }
+    .header-right-container {
+        column-gap: 5px;
+    }
+}
+
+@media screen and (max-width: 520px) { 
+    .client-messages-container {
+        display: none;
+    }
+    /* .client-messages-button {
+        display: block;
+    } */
+    .header-left-container > img {
+        display: none;
+    }
+    /* .site-header {
+        display: none;
+    } */
+    .left-menu-container {
+        display: none;
+    }
+    .recipe-item-wrapper-default {
+        width: 100%;
+    }
+    .main-container {
+        padding: 16px 0;
+    }
+    .header-container {
+        padding: 15px 0 0 15px;
+    }
+   
+}
+
+/*container-wide*/
+.client-messages-container-wide  {
+    display: block;
+    transform: translateX(0);
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    overflow-y: auto;
+}

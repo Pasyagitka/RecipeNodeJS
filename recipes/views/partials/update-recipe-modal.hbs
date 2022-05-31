@@ -1,0 +1,49 @@
+<article class="add-recipe-container">
+    <h1 class="add-recipe-header">Update your recipe</h1>
+    <div>
+        <div>
+            <img id="update-recipe-image" style="width: 300px; height:auto; border-radius: 10px; margin: 0 auto; display: block;">
+        </div>
+        <form class="add-recipe-form">
+            <input type="hidden" id="recipe-id"/>
+            <input type="hidden" id="recipe-authorId"/>
+
+            <h1 style="font-size: 1em;">Title</h1>
+            <input type='text' name='title' value='title' id="recipe-title" class="add-input-text" required/>
+            <h1 style="font-size: 1em;">Image</h1>
+            <input type="file" id="recipe-image" class="add-input-text"  placeholder="image uri"/>
+            <div class="add-select-container">
+                <select name="categoryId" id="recipe-category" class="add-input-select" required>
+                    {{#each categories}}
+                        <option value="{{id}}">{{category}}</option>
+                    {{/each}}
+                </select>
+                <select name="mealId" id="recipe-meal" class="add-input-select" required>
+                    {{#each meals}}
+                        <option value="{{id}}">{{meal}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div>
+                <h1 style="font-size: 1em;">Select ingredients</h1>
+                <div class="add-ingredients-table">
+                    {{#each ingredients}}
+                        <div class="add-ingredients-item">
+                            <div>{{name}}</div>
+                            <div>
+                                <input type="number" class="add-input-text ingredients-input" name="{{id}}" style="height: 20px; margin: 0" min="0" value="0" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </div>
+                            <div>
+                                {{measurement}}
+                            </div>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+            <input type='number' class="add-input-text" id="recipe-time" style="width: 150px;" min="0" name='timeToCook' required placeholder='time to cook (m)' oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+            <textarea class="instruction-input" type='text' id="recipe-instruction" name='instruction' required value='instruction'/></textarea><br/>
+            <span id="error-span" class="error-span"></span>
+            <a class="big-green-button" href="javascript:(UpdateRecipe());">Confirm</a>
+        </form>
+    </div>
+</article>
